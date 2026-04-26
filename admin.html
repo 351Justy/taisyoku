@@ -15,11 +15,32 @@
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(--gray-50);line-height:1.75;font-size:15px;min-height:100vh;}
+
+/* Gate */
+#adminGate{position:fixed;inset:0;background:linear-gradient(135deg,#0F2F5C 0%,#1a3d6b 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:24px;}
+#adminGate.hidden{display:none;}
+.gate-box{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:48px 40px;max-width:400px;width:100%;text-align:center;backdrop-filter:blur(10px);}
+.gate-logo{font-size:15px;font-weight:900;color:rgba(255,255,255,.9);margin-bottom:8px;}
+.gate-badge{font-size:11px;font-weight:700;background:rgba(255,200,0,.2);color:#FDE68A;padding:3px 12px;border-radius:100px;display:inline-block;margin-bottom:28px;}
+.gate-title{font-size:20px;font-weight:900;color:var(--white);margin-bottom:8px;}
+.gate-sub{font-size:13px;color:rgba(255,255,255,.55);margin-bottom:28px;}
+.gate-input{width:100%;padding:13px 20px;border-radius:100px;border:2px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:var(--white);font-size:16px;text-align:center;outline:none;transition:border .2s;font-family:inherit;letter-spacing:.1em;}
+.gate-input::placeholder{color:rgba(255,255,255,.3);letter-spacing:0;}
+.gate-input:focus{border-color:rgba(255,255,255,.5);}
+.gate-btn{margin-top:14px;width:100%;padding:13px;border-radius:100px;background:#059669;color:var(--white);font-size:15px;font-weight:700;border:none;cursor:pointer;font-family:inherit;transition:all .2s;}
+.gate-btn:hover{background:#047857;}
+.gate-err{margin-top:10px;font-size:13px;color:#FCA5A5;min-height:18px;}
+
+/* App */
+#adminApp{display:none;}
+#adminApp.visible{display:block;}
 .nav{background:var(--white);border-bottom:1px solid var(--gray-200);padding:0 24px;}
-.nav-inner{display:flex;align-items:center;height:56px;max-width:760px;margin:0 auto;gap:16px;}
-.nav-logo{font-size:15px;font-weight:900;color:var(--navy);text-decoration:none;}
+.nav-inner{display:flex;align-items:center;height:56px;max-width:800px;margin:0 auto;gap:12px;}
+.nav-logo{font-size:15px;font-weight:900;color:var(--navy);}
 .nav-badge{font-size:11px;font-weight:700;background:#FEF3C7;color:#D97706;padding:2px 10px;border-radius:100px;}
-.main{max-width:760px;margin:0 auto;padding:32px 24px 80px;}
+.nav-logout{margin-left:auto;font-size:12px;color:var(--gray-400);background:none;border:1px solid var(--gray-200);border-radius:100px;padding:5px 14px;cursor:pointer;font-family:inherit;}
+.nav-logout:hover{color:var(--gray-800);border-color:var(--gray-400);}
+.main{max-width:800px;margin:0 auto;padding:32px 24px 80px;}
 .card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:32px;margin-bottom:24px;}
 .card-title{font-size:17px;font-weight:900;color:var(--navy);margin-bottom:20px;display:flex;align-items:center;gap:8px;}
 .card-title::before{content:'';display:block;width:4px;height:20px;background:var(--green);border-radius:2px;}
@@ -28,31 +49,50 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
 .pw-item.primary{background:var(--green-light);border:1.5px solid #6EE7B7;}
 .pw-label{font-size:12px;font-weight:700;color:var(--gray-400);margin-bottom:4px;}
 .pw-item.primary .pw-label{color:#065F46;}
-.pw-value{font-size:28px;font-weight:900;color:var(--navy);letter-spacing:.15em;font-variant-numeric:tabular-nums;}
+.pw-value{font-size:28px;font-weight:900;color:var(--navy);letter-spacing:.15em;}
 .pw-expires{font-size:13px;color:var(--gray-600);margin-top:4px;}
 .pw-item.primary .pw-expires{color:#065F46;font-weight:700;}
 .copy-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:100px;background:var(--green);color:var(--white);font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:inherit;transition:all .2s;white-space:nowrap;}
 .copy-btn:hover{background:#047857;}
-.copy-btn.secondary{background:var(--gray-200);color:var(--gray-800);}
-.copy-btn.secondary:hover{background:var(--gray-400);color:var(--white);}
+.copy-btn.sec{background:var(--gray-200);color:var(--gray-800);}
+.copy-btn.sec:hover{background:var(--gray-400);color:var(--white);}
 .info-box{background:var(--amber-light);border:1px solid #FDE68A;border-radius:8px;padding:14px 18px;font-size:13px;color:var(--amber);margin-bottom:20px;line-height:1.7;}
 .fg{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
 .fg label{font-size:13px;font-weight:700;color:var(--gray-600);}
 .fg input,.fg textarea{padding:10px 14px;border-radius:8px;border:1.5px solid var(--gray-200);font-size:14px;font-family:inherit;color:var(--gray-800);outline:none;transition:border .2s;background:var(--white);}
 .fg input:focus,.fg textarea:focus{border-color:var(--navy);}
-.fg textarea{resize:vertical;min-height:120px;}
+.fg textarea{resize:vertical;min-height:130px;}
 .send-btn{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;border-radius:100px;background:var(--navy);color:var(--white);font-size:15px;font-weight:700;border:none;cursor:pointer;font-family:inherit;transition:all .2s;}
 .send-btn:hover{background:#1E4D8C;transform:translateY(-1px);}
-.algo-note{background:var(--gray-100);border-radius:8px;padding:14px 18px;font-size:12px;color:var(--gray-600);line-height:1.7;}
-.algo-note code{background:var(--gray-200);padding:1px 6px;border-radius:4px;font-family:monospace;font-size:12px;}
-.loading{color:var(--gray-400);font-size:24px;font-weight:700;}
+.algo-note{background:var(--gray-100);border-radius:8px;padding:14px 18px;font-size:12px;color:var(--gray-600);line-height:1.7;margin-top:16px;}
+.algo-note code{background:var(--gray-200);padding:1px 6px;border-radius:4px;font-family:monospace;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{text-align:left;padding:8px 12px;color:var(--gray-600);border-bottom:2px solid var(--gray-200);}
+td{padding:10px 12px;border-bottom:1px solid var(--gray-200);}
 </style>
 </head>
 <body>
+
+<!-- ADMIN GATE -->
+<div id="adminGate">
+  <div class="gate-box">
+    <div class="gate-logo">🏛️ 退職手続きコンシェルジュ</div>
+    <div class="gate-badge">管理者専用</div>
+    <h1 class="gate-title">管理者パスワード</h1>
+    <p class="gate-sub">管理者用パスワードを入力してください</p>
+    <input type="password" id="adminPwInput" class="gate-input" placeholder="パスワード" autocomplete="current-password">
+    <button class="gate-btn" onclick="checkAdminPw()">ログイン →</button>
+    <div class="gate-err" id="adminGateErr"></div>
+  </div>
+</div>
+
+<!-- ADMIN APP -->
+<div id="adminApp">
 <nav class="nav">
   <div class="nav-inner">
     <span class="nav-logo">🏛️ 退職手続きコンシェルジュ</span>
     <span class="nav-badge">管理者ツール</span>
+    <button class="nav-logout" onclick="adminLogout()">ログアウト</button>
   </div>
 </nav>
 
@@ -63,14 +103,10 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
     <div class="info-box">
       ⚠️ このページは管理者専用です。URLを外部に共有しないでください。パスワードは14日サイクルで自動更新されます。
     </div>
-    <div class="pw-row" id="pwRow">
-      <div class="loading">読み込み中...</div>
-    </div>
-    <div style="margin-top:16px;">
-      <div class="algo-note">
-        パスワード生成方式：<code>SHA-256(SALT + 直近の14の倍数日付)</code> の先頭8文字（大文字）を
-        <code>XXXX-XXXX</code> 形式で表示。各パスワードは28日間有効。常に2つが重複して有効です（有効期間の長い方がプライマリ）。
-      </div>
+    <div class="pw-row" id="pwRow"><p style="color:var(--gray-400)">読み込み中...</p></div>
+    <div class="algo-note">
+      生成方式：<code>SHA-256(SALT + アンカー日付YYYYMMDD)</code> 先頭8文字を <code>XXXX-XXXX</code> 形式で表示。
+      各パスワードは28日間有効。14日ごとに更新され、常に2つが重複有効です。
     </div>
   </div>
 
@@ -86,41 +122,62 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
     </div>
     <div class="fg">
       <label>メール本文（編集可能）</label>
-      <textarea id="mailBody" rows="12"></textarea>
+      <textarea id="mailBody" rows="14"></textarea>
     </div>
     <button class="send-btn" onclick="openMailClient()">📧 メールクライアントを開く</button>
-    <p style="font-size:12px;color:var(--gray-400);margin-top:10px;">
-      ※ お使いのメールアプリが開きます。送信前に内容をご確認ください。
-    </p>
+    <p style="font-size:12px;color:var(--gray-400);margin-top:10px;">※ お使いのメールアプリが開きます。送信前に内容をご確認ください。</p>
   </div>
 
   <div class="card">
-    <div class="card-title">直近のパスワード一覧（確認用）</div>
-    <table style="width:100%;border-collapse:collapse;font-size:13px;" id="histTable">
+    <div class="card-title">パスワード履歴（直近5サイクル）</div>
+    <table>
       <thead>
-        <tr style="border-bottom:2px solid var(--gray-200);">
-          <th style="text-align:left;padding:8px 12px;color:var(--gray-600)">アンカー日付</th>
-          <th style="text-align:left;padding:8px 12px;color:var(--gray-600)">パスワード</th>
-          <th style="text-align:left;padding:8px 12px;color:var(--gray-600)">有効期間</th>
-          <th style="text-align:left;padding:8px 12px;color:var(--gray-600)">状態</th>
+        <tr>
+          <th>アンカー日付</th>
+          <th>パスワード</th>
+          <th>有効期間</th>
+          <th>状態</th>
         </tr>
       </thead>
-      <tbody id="histBody">
-        <tr><td colspan="4" style="padding:12px;color:var(--gray-400)">読み込み中...</td></tr>
-      </tbody>
+      <tbody id="histBody"><tr><td colspan="4" style="color:var(--gray-400);padding:12px">読み込み中...</td></tr></tbody>
     </table>
   </div>
 
 </main>
+</div><!-- #adminApp -->
 
 <script>
 'use strict';
+const ADMIN_HASH = 'd7d2fe5536b8c6962c7e447b30c0025f6b7805f3d5b49d3709bf6808fe97e3ce';
 const SALT = 'TSCKeiyaku2026';
+const SITE_URL = 'https://351justy.github.io/taisyoku/';
 
 async function sha256(s){
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
   return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
 }
+
+async function checkAdminPw(){
+  const val = document.getElementById('adminPwInput').value.trim();
+  if(!val){ document.getElementById('adminGateErr').textContent='パスワードを入力してください'; return; }
+  const h = await sha256(val);
+  if(h === ADMIN_HASH){
+    document.getElementById('adminGate').classList.add('hidden');
+    document.getElementById('adminApp').classList.add('visible');
+    sessionStorage.setItem('tsc_admin','1');
+    initAdmin();
+  } else {
+    document.getElementById('adminGateErr').textContent='パスワードが正しくありません';
+    document.getElementById('adminPwInput').value='';
+  }
+}
+document.getElementById('adminPwInput').addEventListener('keydown', e=>{ if(e.key==='Enter') checkAdminPw(); });
+function adminLogout(){ sessionStorage.removeItem('tsc_admin'); location.reload(); }
+if(sessionStorage.getItem('tsc_admin')==='1'){
+  document.getElementById('adminGate').classList.add('hidden');
+  document.getElementById('adminApp').classList.add('visible');
+}
+
 async function derivePassword(anchorEpochDays){
   const d = new Date(anchorEpochDays * 86400000);
   const ymd = d.getUTCFullYear()
@@ -131,33 +188,31 @@ async function derivePassword(anchorEpochDays){
   return raw.substring(0,4)+'-'+raw.substring(4,8);
 }
 function epochToYMD(days){
-  const d = new Date(days * 86400000);
+  const d = new Date(days*86400000);
   return `${d.getUTCFullYear()}/${String(d.getUTCMonth()+1).padStart(2,'0')}/${String(d.getUTCDate()).padStart(2,'0')}`;
 }
 function epochToJp(days){
-  const d = new Date(days * 86400000);
+  const d = new Date(days*86400000);
   return `${d.getUTCFullYear()}年${d.getUTCMonth()+1}月${d.getUTCDate()}日`;
 }
 
-async function init(){
+async function initAdmin(){
   const todayDays = Math.floor(Date.now()/86400000);
   const offset = todayDays % 14;
-  const a1 = todayDays - offset;        // current anchor
-  const a2 = a1 - 14;                   // previous anchor
+  const a1 = todayDays - offset;
+  const a2 = a1 - 14;
   const daysLeft1 = 28 - offset;
-  const daysLeft2 = 14 - offset;        // >0 means still valid
-
+  const daysLeft2 = 14 - offset;
   const pw1 = await derivePassword(a1);
   const pw2 = await derivePassword(a2);
 
-  // Render password cards
-  const pwRow = document.getElementById('pwRow');
+  // Password cards
   let html = `
     <div class="pw-item primary">
       <div>
         <div class="pw-label">🔑 プライマリ（有効期間が長い方）</div>
         <div class="pw-value">${pw1}</div>
-        <div class="pw-expires">残り ${daysLeft1} 日（アンカー: ${epochToJp(a1)}）</div>
+        <div class="pw-expires">残り ${daysLeft1} 日（アンカー：${epochToJp(a1)}）</div>
       </div>
       <button class="copy-btn" onclick="copyText('${pw1}',this)">📋 コピー</button>
     </div>`;
@@ -167,81 +222,83 @@ async function init(){
       <div>
         <div class="pw-label">🔑 セカンダリ（まだ有効）</div>
         <div class="pw-value" style="font-size:22px">${pw2}</div>
-        <div class="pw-expires">残り ${daysLeft2} 日（アンカー: ${epochToJp(a2)}）</div>
+        <div class="pw-expires">残り ${daysLeft2} 日（アンカー：${epochToJp(a2)}）</div>
       </div>
-      <button class="copy-btn secondary" onclick="copyText('${pw2}',this)">📋 コピー</button>
+      <button class="copy-btn sec" onclick="copyText('${pw2}',this)">📋 コピー</button>
     </div>`;
   } else {
-    html += `<div class="pw-item"><div style="color:var(--gray-400);font-size:14px">セカンダリは期限切れです（新しいサイクルの前半のみ有効）</div></div>`;
+    html += `<div class="pw-item"><div style="color:var(--gray-400);font-size:13px">セカンダリは期限切れです（サイクルの後半14日間は1パスワードのみ有効）</div></div>`;
   }
-  pwRow.innerHTML = html;
+  document.getElementById('pwRow').innerHTML = html;
 
-  // Set mail body template
+  // Mail body
   document.getElementById('mailBody').value =
 `この度は退職手続きコンシェルジュをご利用いただきありがとうございます。
 
 お支払いが確認できましたので、書面作成ページへのアクセスパスワードをお知らせします。
 
 ━━━━━━━━━━━━━━━━━━━━━━━━
-　書面作成ページURL:
-　https://（あなたのGitHub PagesのURL）/app.html
+書面作成ページURL：
+${SITE_URL}app.html
 
-　パスワード: ${pw1}
-　有効期限: ${daysLeft1}日間
+パスワード：${pw1}
+有効期限：本日より${daysLeft1}日間
 ━━━━━━━━━━━━━━━━━━━━━━━━
 
-ご利用手順：
+【ご利用手順】
 1. 上記URLにアクセスしてください
 2. パスワードを入力してログインしてください
-3. 基本情報を入力し、各書面をPDFで生成してください
-4. 印刷後、自署欄に署名・日付を手書きで記入してください
-5. 配達証明郵便で会社宛に送付してください
+3. ステップ1「基本情報」に会社名・送付日などを入力してください
+4. ステップ2「書面生成」から必要な書面をPDFで生成してください
+5. 印刷後、自署欄に署名・日付を手書きで記入してください
+6. 配達証明郵便で会社宛に送付してください
 
 ご不明点がございましたら、このメールへの返信にてお問い合わせください。
 
 退職手続きコンシェルジュ`;
 
-  // Build history table
+  // History table
   const tbody = document.getElementById('histBody');
   const rows = [];
-  for(let i = -1; i <= 2; i++){
-    const anchor = a1 + (i * 14);
+  for(let i=-1; i<=3; i++){
+    const anchor = a1 + i*14;
     const pw = await derivePassword(anchor);
-    const validFrom = epochToYMD(anchor);
-    const validTo = epochToYMD(anchor + 27);
+    const from = epochToYMD(anchor);
+    const to = epochToYMD(anchor+27);
     const today = todayDays;
-    let status = '';
-    if(anchor > today){ status = '<span style="color:var(--gray-400)">未来</span>'; }
-    else if(anchor + 28 <= today){ status = '<span style="color:var(--gray-400)">期限切れ</span>'; }
-    else if(anchor === a1){ status = '<span style="color:var(--green);font-weight:700">✓ プライマリ</span>'; }
-    else { status = '<span style="color:#D97706;font-weight:700">✓ セカンダリ</span>'; }
-    rows.push(`<tr style="border-bottom:1px solid var(--gray-200)">
-      <td style="padding:10px 12px">${epochToYMD(anchor)}</td>
-      <td style="padding:10px 12px;font-weight:700;letter-spacing:.1em">${pw}</td>
-      <td style="padding:10px 12px;font-size:12px;color:var(--gray-600)">${validFrom} 〜 ${validTo}</td>
-      <td style="padding:10px 12px">${status}</td>
+    let status;
+    if(anchor > today) status = '<span style="color:var(--gray-400)">未来</span>';
+    else if(anchor+28 <= today) status = '<span style="color:var(--gray-400)">期限切れ</span>';
+    else if(anchor === a1) status = '<span style="color:var(--green);font-weight:700">✓ プライマリ</span>';
+    else status = '<span style="color:#D97706;font-weight:700">✓ セカンダリ</span>';
+    rows.push(`<tr>
+      <td>${from}</td>
+      <td style="font-weight:700;letter-spacing:.1em">${pw}</td>
+      <td style="font-size:12px;color:var(--gray-600)">${from} 〜 ${to}</td>
+      <td>${status}</td>
     </tr>`);
   }
   tbody.innerHTML = rows.join('');
 }
 
-function copyText(text, btn){
+function copyText(text,btn){
   navigator.clipboard.writeText(text).then(()=>{
-    const orig = btn.innerHTML;
-    btn.innerHTML = '✅ コピーしました';
-    setTimeout(()=>{ btn.innerHTML = orig; }, 2000);
-  }).catch(()=>{ alert('コピーできませんでした。手動でコピーしてください: ' + text); });
+    const orig=btn.innerHTML;btn.innerHTML='✅ コピーしました';
+    setTimeout(()=>{ btn.innerHTML=orig; },2000);
+  }).catch(()=>{ alert('コピーできません。手動でコピーしてください:\n'+text); });
 }
-
 function openMailClient(){
   const to = document.getElementById('toEmail').value.trim();
   if(!to){ alert('送信先メールアドレスを入力してください。'); return; }
-  const subject = encodeURIComponent(document.getElementById('mailSubject').value);
+  const subj = encodeURIComponent(document.getElementById('mailSubject').value);
   const body = encodeURIComponent(document.getElementById('mailBody').value);
-  window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+  window.location.href = `mailto:${to}?subject=${subj}&body=${body}`;
 }
 
-init();
+if(sessionStorage.getItem('tsc_admin')==='1'){
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', initAdmin);
+  else initAdmin();
+}
 </script>
 </body>
 </html>

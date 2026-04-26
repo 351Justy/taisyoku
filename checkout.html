@@ -229,16 +229,10 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
 </footer>
 
 <script>
-// Placeholder: replace href with actual Stripe payment link
 document.getElementById('payBtn').addEventListener('click', function(e){
   e.preventDefault();
-  // TODO: Replace this URL with your actual Stripe payment link
-  const stripeUrl = 'https://www.kaihipay.jp/forms?form_code=6087651098891895'; // ← ここを実際のStripe決済リンクに変更
-  if(stripeUrl.includes('XXXXXX')){
-    alert('決済リンクは準備中です。\n設定後にお支払いいただけます。');
-  } else {
-    window.location.href = stripeUrl;
-  }
+  const kaihipayUrl = 'https://www.kaihipay.jp/forms?form_code=6087651098891895';
+  window.location.href = kaihipayUrl;
 });
 </script>
 
