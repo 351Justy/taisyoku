@@ -156,7 +156,7 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
           <div class="flow-step-num">1</div>
           <div class="flow-step-body">
             <div class="flow-step-head">下記よりお支払い</div>
-            <div class="flow-step-text">クレジットカード決済にて <strong>¥9,800（税込）</strong> をお支払いください。決済はStripeの安全な環境で処理されます。</div>
+            <div class="flow-step-text">クレジットカード決済にて <strong>¥4,980（税込）</strong> をお支払いください。決済は会費PAYの安全な環境で処理されます。</div>
           </div>
         </div>
         <div class="flow-step">
@@ -189,7 +189,7 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
 
     <div class="price-card">
       <div class="price-card-label">ライトプラン（買い切り）</div>
-      <div class="price-amount"><span>¥</span>9,800</div>
+      <div class="price-amount"><span>¥</span>4,980</div>
       <div class="price-tax">税込・一回限り</div>
       <ul class="price-features">
         <li>退職通知書（内容証明対応フォーマット）</li>
@@ -200,8 +200,8 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
         <li>返答テンプレート一式（7種）</li>
         <li>郵送ガイド（配達証明・内容証明の手順）</li>
       </ul>
-      <a href="#payment-link" class="pay-btn" id="payBtn">💳 クレジットカードで支払う（¥9,800）</a>
-      <div class="pay-btn-sub">Stripe決済 ・ SSL暗号化通信</div>
+      <a href="#payment-link" class="pay-btn" id="payBtn">💳 クレジットカードで支払う（¥4,980）</a>
+      <div class="pay-btn-sub">会費PAY決済 ・ SSL暗号化通信</div>
     </div>
 
     <div class="after-card">
@@ -233,7 +233,7 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
 document.getElementById('payBtn').addEventListener('click', function(e){
   e.preventDefault();
   // TODO: Replace this URL with your actual Stripe payment link
-  const stripeUrl = 'https://buy.stripe.com/XXXXXX'; // ← ここを実際のStripe決済リンクに変更
+  const stripeUrl = 'https://www.kaihipay.jp/forms?form_code=6087651098891895'; // ← ここを実際のStripe決済リンクに変更
   if(stripeUrl.includes('XXXXXX')){
     alert('決済リンクは準備中です。\n設定後にお支払いいただけます。');
   } else {
