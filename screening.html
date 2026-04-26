@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>無料スクリーニングチェック｜退職手続きコンシェルジュ</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0F2F5C;--navy-light:#1E4D8C;--green:#059669;--green-light:#D1FAE5;
+  --amber:#D97706;--amber-light:#FEF3C7;--red:#DC2626;--red-light:#FEE2E2;
+  --gray-50:#F8FAFC;--gray-100:#F1F5F9;--gray-200:#E2E8F0;
+  --gray-400:#94A3B8;--gray-600:#475569;--gray-800:#1E293B;--white:#fff;
+  --radius:12px;--shadow:0 4px 24px rgba(15,47,92,.10);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(--gray-50);min-height:100vh;}
+.top-bar{background:var(--navy);padding:14px 0;}
+.top-bar-inner{max-width:760px;margin:0 auto;padding:0 20px;display:flex;align-items:center;justify-content:space-between;}
+.top-logo{font-size:16px;font-weight:900;color:#fff;text-decoration:none;display:flex;align-items:center;gap:8px;}
+.top-logo span{color:#6EE7B7;}
+.back-link{font-size:13px;color:rgba(255,255,255,.7);text-decoration:none;}
+.back-link:hover{color:#fff;}
+.main{max-width:760px;margin:0 auto;padding:40px 20px 80px;}
+
+/* Progress */
+.prog-wrap{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius);padding:16px 24px;margin-bottom:24px;box-shadow:var(--shadow);}
+.prog-bar-track{background:var(--gray-200);height:8px;border-radius:4px;overflow:hidden;}
+.prog-bar-fill{background:var(--navy);height:100%;border-radius:4px;transition:width .4s ease;}
+.prog-text{font-size:13px;color:var(--gray-600);margin-top:8px;}
+
+/* Card */
+.card{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius);padding:36px 32px;box-shadow:var(--shadow);}
+.card-title{font-size:22px;font-weight:900;color:var(--navy);margin-bottom:8px;}
+.card-lead{font-size:14px;color:var(--gray-600);margin-bottom:32px;line-height:1.8;}
+
+/* Alert */
+.alert{border-radius:8px;padding:16px 20px;margin-bottom:20px;font-size:14px;line-height:1.7;}
+.alert-success{background:var(--green-light);border:1px solid #6EE7B7;color:#065F46;}
+.alert-danger{background:var(--red-light);border:1px solid #FCA5A5;color:#991B1B;}
+.alert-warn{background:var(--amber-light);border:1px solid #FDE68A;color:#92400E;}
+.alert-title{font-weight:700;margin-bottom:6px;font-size:15px;}
+
+/* Single question display */
+.q-card{background:var(--white);border:2px solid var(--gray-200);border-radius:16px;padding:40px 36px;text-align:center;}
+.q-num{font-size:13px;font-weight:700;color:var(--gray-400);letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px;}
+.q-text{font-size:20px;font-weight:700;color:var(--navy);line-height:1.5;margin-bottom:12px;}
+.q-sub{font-size:14px;color:var(--gray-600);margin-bottom:36px;line-height:1.7;}
+.q-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+.q-btn{min-width:160px;padding:18px 32px;border-radius:100px;border:2px solid var(--gray-200);background:var(--white);font-size:17px;font-weight:700;cursor:pointer;transition:all .2s;font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);}
+.q-btn.yes:hover,.q-btn.yes-sel{background:var(--navy);border-color:var(--navy);color:#fff;}
+.q-btn.no:hover,.q-btn.no-sel{background:var(--green);border-color:var(--green);color:#fff;}
+.q-result-box{margin-top:24px;border-radius:10px;padding:16px 20px;font-size:14px;font-weight:600;display:none;}
+.q-result-box.show{display:block;}
+.q-result-box.ok{background:var(--green-light);color:#065F46;}
+.q-result-box.ng{background:var(--red-light);color:#991B1B;}
+.q-result-box.warn{background:var(--amber-light);color:#92400E;}
+
+/* Navigation */
+.nav-btns{display:flex;justify-content:space-between;align-items:center;margin-top:28px;gap:12px;}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;border-radius:100px;font-size:15px;font-weight:700;text-decoration:none;cursor:pointer;transition:all .2s;border:2px solid transparent;font-family:'Noto Sans JP',sans-serif;}
+.btn-primary{background:var(--green);color:#fff;border-color:var(--green);}
+.btn-primary:hover{background:#047857;transform:translateY(-2px);}
+.btn-navy{background:var(--navy);color:#fff;}
+.btn-navy:hover{background:var(--navy-light);}
+.btn-outline{background:transparent;color:var(--gray-600);border-color:var(--gray-200);}
+.btn-outline:hover{border-color:var(--navy);color:var(--navy);}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+
+/* Summary */
+.summary-list{display:flex;flex-direction:column;gap:8px;margin:20px 0;}
+.summary-row{display:flex;align-items:flex-start;gap:12px;font-size:14px;padding:10px 14px;border-radius:8px;}
+.summary-row.ok{background:var(--green-light);}
+.summary-row.warn{background:var(--amber-light);}
+.summary-icon{flex-shrink:0;font-size:16px;}
+
+/* Lawyer box */
+.lawyer-box{background:linear-gradient(135deg,#FEF3C7,#FDE68A);border:2px solid #F59E0B;border-radius:var(--radius);padding:32px;text-align:center;}
+.lawyer-box h3{font-size:22px;font-weight:900;color:#92400E;margin-bottom:12px;}
+.lawyer-box p{font-size:14px;color:#92400E;margin-bottom:24px;line-height:1.8;}
+.lawyer-links{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <div class="top-bar-inner">
+    <a href="index.html" class="top-logo">📋 退職手続き<span>コンシェルジュ</span></a>
+    <a href="index.html" class="back-link">← サービス概要に戻る</a>
+  </div>
+</div>
+
+<div class="main">
+  <div class="card" style="margin-bottom:20px;">
+    <div class="card-title">📋 無料スクリーニングチェック</div>
+    <div class="card-lead">
+      当サービスが対応できるか確認します。全9問、約3分で完了します。<br>
+      <strong>個人情報の入力は不要です。費用は一切かかりません。</strong>
+    </div>
+  </div>
+
+  <!-- Progress -->
+  <div class="prog-wrap">
+    <div class="prog-bar-track"><div class="prog-bar-fill" id="progFill" style="width:0%"></div></div>
+    <div class="prog-text" id="progText">質問 1 / 9</div>
+  </div>
+
+  <!-- Question display area -->
+  <div id="qArea">
+    <div class="q-card" id="qCard">
+      <div class="q-num" id="qNum">質問 1 / 9</div>
+      <div class="q-text" id="qText"></div>
+      <div class="q-sub" id="qSub"></div>
+      <div class="q-btns">
+        <button class="q-btn yes" id="btnYes" onclick="answer(true)">はい</button>
+        <button class="q-btn no" id="btnNo" onclick="answer(false)">いいえ</button>
+      </div>
+      <div class="q-result-box" id="qResult"></div>
+    </div>
+    <div class="nav-btns">
+      <button class="btn btn-outline" id="btnPrev" onclick="prev()">← 前の質問</button>
+      <button class="btn btn-navy" id="btnNext" onclick="next()" disabled>次の質問 →</button>
+    </div>
+  </div>
+
+  <!-- Summary (shown after all questions) -->
+  <div id="summaryArea" style="display:none;">
+    <div class="card">
+      <div class="card-title" id="summaryTitle"></div>
+      <div id="summaryContent"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const QUESTIONS = [
+  {
+    text: '無期雇用（正社員・正規職員・無期契約社員）ですか？',
+    sub: '有期雇用（契約社員・アルバイト等で雇用期間が設定されている）の場合は「いいえ」を選んでください。',
+    type: 'required_yes',
+    okMsg: '✅ 無期雇用のため、民法627条が適用されます。',
+    ngMsg: '⚠️ 有期雇用の場合、民法627条が直接適用されない場合があります。当サービスの対象外となる可能性があります。',
+    ngLevel: 'danger'
+  },
+  {
+    text: '会社から損害賠償の請求を受けていますか、または脅されていますか？',
+    sub: '口頭・書面を問わず「損害賠償を請求する」「訴訟を起こす」などと言われている場合を含みます。',
+    type: 'ng_yes',
+    okMsg: '✅ 問題ありません。',
+    ngMsg: '⚠️ 損害賠償を言われている場合は弁護士へのご相談が必要です。当サービスでは対応できません。',
+    ngLevel: 'danger'
+  },
+  {
+    text: '未払いの残業代・給与を会社に請求したいですか？',
+    sub: '支払われていない残業代、給与、手当等がある場合です。',
+    type: 'ng_yes',
+    okMsg: '✅ 問題ありません。',
+    ngMsg: '⚠️ 未払い賃金の請求は弁護士の領域です。当サービスでは対応できません。',
+    ngLevel: 'danger'
+  },
+  {
+    text: 'ハラスメント（パワハラ・セクハラ等）による慰謝料を請求したいですか？',
+    sub: '',
+    type: 'ng_yes',
+    okMsg: '✅ 問題ありません。',
+    ngMsg: '⚠️ ハラスメント慰謝料は弁護士の専門領域です。当サービスでは対応できません。',
+    ngLevel: 'danger'
+  },
+  {
+    text: '会社から懲戒解雇を示唆・通告されていますか？',
+    sub: '「懲戒解雇にする」「退職金を払わない」などと言われている場合を含みます。',
+    type: 'ng_yes',
+    okMsg: '✅ 問題ありません。',
+    ngMsg: '⚠️ 懲戒解雇の示唆は弁護士へのご相談が必要です。当サービスでは対応できません。',
+    ngLevel: 'danger'
+  },
+  {
+    text: '公務員・自衛官・特定の国家資格が必要な公的職種ですか？',
+    sub: '国家公務員・地方公務員・自衛官・警察官・消防士等が含まれます。',
+    type: 'ng_yes',
+    okMsg: '✅ 問題ありません。',
+    ngMsg: '⚠️ 公務員等は退職手続きの根拠法が民法627条と異なります。当サービスの対象外です。',
+    ngLevel: 'danger'
+  },
+  {
+    text: '社宅・社員寮など会社が手配した住宅に現在お住まいですか？',
+    sub: '退職に伴い退去が必要になる場合、個別の対応が必要になります。',
+    type: 'warn_yes',
+    okMsg: '✅ 問題ありません。',
+    ngMsg: '⚠️ 社宅等にお住まいの場合、退職に伴い退去が必要になります。次の住居を確保した上でご利用ください。',
+    ngLevel: 'warn'
+  },
+  {
+    text: '会社の多額の現金・重要な書類等を現在預かっていますか？',
+    sub: '会社の金庫の鍵、重要な契約書原本、多額の現金等を個人で保管している場合です。',
+    type: 'ng_yes',
+    okMsg: '✅ 問題ありません。',
+    ngMsg: '⚠️ 重要な資産を預かっている場合は弁護士への相談の上、返却手順を確認することをお勧めします。',
+    ngLevel: 'danger'
+  },
+  {
+    text: '競業避止義務（同業他社への転職禁止）や秘密保持に関して揉めそうですか？',
+    sub: '雇用契約書や誓約書に「退職後○年間は同業他社に転職禁止」などの条項がある場合です。',
+    type: 'warn_yes',
+    okMsg: '✅ 問題ありません。',
+    ngMsg: '⚠️ 競業避止・秘密保持については、転職前に弁護士に有効性を確認することをお勧めします。',
+    ngLevel: 'warn'
+  }
+];
+
+let answers = new Array(QUESTIONS.length).fill(null);
+let current = 0;
+
+function render() {
+  const q = QUESTIONS[current];
+  document.getElementById('qNum').textContent = `質問 ${current+1} / ${QUESTIONS.length}`;
+  document.getElementById('progText').textContent = `質問 ${current+1} / ${QUESTIONS.length}`;
+  document.getElementById('progFill').style.width = `${(current/QUESTIONS.length)*100}%`;
+  document.getElementById('qText').textContent = q.text;
+  document.getElementById('qSub').textContent = q.sub;
+  document.getElementById('qSub').style.display = q.sub ? 'block' : 'none';
+  // Restore button state
+  const ans = answers[current];
+  const btnY = document.getElementById('btnYes');
+  const btnN = document.getElementById('btnNo');
+  btnY.className = 'q-btn yes' + (ans === true ? ' yes-sel' : '');
+  btnN.className = 'q-btn no' + (ans === false ? ' no-sel' : '');
+  showResult(ans);
+  document.getElementById('btnPrev').disabled = current === 0;
+  document.getElementById('btnNext').disabled = ans === null;
+  document.getElementById('btnNext').textContent = current === QUESTIONS.length-1 ? '結果を見る →' : '次の質問 →';
+}
+
+function showResult(ans) {
+  const q = QUESTIONS[current];
+  const el = document.getElementById('qResult');
+  if(ans === null) { el.className = 'q-result-box'; return; }
+  let isNg = false, isWarn = false;
+  if(q.type === 'required_yes') isNg = ans === false;
+  else if(q.type === 'ng_yes') isNg = ans === true;
+  else if(q.type === 'warn_yes') isWarn = ans === true;
+  if(isNg) {
+    el.className = 'q-result-box show ng';
+    el.textContent = q.ngMsg;
+  } else if(isWarn) {
+    el.className = 'q-result-box show warn';
+    el.textContent = q.ngMsg;
+  } else {
+    el.className = 'q-result-box show ok';
+    el.textContent = q.okMsg;
+  }
+}
+
+function answer(val) {
+  answers[current] = val;
+  document.getElementById('btnYes').className = 'q-btn yes' + (val === true ? ' yes-sel' : '');
+  document.getElementById('btnNo').className = 'q-btn no' + (val === false ? ' no-sel' : '');
+  showResult(val);
+  document.getElementById('btnNext').disabled = false;
+}
+
+function next() {
+  if(answers[current] === null) return;
+  if(current < QUESTIONS.length - 1) {
+    current++;
+    render();
+  } else {
+    showSummary();
+  }
+}
+function prev() {
+  if(current > 0) { current--; render(); }
+}
+
+function isNG(i) {
+  const q = QUESTIONS[i];
+  if(q.type === 'required_yes') return answers[i] === false;
+  if(q.type === 'ng_yes') return answers[i] === true;
+  return false;
+}
+function isWarn(i) {
+  return QUESTIONS[i].type === 'warn_yes' && answers[i] === true;
+}
+
+function showSummary() {
+  document.getElementById('qArea').style.display = 'none';
+  document.getElementById('summaryArea').style.display = 'block';
+  document.getElementById('progFill').style.width = '100%';
+  document.getElementById('progText').textContent = 'チェック完了';
+
+  const hasNG = QUESTIONS.some((q, i) => isNG(i));
+  const warnings = QUESTIONS.filter((q, i) => isWarn(i));
+  const titleEl = document.getElementById('summaryTitle');
+  const content = document.getElementById('summaryContent');
+
+  if(hasNG) {
+    titleEl.textContent = '⚠️ 専門家へのご相談が必要なケースが含まれています';
+    const ngItems = QUESTIONS.filter((q, i) => isNG(i));
+    content.innerHTML = `
+      <div class="alert alert-danger">
+        <div class="alert-title">残念ながら、当サービスでは対応が難しいケースが含まれています</div>
+        <div>以下のいずれかに該当する場合、弁護士への相談が必要です。</div>
+      </div>
+      <div class="summary-list">
+        ${ngItems.map(q => `<div class="summary-row ng"><span class="summary-icon">❌</span><span>${q.ngMsg}</span></div>`).join('')}
+      </div>
+      ${warnings.length ? `<div class="summary-list">${warnings.map(q=>`<div class="summary-row warn"><span class="summary-icon">⚠️</span><span>${q.ngMsg}</span></div>`).join('')}</div>` : ''}
+      <div class="lawyer-box" style="margin-top:24px;">
+        <h3>弁護士・専門家にご相談ください</h3>
+        <p>お一人で抱え込まず、専門家に相談することをお勧めします。<br>法テラスでは無料の法律相談が受けられます。</p>
+        <div class="lawyer-links">
+          <a href="https://www.houterasu.or.jp/" target="_blank" rel="noopener" class="btn btn-navy">法テラスに相談 →</a>
+          <a href="https://www.bengo4.com/" target="_blank" rel="noopener" class="btn btn-outline" style="color:var(--navy);border-color:var(--navy);">弁護士ドットコム →</a>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:20px;">
+        <button class="btn btn-outline" onclick="restart()">← 最初からやり直す</button>
+      </div>`;
+  } else {
+    titleEl.textContent = '✅ スクリーニングを通過しました！';
+    content.innerHTML = `
+      <div class="alert alert-success">
+        <div class="alert-title">当サービスでサポートできます</div>
+        すべてのチェック項目を問題なく通過しました。次のステップに進んでください。
+      </div>
+      ${warnings.length ? `<div class="alert alert-warn"><div class="alert-title">⚠️ ご注意いただきたい点</div><div class="summary-list" style="margin:8px 0 0;">${warnings.map(q=>`<div class="summary-row warn" style="padding:6px 10px;"><span>⚠️</span><span>${q.ngMsg}</span></div>`).join('')}</div></div>` : ''}
+      <div style="background:var(--navy);border-radius:16px;padding:36px;text-align:center;margin-top:24px;">
+        <div style="font-size:32px;margin-bottom:12px;">🎉</div>
+        <div style="font-size:20px;font-weight:900;color:#fff;margin-bottom:8px;">次はお申し込みへ</div>
+        <div style="font-size:14px;color:rgba(255,255,255,.8);margin-bottom:24px;">
+          サービス料 <strong style="color:#6EE7B7;font-size:20px;">¥9,800</strong>（税込）をお支払いいただくと、<br>
+          書面作成ツールへのアクセスパスワードをメールでお送りします。
+        </div>
+        <a href="checkout.html" class="btn" style="background:#6EE7B7;color:var(--navy);font-size:18px;padding:18px 40px;">
+          お申し込み・お支払いへ進む →
+        </a>
+      </div>
+      <div style="text-align:center;margin-top:16px;">
+        <button class="btn btn-outline" onclick="restart()">← 最初からやり直す</button>
+      </div>`;
+  }
+}
+
+function restart() {
+  answers = new Array(QUESTIONS.length).fill(null);
+  current = 0;
+  document.getElementById('summaryArea').style.display = 'none';
+  document.getElementById('qArea').style.display = 'block';
+  render();
+}
+
+// Init
+render();
+</script>
+</body>
+</html>

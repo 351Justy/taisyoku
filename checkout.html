@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>お申し込み・お支払い｜退職手続きコンシェルジュ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0F2F5C;--navy-light:#1E4D8C;--green:#059669;--green-light:#D1FAE5;
+  --amber:#D97706;--amber-light:#FEF3C7;--red:#DC2626;--red-light:#FEE2E2;
+  --gray-50:#F8FAFC;--gray-100:#F1F5F9;--gray-200:#E2E8F0;
+  --gray-400:#94A3B8;--gray-600:#475569;--gray-800:#1E293B;--white:#fff;
+  --radius:12px;--shadow:0 4px 24px rgba(15,47,92,.10);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(--gray-50);line-height:1.75;font-size:16px;min-height:100vh;}
+.container{max-width:720px;margin:0 auto;padding:0 24px;}
+
+/* Nav */
+.nav{background:rgba(255,255,255,.97);border-bottom:1px solid var(--gray-200);padding:0 24px;}
+.nav-inner{display:flex;align-items:center;height:60px;max-width:720px;margin:0 auto;}
+.nav-logo{font-size:16px;font-weight:900;color:var(--navy);text-decoration:none;display:flex;align-items:center;gap:8px;}
+.nav-logo span{color:var(--green);}
+
+/* Progress */
+.progress-bar-wrap{background:var(--white);border-bottom:1px solid var(--gray-200);padding:16px 24px;}
+.progress-steps{display:flex;align-items:center;justify-content:center;gap:0;max-width:600px;margin:0 auto;}
+.ps{display:flex;align-items:center;gap:0;}
+.ps-node{display:flex;flex-direction:column;align-items:center;gap:4px;}
+.ps-circle{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;transition:all .3s;}
+.ps-circle.done{background:var(--green);color:var(--white);}
+.ps-circle.active{background:var(--navy);color:var(--white);}
+.ps-circle.idle{background:var(--gray-200);color:var(--gray-400);}
+.ps-label{font-size:11px;font-weight:600;white-space:nowrap;}
+.ps-label.done,.ps-label.active{color:var(--navy);}
+.ps-label.idle{color:var(--gray-400);}
+.ps-line{width:48px;height:2px;margin-bottom:20px;}
+.ps-line.done{background:var(--green);}
+.ps-line.idle{background:var(--gray-200);}
+@media(max-width:480px){.ps-line{width:24px;}.ps-label{font-size:10px;}}
+
+/* Page */
+.page{padding:40px 0 80px;}
+
+/* Intro card */
+.intro-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:36px 40px;margin-bottom:24px;}
+.intro-badge{display:inline-flex;align-items:center;gap:6px;background:var(--green-light);color:var(--green);font-size:12px;font-weight:700;padding:4px 14px;border-radius:100px;letter-spacing:.05em;margin-bottom:20px;}
+.intro-title{font-size:clamp(20px,3vw,26px);font-weight:900;color:var(--navy);line-height:1.35;margin-bottom:12px;}
+.intro-lead{font-size:15px;color:var(--gray-600);line-height:1.8;}
+@media(max-width:480px){.intro-card{padding:24px 20px;}}
+
+/* Flow steps */
+.flow-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:36px 40px;margin-bottom:24px;}
+.flow-card-title{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:24px;display:flex;align-items:center;gap:8px;}
+.flow-card-title::before{content:'';display:block;width:4px;height:20px;background:var(--green);border-radius:2px;}
+.flow-steps{display:flex;flex-direction:column;gap:0;}
+.flow-step{display:grid;grid-template-columns:auto 1fr;gap:0 20px;position:relative;}
+.flow-step:not(:last-child)::after{content:'';position:absolute;left:20px;top:44px;bottom:0;width:2px;background:var(--gray-200);}
+.flow-step-num{width:40px;height:40px;border-radius:50%;background:var(--navy);color:var(--white);font-size:14px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;z-index:1;}
+.flow-step-body{padding-bottom:32px;}
+.flow-step:last-child .flow-step-body{padding-bottom:0;}
+.flow-step-head{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:6px;margin-top:8px;}
+.flow-step-text{font-size:14px;color:var(--gray-600);line-height:1.7;}
+.flow-step-text strong{color:var(--gray-800);font-weight:700;}
+@media(max-width:480px){.flow-card{padding:24px 20px;}}
+
+/* Price card */
+.price-card{background:linear-gradient(135deg,var(--navy) 0%,#1a3d6b 100%);border-radius:var(--radius);padding:36px 40px;margin-bottom:24px;color:var(--white);}
+.price-card-label{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:12px;}
+.price-amount{font-size:clamp(40px,8vw,60px);font-weight:900;line-height:1;margin-bottom:4px;}
+.price-amount span{font-size:20px;font-weight:500;}
+.price-tax{font-size:13px;color:rgba(255,255,255,.6);margin-bottom:24px;}
+.price-features{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:32px;}
+.price-features li{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:rgba(255,255,255,.85);}
+.price-features li::before{content:'✓';color:#6EE7B7;font-weight:900;flex-shrink:0;margin-top:2px;}
+.pay-btn{display:block;width:100%;padding:18px;border-radius:100px;background:var(--green);color:var(--white);font-size:17px;font-weight:900;text-align:center;text-decoration:none;border:none;cursor:pointer;transition:all .2s;letter-spacing:.02em;}
+.pay-btn:hover{background:#047857;transform:translateY(-2px);box-shadow:0 8px 24px rgba(5,150,105,.4);}
+.pay-btn-sub{text-align:center;font-size:12px;color:rgba(255,255,255,.5);margin-top:10px;}
+@media(max-width:480px){.price-card{padding:24px 20px;}}
+
+/* After payment */
+.after-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:36px 40px;margin-bottom:24px;border-left:4px solid var(--green);}
+.after-title{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.after-text{font-size:14px;color:var(--gray-600);line-height:1.8;}
+.after-text strong{color:var(--gray-800);}
+@media(max-width:480px){.after-card{padding:24px 20px;}}
+
+/* Already have password */
+.already-card{background:var(--gray-50);border-radius:var(--radius);border:2px solid var(--gray-200);padding:28px 32px;margin-bottom:24px;}
+.already-title{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.app-link-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border-radius:100px;background:var(--navy);color:var(--white);font-size:14px;font-weight:700;text-decoration:none;transition:all .2s;}
+.app-link-btn:hover{background:var(--navy-light);transform:translateY(-1px);}
+@media(max-width:480px){.already-card{padding:20px;}}
+
+/* Notice */
+.notice{background:var(--amber-light);border:1px solid #FDE68A;border-radius:8px;padding:16px 20px;margin-bottom:24px;font-size:13px;color:var(--amber);line-height:1.7;}
+.notice strong{font-weight:700;}
+
+/* Footer */
+.footer{background:var(--navy);color:rgba(255,255,255,.5);text-align:center;padding:32px 24px;font-size:13px;}
+.footer a{color:rgba(255,255,255,.5);text-decoration:none;}
+.footer a:hover{color:rgba(255,255,255,.8);}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">🏛️ 退職手続き<span>コンシェルジュ</span></a>
+  </div>
+</nav>
+
+<div class="progress-bar-wrap">
+  <div class="progress-steps">
+    <div class="ps">
+      <div class="ps-node">
+        <div class="ps-circle done">✓</div>
+        <div class="ps-label done">スクリーニング</div>
+      </div>
+    </div>
+    <div class="ps-line done"></div>
+    <div class="ps">
+      <div class="ps-node">
+        <div class="ps-circle active">2</div>
+        <div class="ps-label active">お申し込み</div>
+      </div>
+    </div>
+    <div class="ps-line idle"></div>
+    <div class="ps">
+      <div class="ps-node">
+        <div class="ps-circle idle">3</div>
+        <div class="ps-label idle">書面作成</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main class="page">
+  <div class="container">
+
+    <div class="intro-card">
+      <div class="intro-badge">✅ スクリーニング通過</div>
+      <h1 class="intro-title">お申し込み・お支払い</h1>
+      <p class="intro-lead">
+        ご利用の流れをご確認のうえ、下記よりお支払いをお願いします。お支払い確認後、担当者よりパスワードをメールにてご案内いたします。
+      </p>
+    </div>
+
+    <div class="flow-card">
+      <div class="flow-card-title">ご利用の流れ</div>
+      <div class="flow-steps">
+        <div class="flow-step">
+          <div class="flow-step-num">1</div>
+          <div class="flow-step-body">
+            <div class="flow-step-head">下記よりお支払い</div>
+            <div class="flow-step-text">クレジットカード決済にて <strong>¥9,800（税込）</strong> をお支払いください。決済はStripeの安全な環境で処理されます。</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-num">2</div>
+          <div class="flow-step-body">
+            <div class="flow-step-head">パスワードをメールで受け取る</div>
+            <div class="flow-step-text">お支払い確認後、<strong>通常24時間以内</strong>（平日営業時間内）に書面作成ページへのアクセスパスワードをご登録のメールアドレスへお送りします。</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-num">3</div>
+          <div class="flow-step-body">
+            <div class="flow-step-head">書面作成ページにアクセス</div>
+            <div class="flow-step-text">メールに記載のパスワードを使って書面作成ページへアクセスし、必要な書面をPDFで生成します。</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-num">4</div>
+          <div class="flow-step-body">
+            <div class="flow-step-head">印刷・郵送</div>
+            <div class="flow-step-text">生成したPDFを印刷し、自署・捺印のうえ会社宛に配達証明郵便で送付します。郵送方法の詳細は書面作成ページ内でご案内します。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="notice">
+      <strong>⚠️ ご注意：</strong>本サービスは書面作成の支援のみを行います。法律相談・代理交渉・会社への連絡代行は含まれません。ご不明点は事前にお問い合わせください。
+    </div>
+
+    <div class="price-card">
+      <div class="price-card-label">ライトプラン（買い切り）</div>
+      <div class="price-amount"><span>¥</span>9,800</div>
+      <div class="price-tax">税込・一回限り</div>
+      <ul class="price-features">
+        <li>退職通知書（内容証明対応フォーマット）</li>
+        <li>有給休暇消化申請書（カレンダー計算付き）</li>
+        <li>私物返却・物品貸与一覧表</li>
+        <li>業務引き継ぎ記録書</li>
+        <li>退職確認依頼書</li>
+        <li>返答テンプレート一式（7種）</li>
+        <li>郵送ガイド（配達証明・内容証明の手順）</li>
+      </ul>
+      <a href="#payment-link" class="pay-btn" id="payBtn">💳 クレジットカードで支払う（¥9,800）</a>
+      <div class="pay-btn-sub">Stripe決済 ・ SSL暗号化通信</div>
+    </div>
+
+    <div class="after-card">
+      <div class="after-title">💌 お支払い後について</div>
+      <p class="after-text">
+        お支払いが完了しましたら、<strong>決済時に入力されたメールアドレス</strong>へパスワードをお送りします。メールが届かない場合は迷惑メールフォルダもご確認ください。<br><br>
+        書面作成ページのURL：<strong>app.html</strong><br>
+        パスワードはメール本文に記載されます。
+      </p>
+    </div>
+
+    <div class="already-card">
+      <div class="already-title">🔑 すでにパスワードをお持ちの方</div>
+      <p style="font-size:14px;color:var(--gray-600);margin-bottom:16px;">書面作成ページへ直接お進みください。</p>
+      <a href="app.html" class="app-link-btn">→ 書面作成ページへ</a>
+    </div>
+
+  </div>
+</main>
+
+<footer class="footer">
+  <p style="margin-bottom:8px;">退職手続きコンシェルジュ</p>
+  <p>本サービスは法律相談・法的代理を提供するものではありません。</p>
+  <p style="margin-top:8px;"><a href="index.html">トップへ戻る</a></p>
+</footer>
+
+<script>
+// Placeholder: replace href with actual Stripe payment link
+document.getElementById('payBtn').addEventListener('click', function(e){
+  e.preventDefault();
+  // TODO: Replace this URL with your actual Stripe payment link
+  const stripeUrl = 'https://buy.stripe.com/XXXXXX'; // ← ここを実際のStripe決済リンクに変更
+  if(stripeUrl.includes('XXXXXX')){
+    alert('決済リンクは準備中です。\n設定後にお支払いいただけます。');
+  } else {
+    window.location.href = stripeUrl;
+  }
+});
+</script>
+
+</body>
+</html>
