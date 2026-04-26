@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>退職手続きコンシェルジュ｜本人名義の書面で、静かに退職を進める</title>
+<meta name="description" content="電話交渉不要。本人署名の退職通知書を書面で送り、内容証明・証跡管理・郵送物受領までサポートする新しい退職手続き支援サービスです。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0F2F5C;
+  --navy-light: #1E4D8C;
+  --green: #059669;
+  --green-light: #D1FAE5;
+  --amber: #D97706;
+  --amber-light: #FEF3C7;
+  --red: #DC2626;
+  --red-light: #FEE2E2;
+  --gray-50: #F8FAFC;
+  --gray-100: #F1F5F9;
+  --gray-200: #E2E8F0;
+  --gray-400: #94A3B8;
+  --gray-600: #475569;
+  --gray-800: #1E293B;
+  --white: #FFFFFF;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(15,47,92,0.10);
+  --shadow-lg: 0 12px 48px rgba(15,47,92,0.15);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  color: var(--gray-800);
+  background: var(--white);
+  line-height: 1.75;
+  font-size: 16px;
+}
+
+/* ===== UTILITIES ===== */
+.container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+.section { padding: 80px 0; }
+.section-alt { background: var(--gray-50); }
+.text-center { text-align: center; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+
+.tag {
+  display: inline-block;
+  background: var(--green-light);
+  color: var(--green);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 4px 14px;
+  border-radius: 100px;
+  letter-spacing: 0.05em;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 900;
+  color: var(--navy);
+  line-height: 1.35;
+  margin-bottom: 16px;
+}
+
+.section-lead {
+  font-size: 16px;
+  color: var(--gray-600);
+  max-width: 600px;
+  margin: 0 auto 48px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 36px;
+  border-radius: 100px;
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+}
+.btn-primary {
+  background: var(--green);
+  color: var(--white);
+}
+.btn-primary:hover {
+  background: #047857;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(5,150,105,0.35);
+}
+.btn-outline {
+  background: transparent;
+  color: var(--white);
+  border-color: rgba(255,255,255,0.6);
+}
+.btn-outline:hover {
+  background: rgba(255,255,255,0.1);
+}
+.btn-navy {
+  background: var(--navy);
+  color: var(--white);
+}
+.btn-navy:hover {
+  background: var(--navy-light);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+/* ===== NAVIGATION ===== */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--gray-200);
+}
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+.nav-logo {
+  font-size: 17px;
+  font-weight: 900;
+  color: var(--navy);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nav-logo span { color: var(--green); }
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--gray-600);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--navy); }
+.nav-cta { font-size: 14px !important; padding: 10px 24px !important; }
+@media (max-width: 680px) {
+  .nav-links { display: none; }
+  .nav-cta { display: none; }
+}
+
+/* ===== HERO ===== */
+.hero {
+  background: linear-gradient(135deg, var(--navy) 0%, #1a3d6b 60%, #0d4a6e 100%);
+  color: var(--white);
+  padding: 100px 0 80px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 100px;
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: rgba(255,255,255,0.9);
+}
+.hero-title {
+  font-size: clamp(28px, 4.5vw, 48px);
+  font-weight: 900;
+  line-height: 1.25;
+  margin-bottom: 12px;
+  letter-spacing: -0.02em;
+}
+.hero-title em {
+  font-style: normal;
+  color: #6EE7B7;
+}
+.hero-subtitle {
+  font-size: clamp(14px, 2vw, 17px);
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 36px;
+  line-height: 1.8;
+}
+.hero-cta-group {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.hero-trust {
+  margin-top: 40px;
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.hero-trust-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.7);
+}
+.hero-trust-item .check { color: #6EE7B7; }
+
+.hero-visual {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.hero-card {
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  backdrop-filter: blur(8px);
+}
+.hero-card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+.hero-card-flow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.flow-pill {
+  background: rgba(255,255,255,0.18);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  color: var(--white);
+  font-weight: 500;
+}
+.flow-arrow { color: rgba(255,255,255,0.4); font-size: 18px; }
+
+@media (max-width: 768px) {
+  .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+  .hero-visual { display: none; }
+}
+
+/* ===== NOTICE BAR ===== */
+.notice-bar {
+  background: var(--amber-light);
+  border-bottom: 1px solid #FDE68A;
+  padding: 14px 0;
+}
+.notice-bar-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--amber);
+  font-weight: 600;
+}
+
+/* ===== WHAT IS ===== */
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 48px;
+}
+.compare-card {
+  border-radius: var(--radius);
+  padding: 32px;
+  border: 2px solid transparent;
+}
+.compare-card.old {
+  background: var(--red-light);
+  border-color: #FCA5A5;
+}
+.compare-card.new {
+  background: var(--green-light);
+  border-color: #6EE7B7;
+}
+.compare-card-label {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.compare-card.old .compare-card-label { color: var(--red); }
+.compare-card.new .compare-card-label { color: var(--green); }
+.compare-card-title {
+  font-size: 20px;
+  font-weight: 900;
+  margin-bottom: 20px;
+  color: var(--navy);
+}
+.compare-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.compare-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 15px;
+  color: var(--gray-600);
+}
+.compare-list .icon { flex-shrink: 0; font-size: 16px; margin-top: 2px; }
+@media (max-width: 640px) { .compare-grid { grid-template-columns: 1fr; } }
+
+/* ===== FEATURES ===== */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 0;
+}
+.feature-card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  padding: 32px 28px;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+.feature-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  margin-bottom: 20px;
+}
+.feature-icon.blue { background: #DBEAFE; }
+.feature-icon.green { background: var(--green-light); }
+.feature-icon.purple { background: #EDE9FE; }
+.feature-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 10px;
+}
+.feature-desc {
+  font-size: 14px;
+  color: var(--gray-600);
+  line-height: 1.8;
+}
+@media (max-width: 768px) { .features-grid { grid-template-columns: 1fr; } }
+
+/* ===== HOW IT WORKS ===== */
+.steps {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 48px;
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.step {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 24px;
+  position: relative;
+  padding-bottom: 40px;
+}
+.step:last-child { padding-bottom: 0; }
+.step-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.step-num {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--navy);
+  color: var(--white);
+  font-size: 20px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  z-index: 1;
+}
+.step-line {
+  width: 2px;
+  flex: 1;
+  background: var(--gray-200);
+  margin-top: 8px;
+}
+.step:last-child .step-line { display: none; }
+.step-content { padding-top: 10px; }
+.step-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 8px;
+}
+.step-desc {
+  font-size: 15px;
+  color: var(--gray-600);
+  line-height: 1.75;
+}
+.step-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--gray-100);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  color: var(--gray-600);
+  margin-top: 10px;
+}
+
+/* ===== PRICING ===== */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+  align-items: start;
+}
+.pricing-card {
+  background: var(--white);
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius);
+  padding: 36px 28px;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.pricing-card.featured {
+  border-color: var(--navy);
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
+  position: relative;
+}
+.pricing-badge {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--navy);
+  color: var(--white);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 16px;
+  border-radius: 100px;
+  white-space: nowrap;
+}
+.pricing-plan {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gray-400);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+.pricing-price {
+  font-size: 36px;
+  font-weight: 900;
+  color: var(--navy);
+  margin-bottom: 4px;
+  line-height: 1;
+}
+.pricing-price small {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--gray-600);
+}
+.pricing-desc {
+  font-size: 13px;
+  color: var(--gray-400);
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--gray-200);
+}
+.pricing-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+.pricing-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--gray-600);
+}
+.pricing-features .check { color: var(--green); flex-shrink: 0; }
+.pricing-cta {
+  display: block;
+  text-align: center;
+  padding: 14px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.pricing-cta-primary {
+  background: var(--navy);
+  color: var(--white);
+}
+.pricing-cta-primary:hover { background: var(--navy-light); }
+.pricing-cta-outline {
+  background: transparent;
+  color: var(--navy);
+  border: 2px solid var(--gray-200);
+}
+.pricing-cta-outline:hover { border-color: var(--navy); }
+.pricing-note {
+  text-align: center;
+  font-size: 13px;
+  color: var(--gray-400);
+  margin-top: 24px;
+}
+@media (max-width: 768px) {
+  .pricing-grid { grid-template-columns: 1fr; }
+  .pricing-card.featured { transform: none; }
+}
+
+/* ===== FAQ ===== */
+.faq-list {
+  max-width: 720px;
+  margin: 48px auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.faq-item {
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.faq-question {
+  width: 100%;
+  background: var(--white);
+  border: none;
+  padding: 20px 24px;
+  text-align: left;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--navy);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  font-family: 'Noto Sans JP', sans-serif;
+}
+.faq-icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  background: var(--gray-100);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: transform 0.3s, background 0.2s;
+}
+.faq-item.open .faq-icon {
+  transform: rotate(45deg);
+  background: var(--navy);
+  color: var(--white);
+}
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+.faq-answer-inner {
+  padding: 0 24px 20px;
+  font-size: 15px;
+  color: var(--gray-600);
+  line-height: 1.8;
+  border-top: 1px solid var(--gray-200);
+  padding-top: 16px;
+}
+.faq-item.open .faq-answer {
+  max-height: 500px;
+}
+
+/* ===== DISCLAIMER ===== */
+.disclaimer {
+  background: var(--gray-800);
+  color: rgba(255,255,255,0.7);
+  padding: 48px 0;
+  font-size: 13px;
+  line-height: 1.9;
+}
+.disclaimer h3 {
+  color: var(--white);
+  font-size: 15px;
+  margin-bottom: 12px;
+}
+.disclaimer p { margin-bottom: 8px; }
+
+/* ===== CTA BAND ===== */
+.cta-band {
+  background: linear-gradient(135deg, var(--navy), #1a4080);
+  color: var(--white);
+  padding: 80px 0;
+  text-align: center;
+}
+.cta-band-title {
+  font-size: clamp(24px, 4vw, 40px);
+  font-weight: 900;
+  margin-bottom: 16px;
+}
+.cta-band-lead {
+  font-size: 16px;
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 40px;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  background: #05142E;
+  color: rgba(255,255,255,0.5);
+  padding: 40px 0;
+  font-size: 13px;
+}
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.footer-logo { color: var(--white); font-weight: 700; font-size: 15px; }
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav" role="navigation" aria-label="メインナビゲーション">
+  <div class="container nav-inner">
+    <a href="index.html" class="nav-logo">📋 退職手続き<span>コンシェルジュ</span></a>
+    <ul class="nav-links">
+      <li><a href="#service">サービスとは</a></li>
+      <li><a href="#flow">ご利用の流れ</a></li>
+      <li><a href="#pricing">料金</a></li>
+      <li><a href="#faq">よくある質問</a></li>
+    </ul>
+    <a href="app.html" class="btn btn-primary nav-cta">無料で書面を作成する →</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero" aria-label="ヒーローセクション">
+  <div class="container hero-inner">
+    <div>
+      <div class="hero-badge">✉️ 退職代行ではありません</div>
+      <h1 class="hero-title">
+        電話で揉めない。<br>
+        <em>本人名義の書面</em>で、<br>
+        退職手続きを静かに進める。
+      </h1>
+      <p class="hero-subtitle">
+        退職意思の通知から、有給消化・貸与品返却・離職票受領まで。<br>
+        交渉ではなく、<strong>証拠が残る書面手続き</strong>でサポートします。
+      </p>
+      <div class="hero-cta-group">
+        <a href="app.html" class="btn btn-primary" style="font-size:18px; padding:18px 40px;">
+          ✏️ 無料で書面を作成する
+        </a>
+        <a href="#service" class="btn btn-outline">サービス詳細 ↓</a>
+      </div>
+      <div class="hero-trust">
+        <span class="hero-trust-item"><span class="check">✔</span> 弁護士法リスクなし</span>
+        <span class="hero-trust-item"><span class="check">✔</span> 本人自署式</span>
+        <span class="hero-trust-item"><span class="check">✔</span> 内容証明対応</span>
+        <span class="hero-trust-item"><span class="check">✔</span> 証跡をすべて保存</span>
+      </div>
+    </div>
+    <div class="hero-visual" aria-hidden="true">
+      <div class="hero-card">
+        <div class="hero-card-title">📤 A便：内容証明郵便</div>
+        <div class="hero-card-flow">
+          <span class="flow-pill">退職届兼通知書</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-pill">本人自署・捺印</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-pill">内容証明発送</span>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-title">📦 B便：別送パッケージ</div>
+        <div class="hero-card-flow">
+          <span class="flow-pill">会社向けQ&A</span>
+          <span class="flow-arrow">+</span>
+          <span class="flow-pill">引継書</span>
+          <span class="flow-arrow">+</span>
+          <span class="flow-pill">貸与品返却目録</span>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-title">📬 会社からの書類管理</div>
+        <div class="hero-card-flow">
+          <span class="flow-pill">離職票</span>
+          <span class="flow-arrow">+</span>
+          <span class="flow-pill">源泉徴収票</span>
+          <span class="flow-arrow">+</span>
+          <span class="flow-pill">期限アラート</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Notice Bar -->
+<div class="notice-bar">
+  <div class="container notice-bar-inner">
+    ⚠️
+    <span>当サービスは弁護士・行政書士による退職交渉ではありません。未払い賃金請求・損害賠償対応等の紛争案件には対応しておらず、専門家をご案内します。</span>
+  </div>
+</div>
+
+<!-- What Is This Service -->
+<section class="section" id="service">
+  <div class="container">
+    <div class="text-center">
+      <div class="tag">このサービスとは</div>
+      <h2 class="section-title">従来の退職代行とは<br>まったく違うアプローチ</h2>
+      <p class="section-lead">
+        電話での交渉は、会社側に「非弁行為では？」と疑われるリスクがあります。<br>
+        当サービスは、法的に明確な<strong>「本人作成・本人署名の書面」</strong>を軸に設計しています。
+      </p>
+    </div>
+    <div class="compare-grid">
+      <div class="compare-card old">
+        <div class="compare-card-label">❌ 従来型 退職代行</div>
+        <div class="compare-card-title">「会社と電話で戦う」</div>
+        <ul class="compare-list">
+          <li><span class="icon">⚠️</span> 弁護士法上のグレーゾーンが残る</li>
+          <li><span class="icon">⚠️</span> 証拠が残りにくい</li>
+          <li><span class="icon">⚠️</span> 会社側も「代行会社とは話さない」と拒否できる</li>
+          <li><span class="icon">⚠️</span> 交渉結果がブラックボックス</li>
+          <li><span class="icon">⚠️</span> 本人が内容を確認しにくい</li>
+        </ul>
+      </div>
+      <div class="compare-card new">
+        <div class="compare-card-label">✅ 退職手続きコンシェルジュ</div>
+        <div class="compare-card-title">「書面と証跡で静かに完結」</div>
+        <ul class="compare-list">
+          <li><span class="icon">✅</span> 本人自署の書面なので法的に明確</li>
+          <li><span class="icon">✅</span> 内容証明＋配達証明で証拠が残る</li>
+          <li><span class="icon">✅</span> 会社側も書面は受け取る義務がある</li>
+          <li><span class="icon">✅</span> 民法627条に基づき2週間後に自動終了</li>
+          <li><span class="icon">✅</span> 本人が全内容を把握・管理できる</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="text-center">
+      <div class="tag">3つの特長</div>
+      <h2 class="section-title">書面・証跡・受領管理で<br>退職を完結させる</h2>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon blue">✏️</div>
+        <h3 class="feature-title">チェック式で書面を自動生成</h3>
+        <p class="feature-desc">
+          質問に答えるだけで、退職届兼通知書・有給取得通知・会社向けQ&A・貸与品返却目録・引継書が完成します。個別に法的判断をする必要はありません。
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon green">📮</div>
+        <h3 class="feature-title">内容証明の発送を完全サポート</h3>
+        <p class="feature-desc">
+          A4印刷→本人自署→郵便局での発送まで、ステップバイステップでガイドします。発送元は署名のみ・電話番号なし・住所は同上で書く方法まで詳しく説明します。
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon purple">📥</div>
+        <h3 class="feature-title">会社からの書類を確実に受け取る</h3>
+        <p class="feature-desc">
+          離職票・源泉徴収票・退職証明書など、退職後に会社から届くべき書類のチェックリストと期限管理ガイドを提供します。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works -->
+<section class="section" id="flow">
+  <div class="container">
+    <div class="text-center">
+      <div class="tag">ご利用の流れ</div>
+      <h2 class="section-title">5ステップで退職手続きが完了</h2>
+      <p class="section-lead">
+        すべての作業はウェブアプリ上で完結します。発送だけ、ご自身で行っていただきます。
+      </p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-left">
+          <div class="step-num">1</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <h3 class="step-title">スクリーニングチェック</h3>
+          <p class="step-desc">
+            雇用形態・紛争有無・損害賠償の有無など9項目を確認します。専門家対応が必要な案件は、弁護士・行政書士をご案内します。
+          </p>
+          <span class="step-note">📋 約3分で完了</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left">
+          <div class="step-num">2</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <h3 class="step-title">基本情報を入力</h3>
+          <p class="step-desc">
+            会社名・退職希望日・有給残日数・貸与品などを入力します。すべてのデータはお使いのブラウザのみに保存され、送信されません。
+          </p>
+          <span class="step-note">🔒 個人情報はローカル保存のみ</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left">
+          <div class="step-num">3</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <h3 class="step-title">書面を生成・印刷して自署</h3>
+          <p class="step-desc">
+            退職届兼通知書（A便用）と同梱書類（B便用）が自動生成されます。印刷してご自身で署名・捺印してください。
+          </p>
+          <span class="step-note">🖨️ PDF出力または印刷に対応</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left">
+          <div class="step-num">4</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <h3 class="step-title">郵便局から発送</h3>
+          <p class="step-desc">
+            A便（内容証明＋配達証明）とB便（引継書・貸与品）を同日に発送します。発送後の追跡番号は必ず保存してください。
+          </p>
+          <span class="step-note">📫 郵便局で手続き（所要約15分）</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left">
+          <div class="step-num">5</div>
+        </div>
+        <div class="step-content">
+          <h3 class="step-title">書類の受領管理と完了確認</h3>
+          <p class="step-desc">
+            会社から届くべき書類（離職票・源泉徴収票等）の期限を管理します。万一、会社が強硬姿勢をとった場合は、本人名義の返答テンプレートをご活用ください。
+          </p>
+          <span class="step-note">📬 返答テンプレートで7つのシナリオに対応</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing -->
+<section class="section section-alt" id="pricing">
+  <div class="container">
+    <div class="text-center">
+      <div class="tag">料金プラン</div>
+      <h2 class="section-title">シンプルな料金体系</h2>
+      <p class="section-lead">
+        書面作成ツールは無料でお試しいただけます。<br>
+        発送サポートが必要な方はスタンダード以上をご選択ください。
+      </p>
+    </div>
+    <div class="pricing-grid">
+      <!-- Light -->
+      <div class="pricing-card">
+        <div class="pricing-plan">ライト</div>
+        <div class="pricing-price">¥9,800<small>（税込）</small></div>
+        <p class="pricing-desc">書面のみ自分で送る方向け</p>
+        <ul class="pricing-features">
+          <li><span class="check">✔</span> スクリーニングチェック</li>
+          <li><span class="check">✔</span> 書面自動生成（全書類）</li>
+          <li><span class="check">✔</span> 郵送ガイド表示</li>
+          <li><span class="check">✔</span> 返答テンプレート集</li>
+          <li style="opacity:0.4">✖ 郵送物受領サポートなし</li>
+        </ul>
+        <a href="app.html" class="pricing-cta pricing-cta-outline">書面を作成する →</a>
+      </div>
+      <!-- Standard -->
+      <div class="pricing-card featured">
+        <div class="pricing-badge">🔥 最も人気</div>
+        <div class="pricing-plan">スタンダード</div>
+        <div class="pricing-price">¥29,800<small>（税込）</small></div>
+        <p class="pricing-desc">書面発送＋書類受領まで対応</p>
+        <ul class="pricing-features">
+          <li><span class="check">✔</span> スクリーニングチェック</li>
+          <li><span class="check">✔</span> 書面自動生成（全書類）</li>
+          <li><span class="check">✔</span> 郵送ガイド表示</li>
+          <li><span class="check">✔</span> 返答テンプレート集</li>
+          <li><span class="check">✔</span> 事務連絡先として住所を利用（30日間）</li>
+          <li><span class="check">✔</span> 書類受領のご連絡</li>
+        </ul>
+        <a href="app.html" class="pricing-cta pricing-cta-primary">申し込む →</a>
+      </div>
+      <!-- Premium -->
+      <div class="pricing-card">
+        <div class="pricing-plan">プレミアム</div>
+        <div class="pricing-price">¥49,800<small>（税込）</small></div>
+        <p class="pricing-desc">書類受領＋期限管理まで安心</p>
+        <ul class="pricing-features">
+          <li><span class="check">✔</span> スタンダードの全内容</li>
+          <li><span class="check">✔</span> 事務連絡先として住所を利用（90日間）</li>
+          <li><span class="check">✔</span> 離職票・源泉徴収票 受領確認</li>
+          <li><span class="check">✔</span> 期限超過アラート</li>
+          <li><span class="check">✔</span> 弁護士・行政書士紹介（別途費用）</li>
+        </ul>
+        <a href="app.html" class="pricing-cta pricing-cta-outline">申し込む →</a>
+      </div>
+    </div>
+    <p class="pricing-note">
+      ※ 成功報酬型ではありません。退職の成否にかかわらずサービスを提供します。<br>
+      ※ 有期雇用・損害賠償・未払い賃金等の紛争案件は対象外です。<br>
+      ※ 行政書士・弁護士によるオプションサービスは別途費用がかかります。
+    </p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" id="faq">
+  <div class="container">
+    <div class="text-center">
+      <div class="tag">よくある質問</div>
+      <h2 class="section-title">ご利用前に確認できます</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          退職代行会社に依頼するのと何が違いますか？
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-answer" role="region">
+          <div class="faq-answer-inner">
+            最大の違いは「誰が動くか」です。従来の退職代行会社は代行会社が電話で会社と交渉しますが、当サービスでは<strong>あなた自身が作成・署名した書面</strong>を使います。会社との交渉は一切行いません。これにより、弁護士法上の非弁行為リスクを回避しつつ、民法627条に基づく確実な退職を実現できます。
+          </div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          就業規則に「1ヶ月前申告」と書いてあります。2週間で辞められますか？
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-answer" role="region">
+          <div class="faq-answer-inner">
+            無期雇用（正社員）であれば、民法第627条第1項により、解約申し入れから2週間が経過すれば雇用関係は終了します。就業規則の1ヶ月前申告は、民法の規定より長い場合には法的拘束力が弱いと解されています。この点は書面内にも明記しますので、会社側も反論しにくくなります。
+          </div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          有給休暇を全部消化してから辞めたいのですが可能ですか？
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-answer" role="region">
+          <div class="faq-answer-inner">
+            可能です。退職日に向けて残有給をすべて消化する方向で退職日を設定できます。退職予定日が決まっている場合、会社が時季変更権（有給日程を変える権利）を行使できる余地がないため、原則として有給の全消化は認められます。書面でもこの旨を明記します。
+          </div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          会社が「退職を認めない」と言ってきた場合はどうすればよいですか？
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-answer" role="region">
+          <div class="faq-answer-inner">
+            内容証明郵便が会社に到達した時点から2週間のカウントが始まります。会社が「認めない」と言っても、法律上の退職は止められません。当サービスのアプリには、このような場合の<strong>本人名義の返答テンプレート</strong>が用意されており、書面で淡々と対応できます。脅しや損害賠償を示唆する内容が届いた場合は、弁護士をご紹介します。
+          </div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          入力した個人情報はどう扱われますか？
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-answer" role="region">
+          <div class="faq-answer-inner">
+            ウェブアプリ上で入力した会社名・退職日・有給日数・貸与品などの詳細情報は、お使いのブラウザ内（LocalStorage）のみに保存されます。当サービスには送信されません。スタンダード・プレミアムプランでお申し込みいただいた場合のみ、お名前・ご住所・連絡先を別途ご提供いただきます。
+          </div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          引き継ぎを全くしないで辞めることはできますか？
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-answer" role="region">
+          <div class="faq-answer-inner">
+            法律上、退職に際して引き継ぎを完了させる義務はありません（ただし就業規則や誠実義務の観点から可能な範囲での引き継ぎが望まれます）。当サービスでは、引継書テンプレートをご用意しており、最低限の情報を書面で提供することで、後日「引き継ぎ不足による損害賠償」を主張されるリスクを軽減します。
+          </div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          未払い残業代や退職金を請求したい場合は？
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-answer" role="region">
+          <div class="faq-answer-inner">
+            未払い賃金・残業代の請求交渉、損害賠償への反論は、弁護士の専門領域です。当サービスの対象外となりますが、提携弁護士をご紹介しますので、まずはスクリーニングチェックをお試しください。
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Band -->
+<section class="cta-band">
+  <div class="container">
+    <h2 class="cta-band-title">まずは、無料で書面を作ってみましょう</h2>
+    <p class="cta-band-lead">スクリーニングチェックで、あなたのケースに対応できるか確認できます。<br>個人情報の送信はありません。</p>
+    <a href="app.html" class="btn" style="background:var(--green);color:white;font-size:18px;padding:20px 48px;">
+      ✏️ 無料で書面を作成する →
+    </a>
+  </div>
+</section>
+
+<!-- Disclaimer -->
+<div class="disclaimer">
+  <div class="container">
+    <h3>⚠️ ご利用にあたっての重要事項</h3>
+    <p>当サービスは、弁護士・行政書士ではなく、退職に関する書面作成・発送・郵送物受領管理の事務支援を行う個人運営サービスです。</p>
+    <p>当サービスは会社との法的な交渉、法律相談、損害賠償請求への反論、未払い賃金の請求その他の法律事務は一切行いません。</p>
+    <p>損害賠償を言われている、未払い賃金を請求したい、ハラスメント慰謝料を請求したい、懲戒解雇を示唆されているなどの紛争性がある案件については、弁護士その他の専門家へのご相談をお勧めします。</p>
+    <p>有期雇用（契約社員等）の方は、民法627条が直接適用されない場合があります。スクリーニングチェックをご確認ください。</p>
+    <p>書面の内容はあなた自身の状況に合わせてご確認のうえ、自己責任でご使用ください。当サービスへの一切の責任を免除するものではありませんが、書面の法的効力は内容・状況によって異なる場合があります。</p>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container footer-inner">
+    <span class="footer-logo">📋 退職手続きコンシェルジュ</span>
+    <span>© 2026 退職手続きコンシェルジュ. All rights reserved.</span>
+    <a href="app.html" style="color:rgba(255,255,255,0.6);text-decoration:none;">書面作成アプリ →</a>
+  </div>
+</footer>
+
+<script>
+// FAQ Accordion
+document.querySelectorAll('.faq-question').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    // Close all
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    document.querySelectorAll('.faq-question').forEach(b => b.setAttribute('aria-expanded', 'false'));
+    // Open clicked
+    if (!isOpen) {
+      item.classList.add('open');
+      btn.setAttribute('aria-expanded', 'true');
+    }
+  });
+});
+
+// Smooth scroll for nav links
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>書面作成アプリ｜退職手続きコンシェルジュ</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{
+  --navy:#0F2F5C;--navy-light:#1E4D8C;--green:#059669;--green-light:#D1FAE5;
+  --amber:#D97706;--amber-light:#FEF3C7;--red:#DC2626;--red-light:#FEE2E2;
+  --gray-50:#F8FAFC;--gray-100:#F1F5F9;--gray-200:#E2E8F0;
+  --gray-400:#94A3B8;--gray-600:#475569;--gray-800:#1E293B;--white:#fff;
+  --radius:12px;--shadow:0 4px 24px rgba(15,47,92,.10);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(--gray-50);min-height:100vh;font-size:15px;line-height:1.75;}
+
+/* layout */
+.top-bar{background:var(--navy);color:#fff;padding:12px 0;}
+.top-bar-inner{max-width:960px;margin:0 auto;padding:0 20px;display:flex;align-items:center;justify-content:space-between;}
+.top-logo{font-size:15px;font-weight:700;text-decoration:none;color:#fff;display:flex;align-items:center;gap:8px;}
+.top-logo span{color:#6EE7B7;}
+.back-link{font-size:13px;color:rgba(255,255,255,.7);text-decoration:none;}
+.back-link:hover{color:#fff;}
+
+.main{max-width:960px;margin:0 auto;padding:32px 20px 80px;}
+
+/* Progress */
+.progress-wrap{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius);padding:20px 24px;margin-bottom:28px;box-shadow:var(--shadow);}
+.progress-steps{display:flex;gap:0;position:relative;}
+.progress-steps::before{content:'';position:absolute;top:20px;left:20px;right:20px;height:2px;background:var(--gray-200);z-index:0;}
+.ps{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;position:relative;z-index:1;}
+.ps-num{width:40px;height:40px;border-radius:50%;background:var(--gray-200);color:var(--gray-400);font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .3s;}
+.ps-label{font-size:11px;color:var(--gray-400);text-align:center;font-weight:500;transition:color .3s;white-space:nowrap;}
+.ps.active .ps-num{background:var(--navy);color:#fff;}
+.ps.active .ps-label{color:var(--navy);font-weight:700;}
+.ps.done .ps-num{background:var(--green);color:#fff;}
+.ps.done .ps-label{color:var(--green);}
+
+/* Card */
+.card{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius);padding:36px 32px;box-shadow:var(--shadow);margin-bottom:20px;}
+.card-title{font-size:22px;font-weight:900;color:var(--navy);margin-bottom:8px;display:flex;align-items:center;gap:12px;}
+.card-lead{font-size:14px;color:var(--gray-600);margin-bottom:28px;line-height:1.8;}
+
+/* Alert */
+.alert{border-radius:8px;padding:16px 20px;margin-bottom:20px;font-size:14px;line-height:1.7;}
+.alert-warn{background:var(--amber-light);border:1px solid #FDE68A;color:#92400E;}
+.alert-danger{background:var(--red-light);border:1px solid #FCA5A5;color:#991B1B;}
+.alert-success{background:var(--green-light);border:1px solid #6EE7B7;color:#065F46;}
+.alert-title{font-weight:700;margin-bottom:6px;font-size:15px;}
+
+/* Screening */
+.q-list{display:flex;flex-direction:column;gap:16px;}
+.q-item{border:2px solid var(--gray-200);border-radius:10px;padding:20px 20px;transition:border-color .2s;}
+.q-item.ok{border-color:#6EE7B7;background:var(--green-light);}
+.q-item.ng{border-color:#FCA5A5;background:var(--red-light);}
+.q-item.warn{border-color:#FDE68A;background:var(--amber-light);}
+.q-row{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.q-text{font-size:15px;font-weight:500;color:var(--navy);flex:1;}
+.q-note{font-size:12px;color:var(--gray-600);margin-top:4px;}
+.q-btns{display:flex;gap:8px;flex-shrink:0;}
+.q-btn{padding:8px 20px;border-radius:100px;border:2px solid var(--gray-200);background:var(--white);font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;font-family:'Noto Sans JP',sans-serif;}
+.q-btn.sel-yes{background:var(--green);border-color:var(--green);color:#fff;}
+.q-btn.sel-no{background:var(--navy);border-color:var(--navy);color:#fff;}
+.q-result{font-size:13px;margin-top:10px;padding:8px 12px;border-radius:6px;display:none;}
+.q-item.ok .q-result,.q-item.ng .q-result,.q-item.warn .q-result{display:block;}
+.q-item.ok .q-result{background:rgba(5,150,105,.1);color:#065F46;}
+.q-item.ng .q-result{background:rgba(220,38,38,.1);color:#991B1B;}
+.q-item.warn .q-result{background:rgba(217,119,6,.1);color:#92400E;}
+
+/* Form */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.form-group{display:flex;flex-direction:column;gap:6px;}
+.form-group.full{grid-column:1/-1;}
+label{font-size:13px;font-weight:700;color:var(--gray-600);}
+.req{color:var(--red);margin-left:4px;}
+input,textarea,select{
+  border:2px solid var(--gray-200);border-radius:8px;padding:10px 14px;
+  font-size:15px;font-family:'Noto Sans JP',sans-serif;
+  color:var(--gray-800);background:var(--white);transition:border-color .2s;
+  width:100%;
+}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--navy);}
+textarea{resize:vertical;min-height:80px;}
+.input-hint{font-size:12px;color:var(--gray-400);margin-top:2px;}
+.date-calc-box{background:var(--green-light);border:1px solid #6EE7B7;border-radius:8px;padding:14px 16px;font-size:14px;color:#065F46;margin-top:8px;}
+.date-calc-row{display:flex;justify-content:space-between;gap:8px;margin-bottom:4px;}
+.date-calc-row:last-child{margin-bottom:0;font-weight:700;}
+
+/* Return items */
+.return-items-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px;}
+.checkbox-item{display:flex;align-items:center;gap:8px;padding:10px 12px;border:2px solid var(--gray-200);border-radius:8px;cursor:pointer;transition:all .2s;font-size:14px;}
+.checkbox-item:hover{border-color:var(--navy);}
+.checkbox-item input[type=checkbox]{width:18px;height:18px;accent-color:var(--navy);cursor:pointer;}
+.checkbox-item.checked{border-color:var(--navy);background:#EFF6FF;}
+
+/* Navigation buttons */
+.nav-btns{display:flex;justify-content:space-between;align-items:center;margin-top:32px;gap:12px;}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;border-radius:100px;font-size:15px;font-weight:700;text-decoration:none;cursor:pointer;transition:all .2s;border:2px solid transparent;font-family:'Noto Sans JP',sans-serif;}
+.btn-primary{background:var(--green);color:#fff;border-color:var(--green);}
+.btn-primary:hover{background:#047857;}
+.btn-navy{background:var(--navy);color:#fff;border-color:var(--navy);}
+.btn-navy:hover{background:var(--navy-light);}
+.btn-outline{background:transparent;color:var(--gray-600);border-color:var(--gray-200);}
+.btn-outline:hover{border-color:var(--navy);color:var(--navy);}
+.btn-sm{padding:10px 20px;font-size:13px;}
+.btn-danger{background:var(--red);color:#fff;border-color:var(--red);}
+
+/* Document tabs */
+.doc-tabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:24px;border-bottom:2px solid var(--gray-200);padding-bottom:0;}
+.doc-tab{padding:10px 18px;font-size:13px;font-weight:700;border:none;background:transparent;color:var(--gray-400);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .2s;font-family:'Noto Sans JP',sans-serif;}
+.doc-tab.active{color:var(--navy);border-bottom-color:var(--navy);}
+.doc-tab:hover:not(.active){color:var(--gray-800);}
+
+.doc-actions{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
+
+/* Document preview */
+.doc-preview{
+  background:var(--white);border:2px solid var(--gray-200);border-radius:8px;
+  font-family:'Noto Sans JP',serif;font-size:13px;line-height:2;
+  color:#000;padding:40px;min-height:600px;
+  white-space:pre-wrap;word-break:break-all;
+}
+.doc-preview h2{font-size:18px;text-align:center;margin-bottom:24px;font-weight:700;}
+.doc-preview p{margin-bottom:8px;}
+.doc-section{margin-bottom:20px;}
+.doc-section-title{font-weight:700;text-decoration:underline;margin-bottom:8px;}
+
+/* Response templates */
+.template-grid{display:grid;grid-template-columns:1fr;gap:16px;}
+.template-card{border:1px solid var(--gray-200);border-radius:var(--radius);overflow:hidden;}
+.template-header{background:var(--gray-100);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.template-title{font-size:14px;font-weight:700;color:var(--navy);}
+.template-body{padding:20px;font-size:13px;color:var(--gray-600);line-height:1.8;background:var(--white);display:none;}
+.template-body.open{display:block;}
+.template-text{background:var(--gray-50);border:1px solid var(--gray-200);border-radius:6px;padding:16px;font-family:'Noto Sans JP',monospace;font-size:13px;white-space:pre-wrap;line-height:1.9;margin-top:12px;}
+.toggle-btn{background:none;border:none;cursor:pointer;color:var(--navy);font-size:13px;font-weight:700;font-family:'Noto Sans JP',sans-serif;white-space:nowrap;}
+
+/* Postal guide */
+.guide-steps{display:flex;flex-direction:column;gap:24px;}
+.guide-step{display:grid;grid-template-columns:48px 1fr;gap:16px;}
+.guide-step-num{width:40px;height:40px;border-radius:50%;background:var(--navy);color:#fff;font-weight:900;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.guide-step-content h4{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:6px;}
+.guide-step-content p{font-size:14px;color:var(--gray-600);line-height:1.8;}
+.guide-note{display:inline-flex;align-items:center;gap:6px;background:var(--amber-light);border-radius:6px;padding:6px 12px;font-size:13px;color:var(--amber);margin-top:8px;font-weight:600;}
+.guide-ok{display:inline-flex;align-items:center;gap:6px;background:var(--green-light);border-radius:6px;padding:6px 12px;font-size:13px;color:var(--green);margin-top:8px;font-weight:600;}
+.checklist{list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:12px;}
+.checklist li{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--gray-600);}
+.checklist .ck{color:var(--green);flex-shrink:0;font-weight:700;}
+
+/* Loading overlay */
+.loading-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;display:flex;align-items:center;justify-content:center;display:none;}
+.loading-box{background:var(--white);border-radius:16px;padding:40px;text-align:center;}
+.loading-spinner{width:48px;height:48px;border:4px solid var(--gray-200);border-top-color:var(--navy);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* Lawyer referral */
+.lawyer-box{background:linear-gradient(135deg,#FEF3C7,#FDE68A);border:2px solid #F59E0B;border-radius:var(--radius);padding:28px;text-align:center;}
+.lawyer-box h3{font-size:20px;font-weight:900;color:#92400E;margin-bottom:12px;}
+.lawyer-box p{font-size:14px;color:#92400E;margin-bottom:20px;line-height:1.8;}
+
+/* Responsive */
+@media(max-width:640px){
+  .form-grid{grid-template-columns:1fr;}
+  .return-items-grid{grid-template-columns:1fr 1fr;}
+  .card{padding:24px 20px;}
+  .doc-preview{padding:20px;font-size:12px;}
+  .progress-wrap{padding:16px 12px;}
+  .ps-label{display:none;}
+}
+
+/* Print styles */
+@media print{
+  body{background:white;font-family:'Noto Sans JP',serif;}
+  .no-print{display:none!important;}
+  .print-doc{display:block!important;page-break-after:always;}
+  .doc-preview{border:none;padding:20mm;font-size:11pt;line-height:2;}
+}
+</style>
+</head>
+<body>
+
+<!-- Top bar -->
+<div class="top-bar no-print">
+  <div class="top-bar-inner">
+    <a href="index.html" class="top-logo">📋 退職手続き<span>コンシェルジュ</span></a>
+    <a href="index.html" class="back-link">← サービス概要に戻る</a>
+  </div>
+</div>
+
+<!-- Loading overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-box">
+    <div class="loading-spinner"></div>
+    <div id="loadingMsg" style="font-weight:700;color:var(--navy);font-size:16px;">PDF生成中...</div>
+    <div style="font-size:13px;color:var(--gray-600);margin-top:8px;">フォントを読み込んでいます（数秒かかります）</div>
+  </div>
+</div>
+
+<div class="main no-print">
+  <!-- Progress -->
+  <div class="progress-wrap">
+    <div class="progress-steps">
+      <div class="ps" id="ps1"><div class="ps-num">1</div><div class="ps-label">スクリーニング</div></div>
+      <div class="ps" id="ps2"><div class="ps-num">2</div><div class="ps-label">基本情報</div></div>
+      <div class="ps" id="ps3"><div class="ps-num">3</div><div class="ps-label">書面生成</div></div>
+      <div class="ps" id="ps4"><div class="ps-num">4</div><div class="ps-label">返答テンプレート</div></div>
+      <div class="ps" id="ps5"><div class="ps-num">5</div><div class="ps-label">郵送ガイド</div></div>
+    </div>
+  </div>
+
+  <!-- ===== STEP 1: SCREENING ===== -->
+  <div id="step1">
+    <div class="card">
+      <div class="card-title">📋 スクリーニングチェック</div>
+      <div class="card-lead">
+        当サービスが対応できるか確認します。すべての質問に答えてください（約3分）。<br>
+        <strong>このデータは送信されません。ブラウザ内にのみ保存されます。</strong>
+      </div>
+      <div class="q-list" id="qList">
+        <!-- Q1 -->
+        <div class="q-item" id="q1">
+          <div class="q-row">
+            <div>
+              <div class="q-text">Q1. 無期雇用（正社員・正規職員・無期契約社員）ですか？</div>
+              <div class="q-note">有期雇用（契約社員・アルバイト等で契約期間がある）の場合は「いいえ」</div>
+            </div>
+            <div class="q-btns">
+              <button class="q-btn" onclick="answer('q1','yes')">はい</button>
+              <button class="q-btn" onclick="answer('q1','no')">いいえ</button>
+            </div>
+          </div>
+          <div class="q-result" id="q1-result"></div>
+        </div>
+        <!-- Q2 -->
+        <div class="q-item" id="q2">
+          <div class="q-row">
+            <div>
+              <div class="q-text">Q2. 会社から損害賠償の請求を受けていますか、または言われていますか？</div>
+            </div>
+            <div class="q-btns">
+              <button class="q-btn" onclick="answer('q2','yes')">はい</button>
+              <button class="q-btn" onclick="answer('q2','no')">いいえ</button>
+            </div>
+          </div>
+          <div class="q-result" id="q2-result"></div>
+        </div>
+        <!-- Q3 -->
+        <div class="q-item" id="q3">
+          <div class="q-row">
+            <div>
+              <div class="q-text">Q3. 未払い残業代・給与の請求をしたいですか？</div>
+            </div>
+            <div class="q-btns">
+              <button class="q-btn" onclick="answer('q3','yes')">はい</button>
+              <button class="q-btn" onclick="answer('q3','no')">いいえ</button>
+            </div>
+          </div>
+          <div class="q-result" id="q3-result"></div>
+        </div>
+        <!-- Q4 -->
+        <div class="q-item" id="q4">
+          <div class="q-row">
+            <div>
+              <div class="q-text">Q4. ハラスメントによる慰謝料請求を検討していますか？</div>
+            </div>
+            <div class="q-btns">
+              <button class="q-btn" onclick="answer('q4','yes')">はい</button>
+              <button class="q-btn" onclick="answer('q4','no')">いいえ</button>
+            </div>
+          </div>
+          <div class="q-result" id="q4-result"></div>
+        </div>
+        <!-- Q5 -->
+        <div class="q-item" id="q5">
+          <div class="q-row">
+            <div>
+              <div class="q-text">Q5. 会社から懲戒解雇を示唆・通告されていますか？</div>
+            </div>
+            <div class="q-btns">
+              <button class="q-btn" onclick="answer('q5','yes')">はい</button>
+              <button class="q-btn" onclick="answer('q5','no')">いいえ</button>
+            </div>
+          </div>
+          <div class="q-result" id="q5-result"></div>
+        </div>
+        <!-- Q6 -->
+        <div class="q-item" id="q6">
+          <div class="q-row">
+            <div>
+              <div class="q-text">Q6. 公務員・自衛隊・特殊な資格が必要な公的職種ですか？</div>
+            </div>
+            <div class="q-btns">
+              <button class="q-btn" onclick="answer('q6','yes')">はい</button>
+              <button class="q-btn" onclick="answer('q6','no')">いいえ</button>
+            </div>
+          </div>
+          <div class="q-result" id="q6-result"></div>
+        </div>
+        <!-- Q7 -->
+        <div class="q-item" id="q7">
+          <div class="q-row">
+            <div>
+              <div class="q-text">Q7. 社宅・社員寮など会社が手配した住宅に住んでいますか？</div>
+            </div>
+            <div class="q-btns">
+              <button class="q-btn" onclick="answer('q7','yes')">はい</button>
+              <button class="q-btn" onclick="answer('q7','no')">いいえ</button>
+            </div>
+          </div>
+          <div class="q-result" id="q7-result"></div>
+        </div>
+        <!-- Q8 -->
+        <div class="q-item" id="q8">
+          <div class="q-row">
+            <div>
+              <div class="q-text">Q8. 会社の多額の現金・重要物を現在預かっていますか？</div>
+            </div>
+            <div class="q-btns">
+              <button class="q-btn" onclick="answer('q8','yes')">はい</button>
+              <button class="q-btn" onclick="answer('q8','no')">いいえ</button>
+            </div>
+          </div>
+          <div class="q-result" id="q8-result"></div>
+        </div>
+        <!-- Q9 -->
+        <div class="q-item" id="q9">
+          <div class="q-row">
+            <div>
+              <div class="q-text">Q9. 競業避止義務（同業他社への転職禁止）や秘密保持について揉めそうですか？</div>
+            </div>
+            <div class="q-btns">
+              <button class="q-btn" onclick="answer('q9','yes')">はい</button>
+              <button class="q-btn" onclick="answer('q9','no')">いいえ</button>
+            </div>
+          </div>
+          <div class="q-result" id="q9-result"></div>
+        </div>
+      </div>
+
+      <div id="screeningResult" style="display:none;margin-top:24px;"></div>
+
+      <div class="nav-btns">
+        <span></span>
+        <button class="btn btn-primary" onclick="goStep(2)" id="toStep2Btn" style="display:none;">
+          次へ：基本情報を入力する →
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== STEP 2: BASIC INFO ===== -->
+  <div id="step2" style="display:none;">
+    <div class="card">
+      <div class="card-title">📝 基本情報の入力</div>
+      <div class="card-lead">
+        書面に反映する情報を入力してください。<strong>入力内容はすべてお使いのブラウザ内にのみ保存</strong>され、外部に送信されることはありません。
+      </div>
+
+      <h3 style="font-size:16px;font-weight:700;color:var(--navy);margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--gray-200);">🏢 会社情報</h3>
+      <div class="form-grid" style="margin-bottom:28px;">
+        <div class="form-group">
+          <label>会社名（法人名）<span class="req">*</span></label>
+          <input type="text" id="companyName" placeholder="株式会社〇〇" oninput="saveAndUpdate()">
+        </div>
+        <div class="form-group">
+          <label>代表者名（宛先）</label>
+          <input type="text" id="ceoName" placeholder="代表取締役 〇〇 〇〇" oninput="saveAndUpdate()">
+          <div class="input-hint">わからない場合は「ご担当者様」でも可</div>
+        </div>
+        <div class="form-group full">
+          <label>会社住所（郵便番号含む）<span class="req">*</span></label>
+          <input type="text" id="companyAddress" placeholder="〒000-0000 東京都〇〇区〇〇1-2-3" oninput="saveAndUpdate()">
+        </div>
+      </div>
+
+      <h3 style="font-size:16px;font-weight:700;color:var(--navy);margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--gray-200);">👤 本人情報</h3>
+      <div class="form-grid" style="margin-bottom:28px;">
+        <div class="form-group">
+          <label>氏名<span class="req">*</span></label>
+          <input type="text" id="myName" placeholder="山田 太郎" oninput="saveAndUpdate()">
+        </div>
+        <div class="form-group">
+          <label>（ふりがな）</label>
+          <input type="text" id="myNameKana" placeholder="やまだ たろう" oninput="saveAndUpdate()">
+        </div>
+        <div class="form-group full">
+          <label>自宅住所<span class="req">*</span></label>
+          <input type="text" id="myAddress" placeholder="〒000-0000 東京都〇〇区〇〇1-2-3" oninput="saveAndUpdate()">
+        </div>
+      </div>
+
+      <h3 style="font-size:16px;font-weight:700;color:var(--navy);margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--gray-200);">📮 事務連絡先（郵送物受領先）</h3>
+      <div class="alert alert-warn" style="margin-bottom:16px;">
+        <div class="alert-title">⚠️ 事務連絡先とは</div>
+        会社からの書類（離職票等）を受け取る住所です。スタンダード・プレミアムプランでご提供する住所を入力してください。ライトプランの場合は、ご自宅住所を入力してください。
+      </div>
+      <div class="form-grid" style="margin-bottom:28px;">
+        <div class="form-group full">
+          <label>事務連絡先住所<span class="req">*</span></label>
+          <input type="text" id="officeAddress" placeholder="〒000-0000 東京都〇〇区〇〇 退職手続きコンシェルジュ内 山田太郎 宛" oninput="saveAndUpdate()">
+          <div class="input-hint">「退職手続きコンシェルジュ内 〇〇 〇〇 宛」の形式で入力</div>
+        </div>
+        <div class="form-group full">
+          <label>事務連絡先注記（書面内表示文）</label>
+          <input type="text" id="officeNote" value="※上記事務連絡先は、私が郵送物受領のために指定した連絡先です。法的代理人ではありません。" oninput="saveAndUpdate()">
+        </div>
+      </div>
+
+      <h3 style="font-size:16px;font-weight:700;color:var(--navy);margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--gray-200);">📅 退職日の計算</h3>
+      <div class="form-grid" style="margin-bottom:16px;">
+        <div class="form-group">
+          <label>内容証明の発送予定日<span class="req">*</span></label>
+          <input type="date" id="sendDate" oninput="calcDates()">
+          <div class="input-hint">今日から2〜3日後を目安に設定</div>
+        </div>
+        <div class="form-group">
+          <label>有給休暇の残日数</label>
+          <input type="number" id="vacDays" min="0" max="200" placeholder="20" oninput="calcDates()">
+          <div class="input-hint">不明な場合は0と入力</div>
+        </div>
+      </div>
+      <div class="date-calc-box" id="dateCalcBox" style="display:none;">
+        <div class="date-calc-row"><span>📤 内容証明 発送日</span><strong id="calcSend">—</strong></div>
+        <div class="date-calc-row"><span>📬 会社への到達予定日</span><strong id="calcArrival">—</strong></div>
+        <div class="date-calc-row"><span>🏖️ 有給休暇 開始日</span><strong id="calcVacStart">—</strong></div>
+        <div class="date-calc-row"><span>🏖️ 有給休暇 終了日</span><strong id="calcVacEnd">—</strong></div>
+        <div class="date-calc-row" style="border-top:1px solid #6EE7B7;padding-top:8px;margin-top:8px;"><span>✅ 退職確定予定日</span><strong id="calcRetire">—</strong></div>
+      </div>
+
+      <h3 style="font-size:16px;font-weight:700;color:var(--navy);margin:28px 0 16px;padding-bottom:10px;border-bottom:2px solid var(--gray-200);">📦 貸与品リスト</h3>
+      <div class="return-items-grid" id="returnItemsGrid">
+        <label class="checkbox-item"><input type="checkbox" name="item" value="健康保険被保険者証" onchange="updateCheckbox(this)"> 健康保険被保険者証</label>
+        <label class="checkbox-item"><input type="checkbox" name="item" value="社員証" onchange="updateCheckbox(this)"> 社員証</label>
+        <label class="checkbox-item"><input type="checkbox" name="item" value="入館カード・鍵" onchange="updateCheckbox(this)"> 入館カード・鍵</label>
+        <label class="checkbox-item"><input type="checkbox" name="item" value="社用PC・タブレット" onchange="updateCheckbox(this)"> 社用PC・タブレット</label>
+        <label class="checkbox-item"><input type="checkbox" name="item" value="社用スマートフォン" onchange="updateCheckbox(this)"> 社用スマートフォン</label>
+        <label class="checkbox-item"><input type="checkbox" name="item" value="名刺" onchange="updateCheckbox(this)"> 名刺</label>
+        <label class="checkbox-item"><input type="checkbox" name="item" value="社章・ユニフォーム" onchange="updateCheckbox(this)"> 社章・ユニフォーム</label>
+        <label class="checkbox-item"><input type="checkbox" name="item" value="社用車・駐車証" onchange="updateCheckbox(this)"> 社用車・駐車証</label>
+        <label class="checkbox-item"><input type="checkbox" name="item" value="その他備品" onchange="updateCheckbox(this)"> その他（下記に記入）</label>
+      </div>
+      <div class="form-group">
+        <label>その他の貸与品（改行区切り）</label>
+        <textarea id="customItems" placeholder="例：社用傘&#10;ロッカーの鍵" oninput="saveAndUpdate()"></textarea>
+      </div>
+
+      <h3 style="font-size:16px;font-weight:700;color:var(--navy);margin:28px 0 16px;padding-bottom:10px;border-bottom:2px solid var(--gray-200);">📄 引継ぎ概要</h3>
+      <div class="form-group">
+        <label>担当業務の引継ぎ概要（任意）</label>
+        <textarea id="handover" rows="5" placeholder="例：担当顧客：〇〇商事（担当 山田課長）、〇〇工業（担当 鈴木部長）&#10;進行中プロジェクト：〇〇システム導入（完了率80%、詳細は共有フォルダ参照）&#10;作成書類・引継書はデスク上の赤いファイルにまとめてあります。" oninput="saveAndUpdate()"></textarea>
+      </div>
+
+      <div class="nav-btns">
+        <button class="btn btn-outline" onclick="goStep(1)">← 戻る</button>
+        <button class="btn btn-primary" onclick="goStep(3)">次へ：書面を生成する →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== STEP 3: DOCUMENTS ===== -->
+  <div id="step3" style="display:none;">
+    <div class="card">
+      <div class="card-title">📄 書面の生成・印刷</div>
+      <div class="card-lead">
+        各書面を確認し、印刷してご自身で署名・押印してください。<br>
+        <strong>A便</strong>（内容証明郵便）と<strong>B便</strong>（書留・レターパック）に分けて発送します。
+      </div>
+      <div class="alert alert-success">
+        ✅ A便（内容証明）には<strong>退職届兼通知書のみ</strong>封入できます。その他はB便で発送します。
+      </div>
+
+      <div class="doc-tabs">
+        <button class="doc-tab active" onclick="showDoc('docA')">📤 A便：退職届兼通知書</button>
+        <button class="doc-tab" onclick="showDoc('docB')">📦 B便：送付状</button>
+        <button class="doc-tab" onclick="showDoc('docC')">❓ B便：会社向けQ&A</button>
+        <button class="doc-tab" onclick="showDoc('docD')">📋 B便：貸与品返却目録</button>
+        <button class="doc-tab" onclick="showDoc('docE')">🔄 B便：引継書</button>
+      </div>
+
+      <div id="docA">
+        <div class="doc-actions">
+          <button class="btn btn-navy btn-sm" onclick="printDoc('A')">🖨️ 印刷（自署用）</button>
+          <button class="btn btn-outline btn-sm" onclick="downloadPDF('A')">⬇️ PDFダウンロード</button>
+        </div>
+        <div class="doc-preview" id="previewA"></div>
+      </div>
+      <div id="docB" style="display:none;">
+        <div class="doc-actions">
+          <button class="btn btn-navy btn-sm" onclick="printDoc('B')">🖨️ 印刷</button>
+          <button class="btn btn-outline btn-sm" onclick="downloadPDF('B')">⬇️ PDFダウンロード</button>
+        </div>
+        <div class="doc-preview" id="previewB"></div>
+      </div>
+      <div id="docC" style="display:none;">
+        <div class="doc-actions">
+          <button class="btn btn-navy btn-sm" onclick="printDoc('C')">🖨️ 印刷</button>
+          <button class="btn btn-outline btn-sm" onclick="downloadPDF('C')">⬇️ PDFダウンロード</button>
+        </div>
+        <div class="doc-preview" id="previewC"></div>
+      </div>
+      <div id="docD" style="display:none;">
+        <div class="doc-actions">
+          <button class="btn btn-navy btn-sm" onclick="printDoc('D')">🖨️ 印刷</button>
+          <button class="btn btn-outline btn-sm" onclick="downloadPDF('D')">⬇️ PDFダウンロード</button>
+        </div>
+        <div class="doc-preview" id="previewD"></div>
+      </div>
+      <div id="docE" style="display:none;">
+        <div class="doc-actions">
+          <button class="btn btn-navy btn-sm" onclick="printDoc('E')">🖨️ 印刷</button>
+          <button class="btn btn-outline btn-sm" onclick="downloadPDF('E')">⬇️ PDFダウンロード</button>
+        </div>
+        <div class="doc-preview" id="previewE"></div>
+      </div>
+
+      <div class="nav-btns">
+        <button class="btn btn-outline" onclick="goStep(2)">← 戻る</button>
+        <button class="btn btn-primary" onclick="goStep(4)">次へ：返答テンプレート →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== STEP 4: RESPONSE TEMPLATES ===== -->
+  <div id="step4" style="display:none;">
+    <div class="card">
+      <div class="card-title">💬 会社からの返答テンプレート</div>
+      <div class="card-lead">
+        会社から書面が届いた場合、本人名義でこのような返信を送ってください。<strong>コンシェルジュ側が代わりに送ることはできません。</strong><br>
+        ⚠️ 損害賠償・懲戒解雇・刑事告訴に関する内容が届いた場合は、弁護士にご相談ください。
+      </div>
+      <div class="template-grid">
+
+        <div class="template-card">
+          <div class="template-header">
+            <div class="template-title">📩 シナリオ1：「退職を認めない」と通知してきた場合</div>
+            <button class="toggle-btn" onclick="toggleTemplate(this)">開く ▾</button>
+          </div>
+          <div class="template-body">
+            <p>民法627条に基づく退職は、会社の承認を必要としません。以下の返信書面をご自身の署名・捺印の上、書留で送付してください。</p>
+            <div class="template-text" id="tmpl1"></div>
+            <button class="btn btn-outline btn-sm" style="margin-top:12px;" onclick="copyTemplate(1)">📋 コピー</button>
+            <button class="btn btn-navy btn-sm" style="margin-top:12px;" onclick="printTemplate(1)">🖨️ 印刷</button>
+          </div>
+        </div>
+
+        <div class="template-card">
+          <div class="template-header">
+            <div class="template-title">👤 シナリオ2：「本人確認できない」と主張してきた場合</div>
+            <button class="toggle-btn" onclick="toggleTemplate(this)">開く ▾</button>
+          </div>
+          <div class="template-body">
+            <p>本人自署の書面が存在することを改めて通知する返信です。</p>
+            <div class="template-text" id="tmpl2"></div>
+            <button class="btn btn-outline btn-sm" style="margin-top:12px;" onclick="copyTemplate(2)">📋 コピー</button>
+            <button class="btn btn-navy btn-sm" style="margin-top:12px;" onclick="printTemplate(2)">🖨️ 印刷</button>
+          </div>
+        </div>
+
+        <div class="template-card">
+          <div class="template-header">
+            <div class="template-title">📵 シナリオ3：電話・自宅訪問が続く場合</div>
+            <button class="toggle-btn" onclick="toggleTemplate(this)">開く ▾</button>
+          </div>
+          <div class="template-body">
+            <p>着信履歴・録音・メモを保存したうえで、以下の書面を送付してください。</p>
+            <div class="template-text" id="tmpl3"></div>
+            <button class="btn btn-outline btn-sm" style="margin-top:12px;" onclick="copyTemplate(3)">📋 コピー</button>
+            <button class="btn btn-navy btn-sm" style="margin-top:12px;" onclick="printTemplate(3)">🖨️ 印刷</button>
+          </div>
+        </div>
+
+        <div class="template-card">
+          <div class="template-header">
+            <div class="template-title">⚠️ シナリオ4：損害賠償・懲戒解雇を示唆してきた場合</div>
+            <button class="toggle-btn" onclick="toggleTemplate(this)">開く ▾</button>
+          </div>
+          <div class="template-body">
+            <div class="alert alert-danger" style="margin-bottom:12px;">
+              <strong>⚠️ このシナリオは弁護士への相談を強くお勧めします。</strong>以下は最低限の受領確認書面です。内容の詳細な対応は専門家へ。
+            </div>
+            <div class="template-text" id="tmpl4"></div>
+            <button class="btn btn-outline btn-sm" style="margin-top:12px;" onclick="copyTemplate(4)">📋 コピー</button>
+            <button class="btn btn-navy btn-sm" style="margin-top:12px;" onclick="printTemplate(4)">🖨️ 印刷</button>
+          </div>
+        </div>
+
+        <div class="template-card">
+          <div class="template-header">
+            <div class="template-title">🏖️ シナリオ5：有給消化を拒否してきた場合</div>
+            <button class="toggle-btn" onclick="toggleTemplate(this)">開く ▾</button>
+          </div>
+          <div class="template-body">
+            <div class="template-text" id="tmpl5"></div>
+            <button class="btn btn-outline btn-sm" style="margin-top:12px;" onclick="copyTemplate(5)">📋 コピー</button>
+            <button class="btn btn-navy btn-sm" style="margin-top:12px;" onclick="printTemplate(5)">🖨️ 印刷</button>
+          </div>
+        </div>
+
+        <div class="template-card">
+          <div class="template-header">
+            <div class="template-title">📄 シナリオ6：離職票が届かない場合（催促状）</div>
+            <button class="toggle-btn" onclick="toggleTemplate(this)">開く ▾</button>
+          </div>
+          <div class="template-body">
+            <p>退職日から2週間経過しても届かない場合に送付してください。届かない場合はハローワークにご相談ください。</p>
+            <div class="template-text" id="tmpl6"></div>
+            <button class="btn btn-outline btn-sm" style="margin-top:12px;" onclick="copyTemplate(6)">📋 コピー</button>
+            <button class="btn btn-navy btn-sm" style="margin-top:12px;" onclick="printTemplate(6)">🖨️ 印刷</button>
+          </div>
+        </div>
+
+        <div class="template-card">
+          <div class="template-header">
+            <div class="template-title">🔖 シナリオ7：離職理由を「自己都合」以外に変更しようとしてきた場合</div>
+            <button class="toggle-btn" onclick="toggleTemplate(this)">開く ▾</button>
+          </div>
+          <div class="template-body">
+            <div class="alert alert-warn" style="margin-bottom:12px;">
+              <strong>⚠️</strong> 離職理由は失業給付の受給要件に影響します。不当な変更に対してはハローワークに異議申し立てができます。
+            </div>
+            <div class="template-text" id="tmpl7"></div>
+            <button class="btn btn-outline btn-sm" style="margin-top:12px;" onclick="copyTemplate(7)">📋 コピー</button>
+            <button class="btn btn-navy btn-sm" style="margin-top:12px;" onclick="printTemplate(7)">🖨️ 印刷</button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="nav-btns">
+        <button class="btn btn-outline" onclick="goStep(3)">← 戻る</button>
+        <button class="btn btn-primary" onclick="goStep(5)">次へ：郵送ガイドを確認 →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== STEP 5: POSTAL GUIDE ===== -->
+  <div id="step5" style="display:none;">
+    <div class="card">
+      <div class="card-title">📮 郵送ガイド</div>
+      <div class="card-lead">
+        A便（内容証明）とB便（引継書・貸与品）を<strong>同日に発送</strong>します。以下の手順に従ってください。
+      </div>
+
+      <div class="alert alert-warn" style="margin-bottom:24px;">
+        <strong>⚠️ 重要：</strong>内容証明郵便の封筒には「退職届兼通知書のみ」しか入れられません。Q&A・引継書・貸与品は必ずB便として別送します。
+      </div>
+
+      <h3 style="font-size:17px;font-weight:900;color:var(--navy);margin-bottom:20px;">📤 A便：内容証明郵便（退職届兼通知書）</h3>
+      <div class="guide-steps">
+        <div class="guide-step">
+          <div class="guide-step-num">1</div>
+          <div class="guide-step-content">
+            <h4>退職届兼通知書を印刷する</h4>
+            <p>前ステップで生成した「A便：退職届兼通知書」を<strong>A4用紙で3部</strong>印刷します（自分用1部、郵便局用1部、会社送付用1部）。</p>
+            <div class="guide-ok">✅ 印刷はコンビニや図書館でもOK</div>
+          </div>
+        </div>
+        <div class="guide-step">
+          <div class="guide-step-num">2</div>
+          <div class="guide-step-content">
+            <h4>自署・押印する</h4>
+            <p>書面末尾の署名欄に<strong>必ず自分の手書きで署名</strong>し、認印（シャチハタ不可）を押します。3部すべてに同じ署名・押印をしてください。</p>
+            <div class="guide-note">⚠️ ボールペンで署名してください（消えるペン不可）</div>
+          </div>
+        </div>
+        <div class="guide-step">
+          <div class="guide-step-num">3</div>
+          <div class="guide-step-content">
+            <h4>郵便局の窓口へ持参する</h4>
+            <p>「内容証明郵便で送りたい」と窓口で申し出てください。3部のうち1部は郵便局保管用、1部は自分の控え、1部が会社送付分になります。</p>
+            <ul class="checklist">
+              <li><span class="ck">✔</span> 本人確認書類（運転免許証等）を持参</li>
+              <li><span class="ck">✔</span> 「配達証明付き」で依頼する（配達完了の証明が残る）</li>
+              <li><span class="ck">✔</span> 封筒には発送元として署名のみ記載（電話番号は書かない）</li>
+              <li><span class="ck">✔</span> 住所欄は「同上」と書かずに自宅住所または事務連絡先住所を記載</li>
+            </ul>
+            <div class="guide-ok">✅ 費用目安：内容証明料 + 書留基本料 + 配達証明料 ≒ 約1,200〜1,800円</div>
+          </div>
+        </div>
+        <div class="guide-step">
+          <div class="guide-step-num">4</div>
+          <div class="guide-step-content">
+            <h4>追跡番号と発送日を記録する</h4>
+            <p>領収書・追跡番号・発送日時を写真に撮り、安全な場所に保存してください。配達完了の通知が届いたら、そのスクリーンショットも保存します。</p>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="font-size:17px;font-weight:900;color:var(--navy);margin:36px 0 20px;">📦 B便：引継書・貸与品の返却</h3>
+      <div class="guide-steps">
+        <div class="guide-step">
+          <div class="guide-step-num">1</div>
+          <div class="guide-step-content">
+            <h4>B便の書類をまとめる</h4>
+            <p>送付状・会社向けQ&A・貸与品返却目録・引継書を1部ずつ印刷します。</p>
+          </div>
+        </div>
+        <div class="guide-step">
+          <div class="guide-step-num">2</div>
+          <div class="guide-step-content">
+            <h4>貸与品を梱包し、写真を撮る</h4>
+            <p>すべての貸与品を梱包する前に写真を撮影し、証拠として保存します。PCなど精密機器は丁寧に梱包してください。</p>
+            <div class="guide-note">⚠️ PC・スマートフォンは<strong>初期化せず</strong>、会社の指示があるまでそのまま返却</div>
+          </div>
+        </div>
+        <div class="guide-step">
+          <div class="guide-step-num">3</div>
+          <div class="guide-step-content">
+            <h4>発送方法を選ぶ</h4>
+            <ul class="checklist">
+              <li><span class="ck">✔</span> <strong>書類のみ</strong>：レターパックプラス（520円）または書留</li>
+              <li><span class="ck">✔</span> <strong>書類＋小物</strong>：ゆうパック（補償付き）</li>
+              <li><span class="ck">✔</span> <strong>PC等大型</strong>：ゆうパック（補償額を申告する）</li>
+            </ul>
+            <div class="guide-ok">✅ A便と同日または翌日以内に発送</div>
+          </div>
+        </div>
+        <div class="guide-step">
+          <div class="guide-step-num">4</div>
+          <div class="guide-step-content">
+            <h4>発送元の記載について</h4>
+            <p>B便の発送元は以下のように記載します：</p>
+            <div style="background:var(--gray-100);border-radius:8px;padding:16px;font-size:14px;margin-top:8px;line-height:2;font-family:monospace;">
+              <span id="bSenderDisplay">（氏名を入力すると表示されます）</span>
+            </div>
+            <div class="guide-note">⚠️ 電話番号は記載しない。住所は事務連絡先または自宅住所のみ</div>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="font-size:17px;font-weight:900;color:var(--navy);margin:36px 0 20px;">📬 退職後に届くべき書類のチェックリスト</h3>
+      <div class="alert alert-warn" style="margin-bottom:16px;">退職日から<strong>10営業日以内</strong>に届かない場合は催促状（テンプレート集参照）を送付してください。</div>
+      <ul class="checklist" style="font-size:15px;">
+        <li><span class="ck">□</span> <strong>離職票1・離職票2</strong>（ハローワークに提出するもの）</li>
+        <li><span class="ck">□</span> <strong>雇用保険被保険者証</strong></li>
+        <li><span class="ck">□</span> <strong>源泉徴収票</strong>（年末調整または確定申告用）</li>
+        <li><span class="ck">□</span> <strong>社会保険資格喪失証明書</strong>（国民健康保険切り替えに必要）</li>
+        <li><span class="ck">□</span> <strong>退職証明書</strong>（次の職場や転職活動で必要な場合）</li>
+        <li><span class="ck">□</span> <strong>年金手帳</strong>（会社が保管していた場合）</li>
+        <li><span class="ck">□</span> <strong>最終給与・退職金</strong>（従前の振込口座へ）</li>
+      </ul>
+
+      <div style="margin-top:36px;text-align:center;background:var(--navy);border-radius:var(--radius);padding:36px;">
+        <div style="font-size:28px;margin-bottom:12px;">🎉</div>
+        <div style="font-size:20px;font-weight:900;color:#fff;margin-bottom:8px;">書面の準備が完了しました</div>
+        <div style="font-size:14px;color:rgba(255,255,255,.8);margin-bottom:24px;">発送後は郵便局の追跡サービスで配達を確認してください。<br>会社からの返答には、このアプリのテンプレート集をご活用ください。</div>
+        <button class="btn" style="background:#6EE7B7;color:var(--navy);" onclick="goStep(3)">← 書面を見直す</button>
+      </div>
+
+      <div class="nav-btns">
+        <button class="btn btn-outline" onclick="goStep(4)">← 返答テンプレートに戻る</button>
+        <a href="index.html" class="btn btn-outline">トップページへ →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Print-only document container -->
+<div id="printContainer" style="display:none;"></div>
+
+<script>
+// ===== STATE =====
+const S = {
+  screening: {},
+  companyName:'', ceoName:'', companyAddress:'',
+  myName:'', myNameKana:'', myAddress:'',
+  officeAddress:'', officeNote:'',
+  sendDate:'', vacDays:0,
+  calcArrival:'', calcVacStart:'', calcVacEnd:'', calcRetire:'',
+  returnItems:[], customItems:'', handover:'',
+  currentDoc:'A',
+  fontBase64: null
+};
+
+// Restore from localStorage
+try {
+  const saved = JSON.parse(localStorage.getItem('rsc_data') || '{}');
+  Object.assign(S, saved);
+  if(S.returnItems && S.returnItems.length) {
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('input[name="item"]').forEach(cb => {
+        cb.checked = S.returnItems.includes(cb.value);
+        if(cb.checked) cb.closest('label').classList.add('checked');
+      });
+    });
+  }
+} catch(e) {}
+
+function save() {
+  try { localStorage.setItem('rsc_data', JSON.stringify(S)); } catch(e) {}
+}
+
+function syncInputs() {
+  ['companyName','ceoName','companyAddress','myName','myNameKana','myAddress','officeAddress','officeNote','customItems','handover'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el && S[id]) el.value = S[id];
+  });
+  if(S.sendDate) document.getElementById('sendDate').value = S.sendDate;
+  if(S.vacDays) document.getElementById('vacDays').value = S.vacDays;
+}
+
+function saveAndUpdate() {
+  ['companyName','ceoName','companyAddress','myName','myNameKana','myAddress','officeAddress','officeNote','customItems','handover'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) S[id] = el.value;
+  });
+  save();
+  updateBSender();
+}
+
+function updateCheckbox(cb) {
+  if(cb.checked) {
+    cb.closest('label').classList.add('checked');
+    if(!S.returnItems.includes(cb.value)) S.returnItems.push(cb.value);
+  } else {
+    cb.closest('label').classList.remove('checked');
+    S.returnItems = S.returnItems.filter(v => v !== cb.value);
+  }
+  save();
+}
+
+function updateBSender() {
+  const el = document.getElementById('bSenderDisplay');
+  if(!el) return;
+  const addr = S.officeAddress || S.myAddress || '住所を入力してください';
+  const name = S.myName || '氏名を入力してください';
+  el.innerHTML = addr + '<br>' + name;
+}
+
+// ===== DATE CALCULATION =====
+function addDays(date, days) {
+  const d = new Date(date);
+  d.setDate(d.getDate() + days);
+  return d;
+}
+function fmt(d) {
+  return `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`;
+}
+function fmtISO(d) {
+  const m = String(d.getMonth()+1).padStart(2,'0');
+  const day = String(d.getDate()).padStart(2,'0');
+  return `${d.getFullYear()}/${m}/${day}`;
+}
+function calcDates() {
+  const sdEl = document.getElementById('sendDate');
+  const vdEl = document.getElementById('vacDays');
+  S.sendDate = sdEl ? sdEl.value : '';
+  S.vacDays = parseInt(vdEl ? vdEl.value : '0') || 0;
+  save();
+  if(!S.sendDate) { document.getElementById('dateCalcBox').style.display='none'; return; }
+  const send = new Date(S.sendDate);
+  const arrival = addDays(send, 2);
+  const vacStart = addDays(arrival, 1);
+  const minRetire = addDays(arrival, 14);
+  const vacEnd = addDays(vacStart, Math.max(0, S.vacDays - 1));
+  const retire = new Date(Math.max(minRetire.getTime(), vacEnd.getTime() + 86400000));
+  S.calcArrival = fmt(arrival);
+  S.calcVacStart = fmt(vacStart);
+  S.calcVacEnd = S.vacDays > 0 ? fmt(vacEnd) : '—（有給なし）';
+  S.calcRetire = fmt(retire);
+  document.getElementById('calcSend').textContent = fmt(send);
+  document.getElementById('calcArrival').textContent = S.calcArrival;
+  document.getElementById('calcVacStart').textContent = S.calcVacStart;
+  document.getElementById('calcVacEnd').textContent = S.calcVacEnd;
+  document.getElementById('calcRetire').textContent = S.calcRetire;
+  document.getElementById('dateCalcBox').style.display = 'block';
+  save();
+}
+
+// ===== SCREENING =====
+const Q_CONFIG = {
+  q1: { type:'required_yes',
+    ok:'✅ 無期雇用のため、民法627条が適用されます。',
+    ng:'⚠️ 有期雇用の場合、民法627条が直接適用されない場合があります。スタンダード以上にお申し込みの上、ご相談ください。' },
+  q2: { type:'ng_yes', ng:'⚠️ 損害賠償を言われている場合は弁護士へのご相談が必要です。当サービスでは対応できません。', ok:'✅ 問題ありません。' },
+  q3: { type:'ng_yes', ng:'⚠️ 未払い賃金の請求は弁護士の領域です。当サービスでは対応できません。', ok:'✅ 問題ありません。' },
+  q4: { type:'ng_yes', ng:'⚠️ ハラスメント慰謝料は弁護士の領域です。当サービスでは対応できません。', ok:'✅ 問題ありません。' },
+  q5: { type:'ng_yes', ng:'⚠️ 懲戒解雇の示唆は弁護士へのご相談が必要です。当サービスでは対応できません。', ok:'✅ 問題ありません。' },
+  q6: { type:'ng_yes', ng:'⚠️ 公務員・自衛官等は当サービスの対象外です。専門窓口にご相談ください。', ok:'✅ 問題ありません。' },
+  q7: { type:'warn_yes', warn:'⚠️ 社宅にお住まいの場合、退職に伴い退去が必要です。個別にご相談ください。', ok:'✅ 問題ありません。' },
+  q8: { type:'ng_yes', ng:'⚠️ 多額の現金等を預かっている場合は弁護士にご相談ください。', ok:'✅ 問題ありません。' },
+  q9: { type:'warn_yes', warn:'⚠️ 競業避止・秘密保持については、転職前に確認しておくことをお勧めします。', ok:'✅ 問題ありません。' },
+};
+
+function answer(qid, val) {
+  S.screening[qid] = val;
+  const config = Q_CONFIG[qid];
+  const item = document.getElementById(qid);
+  const result = document.getElementById(qid + '-result');
+  item.className = 'q-item';
+  const btns = item.querySelectorAll('.q-btn');
+  btns[0].classList.toggle('sel-yes', val === 'yes');
+  btns[1].classList.toggle('sel-no', val === 'no');
+  let isNG = false, isWarn = false;
+  if(config.type === 'required_yes') {
+    if(val === 'yes') { item.classList.add('ok'); result.textContent = config.ok; }
+    else { item.classList.add('ng'); result.textContent = config.ng; isNG = true; }
+  } else if(config.type === 'ng_yes') {
+    if(val === 'yes') { item.classList.add('ng'); result.textContent = config.ng; isNG = true; }
+    else { item.classList.add('ok'); result.textContent = config.ok; }
+  } else if(config.type === 'warn_yes') {
+    if(val === 'yes') { item.classList.add('warn'); result.textContent = config.warn; isWarn = true; }
+    else { item.classList.add('ok'); result.textContent = config.ok; }
+  }
+  checkScreeningComplete();
+  save();
+}
+
+function checkScreeningComplete() {
+  const allQ = Object.keys(Q_CONFIG);
+  const answered = allQ.filter(q => S.screening[q] !== undefined);
+  if(answered.length < allQ.length) return;
+  const hasNG = ['q1','q2','q3','q4','q5','q6','q8'].some(q => {
+    const c = Q_CONFIG[q];
+    if(c.type === 'required_yes') return S.screening[q] === 'no';
+    return S.screening[q] === 'yes';
+  });
+  const resultEl = document.getElementById('screeningResult');
+  const toStep2 = document.getElementById('toStep2Btn');
+  resultEl.style.display = 'block';
+  if(hasNG) {
+    resultEl.innerHTML = `<div class="lawyer-box">
+      <h3>⚠️ 専門家へのご相談が必要です</h3>
+      <p>ご入力の内容から、弁護士または専門家への相談が必要なケースが含まれています。<br>
+      当サービスではこれらの案件に対応することができません。<br>
+      法的な紛争が予想される場合は、法テラスや弁護士ドットコムをご活用ください。</p>
+      <a href="https://www.houterasu.or.jp/" target="_blank" class="btn btn-navy" style="margin:8px auto;display:inline-flex;">法テラスに相談 →</a>
+    </div>`;
+    toStep2.style.display = 'none';
+  } else {
+    resultEl.innerHTML = `<div class="alert alert-success"><div class="alert-title">✅ 当サービスでサポートできます</div>スクリーニングを通過しました。次のステップに進んでください。</div>`;
+    toStep2.style.display = 'inline-flex';
+  }
+}
+
+// ===== STEP NAVIGATION =====
+function goStep(n) {
+  [1,2,3,4,5].forEach(i => {
+    document.getElementById('step'+i).style.display = i===n ? 'block' : 'none';
+    const ps = document.getElementById('ps'+i);
+    ps.className = 'ps' + (i<n?' done':i===n?' active':'');
+  });
+  if(n===3) { syncInputs(); calcDates(); renderDocs(); }
+  if(n===4) renderTemplates();
+  if(n===5) updateBSender();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// Initialize
+(function(){
+  goStep(1);
+  syncInputs();
+  calcDates();
+  // Re-apply screening answers
+  Object.keys(S.screening).forEach(qid => {
+    if(S.screening[qid]) answer(qid, S.screening[qid]);
+  });
+})();
+
+// ===== DOCUMENT GENERATION =====
+function getItems() {
+  const ci = S.customItems ? S.customItems.split('\n').filter(s=>s.trim()) : [];
+  return [...S.returnItems, ...ci];
+}
+
+function genDocA() {
+  const cn = S.companyName || '株式会社〇〇';
+  const ceo = S.ceoName || 'ご担当者様';
+  const ca = S.companyAddress || '〒000-0000 東京都〇〇区〇〇';
+  const my = S.myName || '〇〇 〇〇';
+  const ma = S.myAddress || '〒000-0000 住所を入力してください';
+  const oa = S.officeAddress || '（事務連絡先住所）';
+  const on2 = S.officeNote || '※上記は法的代理人ではありません';
+  const arrive = S.calcArrival || '（到達予定日）';
+  const vacS = S.calcVacStart || '（有給開始日）';
+  const vacE = S.calcVacEnd || '（有給終了日）';
+  const retire = S.calcRetire || '（退職予定日）';
+  const vdays = S.vacDays || 0;
+  const vacText = vdays > 0
+    ? `2. 年次有給休暇の取得\n退職日までの期間について、残存する年次有給休暇（${vdays}日）を全て取得いたします。\n取得対象期間は、${vacS}（本通知到達日の翌日）から${vacE}（退職日前日）とします。\n退職日以降に時季変更権を行使できる余地がないため、請求のとおり全日数を与えていただくようお願いいたします。なお、残日数に不足・相違がある場合は、確認のうえ書面にてご連絡ください。\n`
+    : `2. 有給休暇について\n現在、消化可能な有給休暇残日数はございません。退職日まで就業規則に従い対応いたします。\n`;
+  const items = getItems();
+  const itemText = items.length > 0
+    ? '以下の貸与品については、本通知書とは別便にて同日付で発送いたします。返却内容の詳細は、別送の「貸与品返却目録」をご確認ください。\n' + items.map(i => '　・' + i).join('\n')
+    : '返却すべき貸与品はございません。';
+  const now = S.sendDate ? new Date(S.sendDate) : new Date();
+  const dateStr = `令和${now.getFullYear()-2018}年${now.getMonth()+1}月${now.getDate()}日`;
+  return `退 職 届 兼 通 知 書
+
+${ca}
+${cn}
+${ceo} 殿
+
+
+
+　私は、一身上の都合により貴社を退職する意思を、本通知書により通知いたします。
+
+記
+
+1. 退職の意思表示
+民法第627条第1項に基づき、貴社との雇用契約の解約を申し入れます。
+本通知書が貴社に到達した日（${arrive}）から起算して2週間が経過する日をもって、雇用関係が終了いたします。
+退職確定予定日：${retire}
+
+${vacText}
+3. 出勤および連絡方法について
+本通知書の到達後、退職日までの期間については、年次有給休暇の取得のため出勤いたしません。
+退職に関する連絡については、記録保全のため、電話ではなく下記の事務連絡先宛に書面でお願いいたします。
+
+【事務連絡先（郵送物受領先）】
+${oa}
+${on2}
+
+4. 貸与品・引継資料について
+${itemText}
+引継ぎに関する資料については、別送の「引継書」をご確認ください。
+
+5. 退職後書類の送付について
+退職後、速やかに以下の書類を上記事務連絡先宛にご送付ください。
+　・離職票1、離職票2
+　・雇用保険被保険者証
+　・源泉徴収票
+　・退職証明書
+　・社会保険資格喪失証明書
+　・その他、退職に伴い本人へ交付すべき書類
+
+6. 最終給与および退職金について
+最終給与・立替金精算・退職金その他、貴社規程上支給される金員については、従前の給与振込口座または貴社所定の方法により、法令および貴社規程に従いお支払いください。
+なお、損害賠償その他名目のいかんを問わず、賃金との相殺は労働基準法第24条により禁止されており、これを行う場合は行政機関への申告を行う場合があります。
+
+7. 本人への直接連絡について
+退職に関する一切のやり取りは、記録保全のため書面にてお願いいたします。本人または家族への電話・訪問は、緊急の場合を除きお控えください。
+
+以上
+
+
+${dateStr}
+
+住所　${ma}
+氏名　${my}　　　印
+
+【自署欄】
+上記の退職通知は、私本人の意思に基づき作成・発送するものです。
+
+　氏名（自署）　___________________________　　　　　　印`;
+}
+
+function genDocB() {
+  const cn = S.companyName || '株式会社〇〇';
+  const ceo = S.ceoName || 'ご担当者様';
+  const my = S.myName || '〇〇 〇〇';
+  const now = S.sendDate ? new Date(S.sendDate) : new Date();
+  const dateStr = `令和${now.getFullYear()-2018}年${now.getMonth()+1}月${now.getDate()}日`;
+  const retire = S.calcRetire || '（退職予定日）';
+  return `送 付 状
+
+${cn}
+${ceo} 殿
+
+${dateStr}
+
+氏名：${my}
+
+
+　標記の件につきまして、下記の書類等を送付いたします。ご確認のほどよろしくお願いいたします。
+
+記
+
+【同封物】
+　1. 会社担当者様向けお手続きに関するQ&A
+　2. 貸与品返却目録
+　3. 引継書
+　4. 返却貸与品一式
+
+　なお、退職届兼通知書につきましては、本送付とは別に内容証明郵便（配達証明付き）にて同日発送しております。
+
+　退職に関するご不明点がございましたら、書面にて事務連絡先宛にご連絡ください。
+
+以上
+
+退職予定日：${retire}
+氏名：${my}　　　印`;
+}
+
+function genDocC() {
+  const cn = S.companyName || '株式会社〇〇';
+  const arrive = S.calcArrival || '（到達予定日）';
+  const retire = S.calcRetire || '（退職予定日）';
+  const vdays = S.vacDays || 0;
+  return `退職手続に関するQ&A
+${cn} ご担当者様へ
+
+本書は、退職手続を円滑に進めるための一般的な確認事項をまとめたものです。
+なお、本書の発送元（事務連絡先）は、本人が指定した郵送物受領・事務窓口であり、法的代理人ではありません。個別の法的主張・交渉は行いません。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q1. 本人と直接話さなければ退職を認められないのでは？
+
+A. 本人自署の退職通知書（内容証明）により、本人の退職意思は法的に有効に表示されています。
+退職は「承認」を要する行為ではなく、民法627条第1項に基づき、到達日（${arrive}）から2週間経過した${retire}に雇用関係が自動的に終了します。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q2. 就業規則に「○ヶ月前申告」と定めてありますが？
+
+A. 無期雇用の場合、民法627条第1項が適用され、就業規則の定める予告期間が民法より長い場合には法的拘束力が弱いと解されています（最高裁判例・学説上の多数説）。2週間経過後の退職は法的に有効です。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q3. 有給休暇を拒否することはできますか？
+
+A. 退職日が決定している場合、退職日以降に時季変更権（他の日への変更権）を行使する余地がなくなるため、原則として本人が請求した日程どおりに有給休暇を与えなければなりません（労働基準法第39条）。${vdays > 0 ? `本人は退職日までに残有給${vdays}日の取得を申請しています。` : ''}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q4. 引継ぎが終わっていないことを理由に退職を止められますか？
+
+A. 退職の意思表示そのものを無効にする理由にはなりません。本人は別送の引継書・返却目録により可能な範囲での引継情報を提供しています。追加確認事項があれば書面にてご連絡ください。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q5. 損害賠償を請求できますか？
+
+A. 正当な退職の意思表示に基づく退職が直ちに損害賠償の対象となることはありません。請求される場合は、根拠・損害額・因果関係を明記した書面でご連絡ください。なお、賃金と損害賠償の相殺は労働基準法第24条で禁じられています。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q6. 最終給与から損害額等を差し引けますか？
+
+A. 労働基準法第24条（賃金全額払いの原則）により、使用者が一方的に損害賠償等と相殺することは原則として禁じられています。差し引く場合は法的根拠と内容を書面でお示しください。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q7. 離職票はいつまでに手続が必要ですか？
+
+A. 雇用保険被保険者資格喪失届は、離職日の翌々日から10日以内にハローワークへ提出する必要があります（雇用保険法第7条）。これを怠ると行政指導の対象となります。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q8. 退職証明書は発行する必要がありますか？
+
+A. 本人から請求がある場合、使用者は遅滞なく退職証明書を交付する義務があります（労働基準法第22条）。請求していない事項を記入することは禁止されています。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q9. 本人または家族に電話・訪問してよいですか？
+
+A. 本人は退職に関する連絡を書面（事務連絡先宛）にて行うよう指定しています。執拗な電話・訪問はハラスメントや不法行為に該当する恐れがあります。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+本書に関するご連絡は、退職通知書記載の事務連絡先に書面でお送りください。`;
+}
+
+function genDocD() {
+  const cn = S.companyName || '株式会社〇〇';
+  const my = S.myName || '〇〇 〇〇';
+  const now = S.sendDate ? new Date(S.sendDate) : new Date();
+  const dateStr = `令和${now.getFullYear()-2018}年${now.getMonth()+1}月${now.getDate()}日`;
+  const items = getItems();
+  const itemRows = items.length > 0
+    ? items.map((item,i) => `　${i+1}. ${item}`).join('\n')
+    : '　（返却する貸与品なし）';
+  return `貸 与 品 返 却 目 録
+
+${cn}
+ご担当者様へ
+
+${dateStr}
+
+氏名：${my}
+
+
+　以下の貸与品を返却いたします。本目録に記載の品目と、同封物をご確認ください。
+
+記
+
+【返却品一覧】
+${itemRows}
+
+※上記の品物は、本書の発送日（${dateStr}）に梱包し、別送にて発送いたしました。
+※梱包前の写真を控えとして保存しております。
+※万一、数量・内容に相違がある場合は、品名・管理番号・返却を求める理由を明記のうえ、書面にてご連絡ください。
+
+　なお、PCその他の情報端末については、初期化を行っておりません。データ消去については貴社のご指示に従います。
+
+以上
+
+氏名：${my}　　　印`;
+}
+
+function genDocE() {
+  const cn = S.companyName || '株式会社〇〇';
+  const my = S.myName || '〇〇 〇〇';
+  const now = S.sendDate ? new Date(S.sendDate) : new Date();
+  const dateStr = `令和${now.getFullYear()-2018}年${now.getMonth()+1}月${now.getDate()}日`;
+  const hw = S.handover || '（引継ぎ内容を入力してください）';
+  return `引 継 書
+
+${cn}
+ご担当者様へ
+
+${dateStr}
+
+氏名：${my}
+
+
+　退職に際し、業務の引継ぎ事項を以下にまとめます。追加確認が必要な場合は、書面にてご連絡ください。
+
+記
+
+【業務引継ぎ概要】
+
+${hw}
+
+【ファイル・資料の所在】
+　・紙の引継ぎ資料　：デスク上の所定の場所にまとめております
+　・電子データ　　　：共有フォルダの指定ディレクトリに保存しております
+　・不明点がある場合：書面にてご連絡いただければ、可能な範囲で回答いたします
+
+【注意事項】
+　・本引継書は可能な限りの情報提供を目的としており、退職の意思表示を撤回するものではありません
+　・引継ぎ未了を理由に退職日の変更・損害賠償請求を行うことは、法的に認められていない場合があります
+
+以上
+
+氏名：${my}　　　印`;
+}
+
+function renderDocs() {
+  document.getElementById('previewA').textContent = genDocA();
+  document.getElementById('previewB').textContent = genDocB();
+  document.getElementById('previewC').textContent = genDocC();
+  document.getElementById('previewD').textContent = genDocD();
+  document.getElementById('previewE').textContent = genDocE();
+}
+
+// ===== DOCUMENT TABS =====
+function showDoc(id) {
+  ['docA','docB','docC','docD','docE'].forEach(d => {
+    document.getElementById(d).style.display = d===id ? 'block' : 'none';
+  });
+  document.querySelectorAll('.doc-tab').forEach((t,i) => {
+    t.classList.toggle('active', ['docA','docB','docC','docD','docE'][i] === id);
+  });
+  S.currentDoc = id.replace('doc','');
+}
+
+// ===== PRINT =====
+function printDoc(type) {
+  const genFns = {A:genDocA, B:genDocB, C:genDocC, D:genDocD, E:genDocE};
+  const titles = {A:'退職届兼通知書', B:'送付状', C:'Q&A（会社向け）', D:'貸与品返却目録', E:'引継書'};
+  const content = genFns[type]();
+  const win = window.open('','_blank','width=800,height=900');
+  win.document.write(`<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8">
+<title>${titles[type]}</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;}
+body{font-family:'Noto Sans JP',serif;padding:20mm 25mm;font-size:11pt;line-height:2;color:#000;background:#fff;white-space:pre-wrap;word-break:break-all;}
+@media print{body{padding:15mm 20mm;}@page{size:A4;margin:15mm 20mm;}}
+.print-hint{background:#f0f0f0;padding:12px;font-size:10pt;text-align:center;margin-bottom:20px;border-radius:4px;}
+@media print{.print-hint{display:none;}}
+</style></head><body>
+<div class="print-hint">このウィンドウでCtrl+P（Mac: ⌘+P）を押して印刷してください。「署名・押印」後、郵便局で発送します。</div>
+<pre style="font-family:inherit;white-space:pre-wrap;">${content}</pre>
+<script>setTimeout(()=>window.print(),600);<\/script>
+</body></html>`);
+  win.document.close();
+}
+
+// ===== PDF GENERATION =====
+async function downloadPDF(type) {
+  const genFns = {A:genDocA, B:genDocB, C:genDocC, D:genDocD, E:genDocE};
+  const titles = {A:'退職届兼通知書', B:'送付状', C:'Q&A（会社向け）', D:'貸与品返却目録', E:'引継書'};
+  const overlay = document.getElementById('loadingOverlay');
+  overlay.style.display = 'flex';
+  try {
+    // Load font if not cached
+    if(!S.fontBase64) {
+      document.getElementById('loadingMsg').textContent = 'フォントを読み込み中...';
+      const resp = await fetch('./NotoSansJP-Regular.ttf');
+      if(!resp.ok) throw new Error('font not found');
+      const buf = await resp.arrayBuffer();
+      const bytes = new Uint8Array(buf);
+      let binary = '';
+      const chunk = 8192;
+      for(let i=0; i<bytes.length; i+=chunk) {
+        binary += String.fromCharCode.apply(null, bytes.subarray(i, Math.min(i+chunk, bytes.length)));
+      }
+      S.fontBase64 = btoa(binary);
+    }
+    document.getElementById('loadingMsg').textContent = 'PDF生成中...';
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
+    doc.addFileToVFS('NotoSansJP.ttf', S.fontBase64);
+    doc.addFont('NotoSansJP.ttf', 'NotoSansJP', 'normal');
+    doc.setFont('NotoSansJP', 'normal');
+    const content = genFns[type]();
+    const lines = content.split('\n');
+    const marginL = 20, marginT = 20, lineH = 6;
+    const maxW = 170;
+    doc.setFontSize(10);
+    let y = marginT;
+    const pageH = 297 - 20;
+    for(const line of lines) {
+      if(y > pageH) { doc.addPage(); y = marginT; }
+      if(line.trim() === '') { y += lineH * 0.6; continue; }
+      const wrapped = doc.splitTextToSize(line, maxW);
+      for(const wl of wrapped) {
+        if(y > pageH) { doc.addPage(); y = marginT; }
+        doc.text(wl, marginL, y);
+        y += lineH;
+      }
+    }
+    doc.save(`${titles[type]}.pdf`);
+  } catch(err) {
+    alert('PDFの生成に失敗しました。代わりに「印刷（自署用）」ボタンからPDFとして保存してください。\n（印刷ダイアログで「PDFに保存」を選択）');
+  } finally {
+    overlay.style.display = 'none';
+  }
+}
+
+// ===== TEMPLATES =====
+function renderTemplates() {
+  const my = S.myName || '〇〇 〇〇';
+  const cn = S.companyName || '株式会社〇〇';
+  const now = new Date();
+  const dateStr = `令和${now.getFullYear()-2018}年${now.getMonth()+1}月${now.getDate()}日`;
+  const retire = S.calcRetire || '（退職予定日）';
+  const arrive = S.calcArrival || '（到達予定日）';
+  const vdays = S.vacDays || 0;
+
+  const tmpl1 = `回 答 書
+
+${cn} ご担当者様へ　　　　　${dateStr}
+
+　貴社のご連絡を確認いたしました。
+
+　私は、民法第627条第1項に基づき、${arrive}付けの退職届兼通知書（内容証明郵便）により適法に雇用契約の解約を申し入れております。同条により、意思表示が到達した日から2週間が経過する${retire}をもって、雇用関係は法律上当然に終了いたします。
+
+　退職の意思を撤回する意思はございません。今後の手続については、書面にてご連絡ください。
+
+住所　${S.myAddress || '〒〇〇〇 住所'}
+氏名　${my}　　　印`;
+
+  const tmpl2 = `回 答 書
+
+${cn} ご担当者様へ　　　　　${dateStr}
+
+　貴社より本人確認に関するご連絡をいただきました。
+
+　退職届兼通知書には私本人の自署および押印がございます。本人意思に基づく真正な退職通知書であることは明らかです。
+
+　本人確認の方法に疑義がある場合は、具体的な確認方法を書面でご提示ください。なお、電話および訪問による確認には対応いたしかねます。すべての連絡は指定の事務連絡先宛に書面でお願いいたします。
+
+住所　${S.myAddress || '〒〇〇〇 住所'}
+氏名　${my}　　　印`;
+
+  const tmpl3 = `警 告 書
+
+${cn} ご担当者様へ　　　　　${dateStr}
+
+　退職に関する連絡は、退職届兼通知書に記載の事務連絡先宛に書面でお願いするよう既にお伝えしております。
+
+　にもかかわらず、私および家族への電話・訪問が継続されております。このような行為は、私の生活の平穏を著しく害しており、場合によっては不法行為（民法709条）に該当する恐れがあります。
+
+　直ちに電話・訪問による連絡をお控えください。今後も継続する場合は、記録をもとに警察・労働局・弁護士に相談することをお伝えいたします。
+
+住所　${S.myAddress || '〒〇〇〇 住所'}
+氏名　${my}　　　印`;
+
+  const tmpl4 = `回 答 書
+
+${cn} ご担当者様へ　　　　　${dateStr}
+
+　貴社のご連絡内容を確認いたしました。
+
+　損害賠償・懲戒処分その他の法的主張については、根拠・損害額・因果関係を具体的に明記した書面にてご送付ください。内容を確認のうえ、必要に応じて専門家に相談いたします。
+
+　なお、賃金と損害賠償の相殺は労働基準法第24条により原則禁止されており、これに反する給与控除がある場合は労働基準監督署への申告を行います。
+
+住所　${S.myAddress || '〒〇〇〇 住所'}
+氏名　${my}　　　印`;
+
+  const tmpl5 = `回 答 書
+
+${cn} ご担当者様へ　　　　　${dateStr}
+
+　貴社から有給休暇の取得に関してご連絡をいただきました。
+
+　退職日（${retire}）が決定している場合、退職日以降に時季変更権を行使する余地がないため、使用者は請求のとおり有給休暇を与える義務があります（労働基準法第39条）。${vdays > 0 ? `私は退職日までに残有給${vdays}日の消化を申請しております。` : ''}
+
+　有給休暇取得を不当に拒否した場合は、労働基準監督署への申告を行う場合があります。書面でのご連絡をお待ちしております。
+
+住所　${S.myAddress || '〒〇〇〇 住所'}
+氏名　${my}　　　印`;
+
+  const tmpl6 = `催 促 状（離職票等未着）
+
+${cn} ご担当者様へ　　　　　${dateStr}
+
+　私は${retire}付けで退職いたしましたが、本日時点で離職票その他退職後書類が届いておりません。
+
+　雇用保険法第7条により、資格喪失届は離職日の翌々日から10日以内の提出が義務付けられております。速やかに手続のうえ、以下の書類を事務連絡先宛にご送付ください。
+
+　　・離職票1、離職票2
+　　・雇用保険被保険者証
+　　・源泉徴収票
+　　・社会保険資格喪失証明書
+　　・退職証明書
+
+　本状到達後10日以内にご対応いただけない場合は、ハローワークへの相談および労働基準監督署への申告を行います。
+
+住所　${S.myAddress || '〒〇〇〇 住所'}
+氏名　${my}　　　印`;
+
+  const tmpl7 = `異 議 申 立 書
+
+${cn} ご担当者様へ　　　　　${dateStr}
+
+　離職票に記載された離職理由について、私の認識と相違があります。
+
+　私は自己都合により退職したものであり、貴社の記載内容（○○）は事実と異なります。相違の理由および根拠資料を、書面にてご提示ください。
+
+　内容を確認のうえ、必要に応じてハローワークへ異議申し立てを行います。
+
+住所　${S.myAddress || '〒〇〇〇 住所'}
+氏名　${my}　　　印`;
+
+  document.getElementById('tmpl1').textContent = tmpl1;
+  document.getElementById('tmpl2').textContent = tmpl2;
+  document.getElementById('tmpl3').textContent = tmpl3;
+  document.getElementById('tmpl4').textContent = tmpl4;
+  document.getElementById('tmpl5').textContent = tmpl5;
+  document.getElementById('tmpl6').textContent = tmpl6;
+  document.getElementById('tmpl7').textContent = tmpl7;
+}
+
+function toggleTemplate(btn) {
+  const card = btn.closest('.template-card');
+  const body = card.querySelector('.template-body');
+  body.classList.toggle('open');
+  btn.textContent = body.classList.contains('open') ? '閉じる ▴' : '開く ▾';
+}
+
+function copyTemplate(n) {
+  const el = document.getElementById('tmpl'+n);
+  if(!el) return;
+  navigator.clipboard.writeText(el.textContent).then(()=>alert('コピーしました')).catch(()=>{
+    const ta = document.createElement('textarea');
+    ta.value = el.textContent;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    alert('コピーしました');
+  });
+}
+
+function printTemplate(n) {
+  const el = document.getElementById('tmpl'+n);
+  if(!el) return;
+  const win = window.open('','_blank','width=800,height=900');
+  win.document.write(`<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><title>返答書面</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+<style>body{font-family:'Noto Sans JP',serif;padding:20mm 25mm;font-size:11pt;line-height:2;white-space:pre-wrap;}
+.hint{background:#eee;padding:10px;text-align:center;font-size:10pt;margin-bottom:16px;}
+@media print{.hint{display:none;}}</style></head><body>
+<div class="hint">Ctrl+P（Mac: ⌘+P）で印刷。署名・押印の上、書留で会社へ送付してください。</div>
+<pre style="font-family:inherit;">${el.textContent}</pre>
+<script>setTimeout(()=>window.print(),600);<\/script></body></html>`);
+  win.document.close();
+}
+</script>
+</body>
+</html>
