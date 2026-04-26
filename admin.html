@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>管理者ツール｜退職手続きコンシェルジュ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0F2F5C;--green:#059669;--green-light:#D1FAE5;--amber:#D97706;--amber-light:#FEF3C7;
+  --gray-50:#F8FAFC;--gray-100:#F1F5F9;--gray-200:#E2E8F0;--gray-400:#94A3B8;
+  --gray-600:#475569;--gray-800:#1E293B;--white:#fff;--radius:12px;
+  --shadow:0 4px 24px rgba(15,47,92,.10);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(--gray-50);line-height:1.75;font-size:15px;min-height:100vh;}
+.nav{background:var(--white);border-bottom:1px solid var(--gray-200);padding:0 24px;}
+.nav-inner{display:flex;align-items:center;height:56px;max-width:760px;margin:0 auto;gap:16px;}
+.nav-logo{font-size:15px;font-weight:900;color:var(--navy);text-decoration:none;}
+.nav-badge{font-size:11px;font-weight:700;background:#FEF3C7;color:#D97706;padding:2px 10px;border-radius:100px;}
+.main{max-width:760px;margin:0 auto;padding:32px 24px 80px;}
+.card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:32px;margin-bottom:24px;}
+.card-title{font-size:17px;font-weight:900;color:var(--navy);margin-bottom:20px;display:flex;align-items:center;gap:8px;}
+.card-title::before{content:'';display:block;width:4px;height:20px;background:var(--green);border-radius:2px;}
+.pw-row{display:flex;flex-direction:column;gap:16px;}
+.pw-item{background:var(--gray-50);border-radius:10px;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.pw-item.primary{background:var(--green-light);border:1.5px solid #6EE7B7;}
+.pw-label{font-size:12px;font-weight:700;color:var(--gray-400);margin-bottom:4px;}
+.pw-item.primary .pw-label{color:#065F46;}
+.pw-value{font-size:28px;font-weight:900;color:var(--navy);letter-spacing:.15em;font-variant-numeric:tabular-nums;}
+.pw-expires{font-size:13px;color:var(--gray-600);margin-top:4px;}
+.pw-item.primary .pw-expires{color:#065F46;font-weight:700;}
+.copy-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:100px;background:var(--green);color:var(--white);font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:inherit;transition:all .2s;white-space:nowrap;}
+.copy-btn:hover{background:#047857;}
+.copy-btn.secondary{background:var(--gray-200);color:var(--gray-800);}
+.copy-btn.secondary:hover{background:var(--gray-400);color:var(--white);}
+.info-box{background:var(--amber-light);border:1px solid #FDE68A;border-radius:8px;padding:14px 18px;font-size:13px;color:var(--amber);margin-bottom:20px;line-height:1.7;}
+.fg{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
+.fg label{font-size:13px;font-weight:700;color:var(--gray-600);}
+.fg input,.fg textarea{padding:10px 14px;border-radius:8px;border:1.5px solid var(--gray-200);font-size:14px;font-family:inherit;color:var(--gray-800);outline:none;transition:border .2s;background:var(--white);}
+.fg input:focus,.fg textarea:focus{border-color:var(--navy);}
+.fg textarea{resize:vertical;min-height:120px;}
+.send-btn{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;border-radius:100px;background:var(--navy);color:var(--white);font-size:15px;font-weight:700;border:none;cursor:pointer;font-family:inherit;transition:all .2s;}
+.send-btn:hover{background:#1E4D8C;transform:translateY(-1px);}
+.algo-note{background:var(--gray-100);border-radius:8px;padding:14px 18px;font-size:12px;color:var(--gray-600);line-height:1.7;}
+.algo-note code{background:var(--gray-200);padding:1px 6px;border-radius:4px;font-family:monospace;font-size:12px;}
+.loading{color:var(--gray-400);font-size:24px;font-weight:700;}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <span class="nav-logo">🏛️ 退職手続きコンシェルジュ</span>
+    <span class="nav-badge">管理者ツール</span>
+  </div>
+</nav>
+
+<main class="main">
+
+  <div class="card">
+    <div class="card-title">現在有効なパスワード</div>
+    <div class="info-box">
+      ⚠️ このページは管理者専用です。URLを外部に共有しないでください。パスワードは14日サイクルで自動更新されます。
+    </div>
+    <div class="pw-row" id="pwRow">
+      <div class="loading">読み込み中...</div>
+    </div>
+    <div style="margin-top:16px;">
+      <div class="algo-note">
+        パスワード生成方式：<code>SHA-256(SALT + 直近の14の倍数日付)</code> の先頭8文字（大文字）を
+        <code>XXXX-XXXX</code> 形式で表示。各パスワードは28日間有効。常に2つが重複して有効です（有効期間の長い方がプライマリ）。
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">パスワード通知メール</div>
+    <div class="fg">
+      <label>送信先メールアドレス</label>
+      <input type="email" id="toEmail" placeholder="user@example.com">
+    </div>
+    <div class="fg">
+      <label>メール件名</label>
+      <input type="text" id="mailSubject" value="【退職手続きコンシェルジュ】書面作成ページのご案内">
+    </div>
+    <div class="fg">
+      <label>メール本文（編集可能）</label>
+      <textarea id="mailBody" rows="12"></textarea>
+    </div>
+    <button class="send-btn" onclick="openMailClient()">📧 メールクライアントを開く</button>
+    <p style="font-size:12px;color:var(--gray-400);margin-top:10px;">
+      ※ お使いのメールアプリが開きます。送信前に内容をご確認ください。
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">直近のパスワード一覧（確認用）</div>
+    <table style="width:100%;border-collapse:collapse;font-size:13px;" id="histTable">
+      <thead>
+        <tr style="border-bottom:2px solid var(--gray-200);">
+          <th style="text-align:left;padding:8px 12px;color:var(--gray-600)">アンカー日付</th>
+          <th style="text-align:left;padding:8px 12px;color:var(--gray-600)">パスワード</th>
+          <th style="text-align:left;padding:8px 12px;color:var(--gray-600)">有効期間</th>
+          <th style="text-align:left;padding:8px 12px;color:var(--gray-600)">状態</th>
+        </tr>
+      </thead>
+      <tbody id="histBody">
+        <tr><td colspan="4" style="padding:12px;color:var(--gray-400)">読み込み中...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</main>
+
+<script>
+'use strict';
+const SALT = 'TSCKeiyaku2026';
+
+async function sha256(s){
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+async function derivePassword(anchorEpochDays){
+  const d = new Date(anchorEpochDays * 86400000);
+  const ymd = d.getUTCFullYear()
+    + String(d.getUTCMonth()+1).padStart(2,'0')
+    + String(d.getUTCDate()).padStart(2,'0');
+  const h = await sha256(SALT + ymd);
+  const raw = h.substring(0,8).toUpperCase();
+  return raw.substring(0,4)+'-'+raw.substring(4,8);
+}
+function epochToYMD(days){
+  const d = new Date(days * 86400000);
+  return `${d.getUTCFullYear()}/${String(d.getUTCMonth()+1).padStart(2,'0')}/${String(d.getUTCDate()).padStart(2,'0')}`;
+}
+function epochToJp(days){
+  const d = new Date(days * 86400000);
+  return `${d.getUTCFullYear()}年${d.getUTCMonth()+1}月${d.getUTCDate()}日`;
+}
+
+async function init(){
+  const todayDays = Math.floor(Date.now()/86400000);
+  const offset = todayDays % 14;
+  const a1 = todayDays - offset;        // current anchor
+  const a2 = a1 - 14;                   // previous anchor
+  const daysLeft1 = 28 - offset;
+  const daysLeft2 = 14 - offset;        // >0 means still valid
+
+  const pw1 = await derivePassword(a1);
+  const pw2 = await derivePassword(a2);
+
+  // Render password cards
+  const pwRow = document.getElementById('pwRow');
+  let html = `
+    <div class="pw-item primary">
+      <div>
+        <div class="pw-label">🔑 プライマリ（有効期間が長い方）</div>
+        <div class="pw-value">${pw1}</div>
+        <div class="pw-expires">残り ${daysLeft1} 日（アンカー: ${epochToJp(a1)}）</div>
+      </div>
+      <button class="copy-btn" onclick="copyText('${pw1}',this)">📋 コピー</button>
+    </div>`;
+  if(daysLeft2 > 0){
+    html += `
+    <div class="pw-item">
+      <div>
+        <div class="pw-label">🔑 セカンダリ（まだ有効）</div>
+        <div class="pw-value" style="font-size:22px">${pw2}</div>
+        <div class="pw-expires">残り ${daysLeft2} 日（アンカー: ${epochToJp(a2)}）</div>
+      </div>
+      <button class="copy-btn secondary" onclick="copyText('${pw2}',this)">📋 コピー</button>
+    </div>`;
+  } else {
+    html += `<div class="pw-item"><div style="color:var(--gray-400);font-size:14px">セカンダリは期限切れです（新しいサイクルの前半のみ有効）</div></div>`;
+  }
+  pwRow.innerHTML = html;
+
+  // Set mail body template
+  document.getElementById('mailBody').value =
+`この度は退職手続きコンシェルジュをご利用いただきありがとうございます。
+
+お支払いが確認できましたので、書面作成ページへのアクセスパスワードをお知らせします。
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+　書面作成ページURL:
+　https://（あなたのGitHub PagesのURL）/app.html
+
+　パスワード: ${pw1}
+　有効期限: ${daysLeft1}日間
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+ご利用手順：
+1. 上記URLにアクセスしてください
+2. パスワードを入力してログインしてください
+3. 基本情報を入力し、各書面をPDFで生成してください
+4. 印刷後、自署欄に署名・日付を手書きで記入してください
+5. 配達証明郵便で会社宛に送付してください
+
+ご不明点がございましたら、このメールへの返信にてお問い合わせください。
+
+退職手続きコンシェルジュ`;
+
+  // Build history table
+  const tbody = document.getElementById('histBody');
+  const rows = [];
+  for(let i = -1; i <= 2; i++){
+    const anchor = a1 + (i * 14);
+    const pw = await derivePassword(anchor);
+    const validFrom = epochToYMD(anchor);
+    const validTo = epochToYMD(anchor + 27);
+    const today = todayDays;
+    let status = '';
+    if(anchor > today){ status = '<span style="color:var(--gray-400)">未来</span>'; }
+    else if(anchor + 28 <= today){ status = '<span style="color:var(--gray-400)">期限切れ</span>'; }
+    else if(anchor === a1){ status = '<span style="color:var(--green);font-weight:700">✓ プライマリ</span>'; }
+    else { status = '<span style="color:#D97706;font-weight:700">✓ セカンダリ</span>'; }
+    rows.push(`<tr style="border-bottom:1px solid var(--gray-200)">
+      <td style="padding:10px 12px">${epochToYMD(anchor)}</td>
+      <td style="padding:10px 12px;font-weight:700;letter-spacing:.1em">${pw}</td>
+      <td style="padding:10px 12px;font-size:12px;color:var(--gray-600)">${validFrom} 〜 ${validTo}</td>
+      <td style="padding:10px 12px">${status}</td>
+    </tr>`);
+  }
+  tbody.innerHTML = rows.join('');
+}
+
+function copyText(text, btn){
+  navigator.clipboard.writeText(text).then(()=>{
+    const orig = btn.innerHTML;
+    btn.innerHTML = '✅ コピーしました';
+    setTimeout(()=>{ btn.innerHTML = orig; }, 2000);
+  }).catch(()=>{ alert('コピーできませんでした。手動でコピーしてください: ' + text); });
+}
+
+function openMailClient(){
+  const to = document.getElementById('toEmail').value.trim();
+  if(!to){ alert('送信先メールアドレスを入力してください。'); return; }
+  const subject = encodeURIComponent(document.getElementById('mailSubject').value);
+  const body = encodeURIComponent(document.getElementById('mailBody').value);
+  window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+}
+
+init();
+</script>
+</body>
+</html>

@@ -18,8 +18,6 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
 body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(--gray-50);line-height:1.75;font-size:15px;}
-
-/* ===== PASSWORD GATE ===== */
 #gate{position:fixed;inset:0;background:linear-gradient(135deg,var(--navy) 0%,#1a3d6b 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:24px;}
 #gate.hidden{display:none;}
 .gate-box{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:48px 40px;max-width:420px;width:100%;text-align:center;backdrop-filter:blur(10px);}
@@ -27,7 +25,7 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
 .gate-logo span{color:#6EE7B7;}
 .gate-title{font-size:22px;font-weight:900;color:var(--white);margin-bottom:8px;}
 .gate-sub{font-size:14px;color:rgba(255,255,255,.6);margin-bottom:32px;}
-.gate-input{width:100%;padding:14px 20px;border-radius:100px;border:2px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:var(--white);font-size:16px;text-align:center;outline:none;transition:border .2s;font-family:inherit;letter-spacing:.1em;}
+.gate-input{width:100%;padding:14px 20px;border-radius:100px;border:2px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:var(--white);font-size:16px;text-align:center;outline:none;transition:border .2s;font-family:inherit;letter-spacing:.05em;}
 .gate-input::placeholder{color:rgba(255,255,255,.35);letter-spacing:0;}
 .gate-input:focus{border-color:rgba(255,255,255,.5);}
 .gate-btn{margin-top:16px;width:100%;padding:14px;border-radius:100px;background:#059669;color:var(--white);font-size:16px;font-weight:700;border:none;cursor:pointer;font-family:inherit;transition:all .2s;}
@@ -35,109 +33,98 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
 .gate-err{margin-top:12px;font-size:13px;color:#FCA5A5;min-height:20px;}
 .gate-help{margin-top:20px;font-size:12px;color:rgba(255,255,255,.4);}
 .gate-help a{color:rgba(255,255,255,.5);text-decoration:none;}
-
-/* ===== APP LAYOUT ===== */
 #app{display:none;}
 #app.visible{display:block;}
-
 .app-nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.97);backdrop-filter:blur(10px);border-bottom:1px solid var(--gray-200);}
-.app-nav-inner{display:flex;align-items:center;justify-content:space-between;height:56px;max-width:900px;margin:0 auto;padding:0 20px;}
+.app-nav-inner{display:flex;align-items:center;justify-content:space-between;height:56px;max-width:920px;margin:0 auto;padding:0 20px;}
 .app-logo{font-size:15px;font-weight:900;color:var(--navy);display:flex;align-items:center;gap:6px;}
 .app-logo span{color:var(--green);}
 .app-logout{font-size:12px;color:var(--gray-400);background:none;border:1px solid var(--gray-200);border-radius:100px;padding:5px 14px;cursor:pointer;font-family:inherit;transition:all .2s;}
 .app-logout:hover{color:var(--gray-800);border-color:var(--gray-400);}
-
 .step-tabs{background:var(--white);border-bottom:2px solid var(--gray-200);padding:0 20px;}
-.step-tabs-inner{display:flex;max-width:900px;margin:0 auto;overflow-x:auto;gap:0;}
+.step-tabs-inner{display:flex;max-width:920px;margin:0 auto;overflow-x:auto;}
 .step-tab{display:flex;align-items:center;gap:8px;padding:14px 20px;font-size:13px;font-weight:700;color:var(--gray-400);border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap;transition:all .2s;margin-bottom:-2px;user-select:none;background:none;border-top:none;border-left:none;border-right:none;font-family:inherit;}
 .step-tab.active{color:var(--navy);border-bottom-color:var(--navy);}
 .step-tab.done{color:var(--green);}
-.step-tab.locked{cursor:not-allowed;opacity:.5;}
-.step-num{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;flex-shrink:0;}
-.step-tab .step-num{background:var(--gray-200);color:var(--gray-400);}
+.step-num{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;flex-shrink:0;background:var(--gray-200);color:var(--gray-400);}
 .step-tab.active .step-num{background:var(--navy);color:var(--white);}
 .step-tab.done .step-num{background:var(--green);color:var(--white);}
-
-.app-content{max-width:900px;margin:0 auto;padding:32px 20px 80px;}
-
+.app-content{max-width:920px;margin:0 auto;padding:32px 20px 80px;}
 .card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:32px;margin-bottom:24px;}
 .card-title{font-size:17px;font-weight:900;color:var(--navy);margin-bottom:20px;display:flex;align-items:center;gap:8px;}
 .card-title::before{content:'';display:block;width:4px;height:20px;background:var(--green);border-radius:2px;flex-shrink:0;}
-
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
 .form-grid.single{grid-template-columns:1fr;}
 @media(max-width:600px){.form-grid{grid-template-columns:1fr;}}
 .fg{display:flex;flex-direction:column;gap:6px;}
 .fg label{font-size:13px;font-weight:700;color:var(--gray-600);}
-.fg input,.fg textarea,.fg select{padding:10px 14px;border-radius:8px;border:1.5px solid var(--gray-200);font-size:14px;font-family:inherit;color:var(--gray-800);outline:none;transition:border .2s;background:var(--white);}
-.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--navy);}
+.fg input,.fg textarea{padding:10px 14px;border-radius:8px;border:1.5px solid var(--gray-200);font-size:14px;font-family:inherit;color:var(--gray-800);outline:none;transition:border .2s;background:var(--white);}
+.fg input:focus,.fg textarea:focus{border-color:var(--navy);}
 .fg textarea{resize:vertical;min-height:80px;}
 .fg small{font-size:12px;color:var(--gray-400);}
-
 .vac-layout{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start;}
 @media(max-width:640px){.vac-layout{grid-template-columns:1fr;}}
-.vac-days-input{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
-.vac-days-input input[type=number]{width:80px;padding:10px 12px;border-radius:8px;border:1.5px solid var(--gray-200);font-size:18px;font-weight:700;text-align:center;font-family:inherit;color:var(--gray-800);outline:none;transition:border .2s;}
-.vac-days-input input[type=number]:focus{border-color:var(--navy);}
-.vac-days-label{font-size:14px;color:var(--gray-600);}
-.vac-result-box{background:var(--gray-50);border-radius:10px;padding:16px;font-size:13px;color:var(--gray-600);line-height:1.8;}
-.vac-result-box strong{color:var(--navy);font-size:15px;}
-.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.vac-days-row{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.vac-days-row input[type=number]{width:80px;padding:10px 12px;border-radius:8px;border:1.5px solid var(--gray-200);font-size:18px;font-weight:700;text-align:center;font-family:inherit;outline:none;transition:border .2s;}
+.vac-days-row input[type=number]:focus{border-color:var(--navy);}
+.vac-result-box{background:var(--gray-50);border-radius:10px;padding:16px;font-size:13px;color:var(--gray-600);line-height:1.8;margin-top:8px;}
+.vac-result-box strong{color:var(--navy);}
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
 .cal-nav-btn{background:none;border:1px solid var(--gray-200);border-radius:6px;width:30px;height:30px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;color:var(--gray-600);transition:all .2s;}
 .cal-nav-btn:hover{border-color:var(--navy);color:var(--navy);}
 .cal-month-label{font-size:14px;font-weight:700;color:var(--navy);}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
 .cal-dow{font-size:11px;font-weight:700;text-align:center;padding:4px 0;color:var(--gray-400);}
-.cal-dow:first-child{color:#DC2626;}
-.cal-dow:last-child{color:#2563EB;}
-.cal-day{aspect-ratio:1;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer;transition:all .15s;border:1.5px solid transparent;font-weight:500;}
-.cal-day.empty{background:none;cursor:default;}
-.cal-day.past{color:var(--gray-400);cursor:default;}
+.cal-day{aspect-ratio:1;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer;transition:all .15s;border:1.5px solid transparent;font-weight:500;user-select:none;}
+.cal-day.empty{cursor:default;}
 .cal-day.today{border-color:var(--navy);color:var(--navy);font-weight:900;}
-.cal-day.sun{color:#DC2626;}
-.cal-day.sat{color:#2563EB;}
-.cal-day.public-holiday{background:#FEE2E2 !important;color:#DC2626 !important;font-weight:700;}
-.cal-day:not(.empty):not(.past):not(.sun):not(.sat):hover{background:var(--gray-100);}
-.cal-hint{font-size:12px;color:var(--gray-400);margin-top:8px;line-height:1.6;}
-.cal-legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;font-size:11px;color:var(--gray-500);}
-.cal-legend-item{display:flex;align-items:center;gap:4px;}
-.cal-legend-dot{width:12px;height:12px;border-radius:3px;}
-
-.doc-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-@media(max-width:560px){.doc-grid{grid-template-columns:1fr;}}
-.doc-btn-card{background:var(--gray-50);border:1.5px solid var(--gray-200);border-radius:10px;padding:20px;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;gap:8px;}
-.doc-btn-card:hover{border-color:var(--navy);background:var(--white);box-shadow:var(--shadow);}
-.doc-btn-label{font-size:13px;font-weight:700;color:var(--navy);}
-.doc-btn-desc{font-size:12px;color:var(--gray-400);line-height:1.5;}
-.doc-btn-action{margin-top:8px;display:inline-flex;align-items:center;gap:6px;background:var(--green);color:var(--white);font-size:12px;font-weight:700;padding:8px 16px;border-radius:100px;width:fit-content;transition:all .2s;}
-
+.cal-day.holiday{background:#FEE2E2;color:#DC2626;font-weight:700;}
+.cal-day:not(.empty):not(.holiday):hover{background:var(--gray-100);}
+.cal-hint{font-size:11px;color:var(--gray-400);margin-top:8px;line-height:1.6;}
+.doc-list{display:flex;flex-direction:column;gap:12px;}
+.doc-item{border:1.5px solid var(--gray-200);border-radius:10px;overflow:hidden;transition:border-color .2s;}
+.doc-item:hover{border-color:#94A3B8;}
+.doc-item-header{display:flex;align-items:center;gap:12px;padding:16px 20px;cursor:pointer;background:var(--gray-50);}
+.doc-item-header:hover{background:var(--gray-100);}
+.doc-item-info{flex:1;}
+.doc-item-title{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:2px;}
+.doc-item-desc{font-size:12px;color:var(--gray-400);}
+.doc-item-actions{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.doc-pdf-btn{display:inline-flex;align-items:center;gap:5px;background:var(--green);color:var(--white);font-size:12px;font-weight:700;padding:7px 14px;border-radius:100px;border:none;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .2s;}
+.doc-pdf-btn:hover{background:#047857;}
+.doc-toggle{font-size:12px;color:var(--gray-500);background:var(--white);border:1px solid var(--gray-200);border-radius:100px;padding:5px 12px;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .2s;}
+.doc-toggle:hover{border-color:var(--navy);color:var(--navy);}
+.doc-preview{display:none;padding:20px 24px;background:var(--white);border-top:1px solid var(--gray-200);font-family:'Noto Sans JP',sans-serif;}
+.pv-line{font-size:11.5px;color:var(--gray-800);line-height:1.9;}
+.pv-line.pv-center{text-align:center;}
+.pv-line.pv-big{font-size:16px;font-weight:900;text-align:center;margin:4px 0;}
+.pv-blank{height:6px;}
+.pv-rule{border:none;border-top:1px solid var(--gray-300);margin:8px 0;}
+.pv-sig{font-size:11px;color:var(--gray-400);font-style:italic;}
+.tmpl-list{display:flex;flex-direction:column;gap:12px;}
+.tmpl-item{border:1.5px solid var(--gray-200);border-radius:10px;overflow:hidden;}
+.tmpl-item-header{display:flex;align-items:center;gap:12px;padding:16px 20px;cursor:pointer;background:var(--gray-50);}
+.tmpl-item-header:hover{background:var(--gray-100);}
+.tmpl-item-info{flex:1;}
+.tmpl-item-name{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:2px;}
+.tmpl-item-scene{font-size:12px;color:var(--gray-400);}
+.tmpl-preview{display:none;padding:20px 24px;background:var(--white);border-top:1px solid var(--gray-200);}
 .guide-sections{display:flex;flex-direction:column;gap:20px;}
 .guide-section{background:var(--gray-50);border-radius:10px;padding:24px;}
-.guide-section-title{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.guide-section-title{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:12px;}
 .guide-section-body{font-size:14px;color:var(--gray-600);line-height:1.85;}
 .guide-section-body strong{color:var(--gray-800);}
 .guide-section-body ol,.guide-section-body ul{padding-left:20px;display:flex;flex-direction:column;gap:6px;margin-top:8px;}
 .guide-box{background:var(--amber-light);border:1px solid #FDE68A;border-radius:8px;padding:14px 18px;margin-top:12px;font-size:13px;color:var(--amber);}
-
-.tmpl-list{display:flex;flex-direction:column;gap:16px;}
-.tmpl-item{background:var(--gray-50);border:1.5px solid var(--gray-200);border-radius:10px;padding:20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
-.tmpl-name{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:4px;}
-.tmpl-scene{font-size:12px;color:var(--gray-400);}
-.tmpl-pdf-btn{display:inline-flex;align-items:center;gap:6px;background:var(--navy);color:var(--white);font-size:13px;font-weight:700;padding:10px 20px;border-radius:100px;border:none;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .2s;flex-shrink:0;}
-.tmpl-pdf-btn:hover{background:var(--navy-light);}
-
 .nav-btns{display:flex;justify-content:space-between;align-items:center;margin-top:32px;padding-top:24px;border-top:1px solid var(--gray-200);}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border-radius:100px;font-size:14px;font-weight:700;border:none;cursor:pointer;font-family:inherit;transition:all .2s;}
 .btn-primary{background:var(--green);color:var(--white);}
 .btn-primary:hover{background:#047857;transform:translateY(-1px);}
 .btn-secondary{background:var(--gray-100);color:var(--gray-600);}
 .btn-secondary:hover{background:var(--gray-200);}
-
 .step-section{display:none;}
 .step-section.active{display:block;}
-
 .alert-info{background:var(--green-light);border:1px solid #6EE7B7;border-radius:8px;padding:14px 18px;font-size:13px;color:#065F46;margin-bottom:20px;line-height:1.7;}
-
 .app-footer{background:var(--navy);color:rgba(255,255,255,.4);text-align:center;padding:24px;font-size:12px;}
 </style>
 </head>
@@ -145,10 +132,10 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
 
 <div id="gate">
   <div class="gate-box">
-    <div class="gate-logo">&#127963; 退職手続き<span>コンシェルジュ</span></div>
+    <div class="gate-logo">🏛️ 退職手続き<span>コンシェルジュ</span></div>
     <h1 class="gate-title">アクセスパスワード</h1>
     <p class="gate-sub">メールでお知らせしたパスワードを入力してください</p>
-    <input type="password" id="pwInput" class="gate-input" placeholder="パスワードを入力" autocomplete="current-password">
+    <input type="password" id="pwInput" class="gate-input" placeholder="XXXX-XXXX" autocomplete="current-password">
     <button class="gate-btn" onclick="checkPassword()">ログイン →</button>
     <div class="gate-err" id="gateErr"></div>
     <p class="gate-help">パスワードをお持ちでない方は <a href="checkout.html">こちらからお申し込み</a></p>
@@ -158,11 +145,10 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
 <div id="app">
 <nav class="app-nav">
   <div class="app-nav-inner">
-    <div class="app-logo">&#127963; 退職手続き<span>コンシェルジュ</span></div>
+    <div class="app-logo">🏛️ 退職手続き<span>コンシェルジュ</span></div>
     <button class="app-logout" onclick="logout()">ログアウト</button>
   </div>
 </nav>
-
 <div class="step-tabs">
   <div class="step-tabs-inner">
     <button class="step-tab active" id="tab0" onclick="goStep(0)"><span class="step-num">1</span>基本情報</button>
@@ -172,23 +158,20 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
   </div>
 </div>
 
-<!-- STEP 1 -->
+<!-- STEP 1: 基本情報 -->
 <div class="step-section active" id="step0">
   <div class="app-content">
-    <div class="alert-info">
-      💡 個人情報保護のため、お名前・ご住所は収集しません。書面には自署欄を設けており、印刷後にご自身でご記入ください。
-    </div>
+    <div class="alert-info">💡 氏名・住所はサーバーに送信されません。住所は任意入力で書面に転記されます。</div>
     <div class="card">
       <div class="card-title">会社情報</div>
       <div class="form-grid">
-        <div class="fg" style="grid-column:1/-1;">
+        <div class="fg" style="grid-column:1/-1">
           <label>会社名（正式名称）</label>
           <input type="text" id="companyName" placeholder="例：株式会社〇〇商事" oninput="saveData()">
         </div>
-        <div class="fg" style="grid-column:1/-1;">
-          <label>会社所在地（住所）</label>
+        <div class="fg" style="grid-column:1/-1">
+          <label>会社所在地</label>
           <input type="text" id="companyAddr" placeholder="例：東京都千代田区〇〇1-2-3" oninput="saveData()">
-          <small>書面の宛先として使用します</small>
         </div>
         <div class="fg">
           <label>代表者名（役職・氏名）</label>
@@ -197,57 +180,59 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
         <div class="fg">
           <label>書面送付予定日</label>
           <input type="date" id="sendDate" oninput="saveData()">
-          <small>郵送ポスト投函日</small>
+          <small>郵送投函日</small>
         </div>
       </div>
     </div>
-
+    <div class="card">
+      <div class="card-title">差出人住所（任意）</div>
+      <div class="form-grid single">
+        <div class="fg">
+          <label>ご住所（書面の住所欄に転記されます）</label>
+          <input type="text" id="userAddr" placeholder="例：東京都新宿区〇〇1-2-3 〇〇マンション101" oninput="saveData()">
+          <small>入力しない場合は住所欄が空白になります。サーバーへの送信はしません。</small>
+        </div>
+      </div>
+    </div>
     <div class="card">
       <div class="card-title">退職・有給休暇</div>
       <div class="vac-layout">
         <div>
-          <div class="fg" style="margin-bottom:16px;">
-            <label>退職の意思表示日（書面記載日）</label>
+          <div class="fg" style="margin-bottom:16px">
+            <label>退職の意思表示日</label>
             <input type="date" id="noticeDate" oninput="calcRetirement()">
             <small>通常は書面送付日と同日</small>
           </div>
-          <div class="fg" style="margin-bottom:16px;">
+          <div class="fg" style="margin-bottom:8px">
             <label>残有給休暇日数</label>
-            <div class="vac-days-input">
+            <div class="vac-days-row">
               <input type="number" id="vacDays" min="0" max="40" value="0" oninput="calcRetirement()">
-              <span class="vac-days-label">日間</span>
+              <span style="font-size:14px;color:var(--gray-600)">日間</span>
             </div>
           </div>
-          <div class="vac-result-box" id="vacResult">退職の意思表示日と有給日数を入力すると、退職予定日を計算します。</div>
+          <div class="vac-result-box" id="vacResult">退職の意思表示日を入力してください。</div>
         </div>
         <div>
           <div class="cal-header">
-            <button class="cal-nav-btn" onclick="calPrev()">&#8249;</button>
+            <button class="cal-nav-btn" onclick="calPrev()">‹</button>
             <div class="cal-month-label" id="calMonthLabel"></div>
-            <button class="cal-nav-btn" onclick="calNext()">&#8250;</button>
+            <button class="cal-nav-btn" onclick="calNext()">›</button>
           </div>
           <div class="cal-grid" id="calGrid"></div>
-          <p class="cal-hint">📅 日付をクリックして<strong>公休日（祝日等）</strong>を赤くマーク。公休日は有給カウントから除外されます。</p>
-          <div class="cal-legend">
-            <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#FEE2E2;border:1px solid #FCA5A5;"></div>公休日（クリックで設定）</div>
-            <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#EFF6FF;border:1px solid #BFDBFE;"></div>土曜</div>
-            <div class="cal-legend-item" style="color:#DC2626;">日曜（赤字）</div>
-          </div>
+          <p class="cal-hint">📅 日付をクリックして公休日（休み）のオン/オフを切り替えます。<br>赤＝公休日（有給カウントから除外）。初期は土日祝が設定済みです。</p>
         </div>
       </div>
     </div>
-
     <div class="card">
-      <div class="card-title">返却物・引き継ぎ情報</div>
+      <div class="card-title">返却物・引き継ぎ</div>
       <div class="form-grid single">
         <div class="fg">
-          <label>会社への返却物（改行区切りで入力）</label>
-          <textarea id="returnItems" rows="4" placeholder="例：社員証&#10;制服（上下）&#10;会社携帯電話" oninput="saveData()"></textarea>
-          <small>書面に反映されます</small>
+          <label>会社への返却物（改行区切り）</label>
+          <textarea id="returnItems" rows="3" placeholder="社員証&#10;制服（上下）&#10;会社携帯電話" oninput="saveData();updateOpenPreviews()"></textarea>
         </div>
         <div class="fg">
           <label>業務引き継ぎ内容（概要）</label>
-          <textarea id="handover" rows="4" placeholder="例：担当業務の引き継ぎは退職日までに完了予定。" oninput="saveData()"></textarea>
+          <textarea id="handover" rows="3" placeholder="担当業務の引き継ぎは退職日までに完了予定。" oninput="saveData();updateOpenPreviews()"></textarea>
         </div>
       </div>
     </div>
@@ -258,37 +243,84 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
   </div>
 </div>
 
-<!-- STEP 2 -->
+<!-- STEP 2: 書面生成 -->
 <div class="step-section" id="step1">
   <div class="app-content">
     <div class="card">
       <div class="card-title">書面生成（PDF）</div>
-      <p style="font-size:14px;color:var(--gray-600);margin-bottom:24px;line-height:1.8;">各書面のPDFを生成してダウンロードできます。印刷後、自署欄に署名・日付を手書きで記入してください。捺印欄はありません。</p>
-      <div class="doc-grid">
-        <div class="doc-btn-card" onclick="genDoc('A')">
-          <div class="doc-btn-label">A. 退職届（退職通知書）</div>
-          <div class="doc-btn-desc">民法627条に基づく退職の意思表示。配達証明郵便で送付する正式書面。</div>
-          <div class="doc-btn-action" id="btn-A">📄 PDFを生成</div>
+      <p style="font-size:14px;color:var(--gray-600);margin-bottom:20px;line-height:1.8">
+        各書面のプレビューを確認してからPDFを生成できます。印刷後、自署欄に署名・日付を手書きで記入してください。
+      </p>
+      <div class="doc-list">
+        
+        <div class="doc-item">
+          <div class="doc-item-header" onclick="togglePreview('A')">
+            <div class="doc-item-info">
+              <div class="doc-item-title">A. 退職届（退職通知書）</div>
+              <div class="doc-item-desc">民法627条に基づく退職の意思表示。配達証明郵便で送付する正式書面。</div>
+            </div>
+            <div class="doc-item-actions" onclick="event.stopPropagation()">
+              <button class="doc-toggle" id="toggle-A">プレビュー ▾</button>
+              <button class="doc-pdf-btn" id="pdfbtn-A" onclick="genPDF('A',event)">📄 PDF</button>
+            </div>
+          </div>
+          <div class="doc-preview" id="preview-A"></div>
         </div>
-        <div class="doc-btn-card" onclick="genDoc('B')">
-          <div class="doc-btn-label">B. 有給休暇消化申請書</div>
-          <div class="doc-btn-desc">退職日までの有給休暇全消化を申請する書面。</div>
-          <div class="doc-btn-action" id="btn-B">📄 PDFを生成</div>
+        
+        <div class="doc-item">
+          <div class="doc-item-header" onclick="togglePreview('B')">
+            <div class="doc-item-info">
+              <div class="doc-item-title">B. 有給休暇消化申請書</div>
+              <div class="doc-item-desc">退職日までの有給休暇全消化を申請する書面。</div>
+            </div>
+            <div class="doc-item-actions" onclick="event.stopPropagation()">
+              <button class="doc-toggle" id="toggle-B">プレビュー ▾</button>
+              <button class="doc-pdf-btn" id="pdfbtn-B" onclick="genPDF('B',event)">📄 PDF</button>
+            </div>
+          </div>
+          <div class="doc-preview" id="preview-B"></div>
         </div>
-        <div class="doc-btn-card" onclick="genDoc('C')">
-          <div class="doc-btn-label">C. 私物返却・物品貸与確認書</div>
-          <div class="doc-btn-desc">会社への返却物と受け取るべき貸与物の一覧書面。</div>
-          <div class="doc-btn-action" id="btn-C">📄 PDFを生成</div>
+        
+        <div class="doc-item">
+          <div class="doc-item-header" onclick="togglePreview('C')">
+            <div class="doc-item-info">
+              <div class="doc-item-title">C. 私物返却・物品貸与確認書</div>
+              <div class="doc-item-desc">会社への返却物と受け取るべき貸与物の一覧書面。</div>
+            </div>
+            <div class="doc-item-actions" onclick="event.stopPropagation()">
+              <button class="doc-toggle" id="toggle-C">プレビュー ▾</button>
+              <button class="doc-pdf-btn" id="pdfbtn-C" onclick="genPDF('C',event)">📄 PDF</button>
+            </div>
+          </div>
+          <div class="doc-preview" id="preview-C"></div>
         </div>
-        <div class="doc-btn-card" onclick="genDoc('D')">
-          <div class="doc-btn-label">D. 業務引き継ぎ記録書</div>
-          <div class="doc-btn-desc">退職日までの引き継ぎ完了予定を記録する書面。</div>
-          <div class="doc-btn-action" id="btn-D">📄 PDFを生成</div>
+        
+        <div class="doc-item">
+          <div class="doc-item-header" onclick="togglePreview('D')">
+            <div class="doc-item-info">
+              <div class="doc-item-title">D. 業務引き継ぎ記録書</div>
+              <div class="doc-item-desc">退職日までの引き継ぎ完了予定を記録する書面。</div>
+            </div>
+            <div class="doc-item-actions" onclick="event.stopPropagation()">
+              <button class="doc-toggle" id="toggle-D">プレビュー ▾</button>
+              <button class="doc-pdf-btn" id="pdfbtn-D" onclick="genPDF('D',event)">📄 PDF</button>
+            </div>
+          </div>
+          <div class="doc-preview" id="preview-D"></div>
         </div>
-        <div class="doc-btn-card" onclick="genDoc('E')">
-          <div class="doc-btn-label">E. 退職確認依頼書</div>
-          <div class="doc-btn-desc">退職日の確認と離職票等の書類交付を依頼する書面。</div>
-          <div class="doc-btn-action" id="btn-E">📄 PDFを生成</div>
+        
+        <div class="doc-item">
+          <div class="doc-item-header" onclick="togglePreview('E')">
+            <div class="doc-item-info">
+              <div class="doc-item-title">E. 退職確認依頼書</div>
+              <div class="doc-item-desc">退職日の確認と離職票等の書類交付を依頼する書面。</div>
+            </div>
+            <div class="doc-item-actions" onclick="event.stopPropagation()">
+              <button class="doc-toggle" id="toggle-E">プレビュー ▾</button>
+              <button class="doc-pdf-btn" id="pdfbtn-E" onclick="genPDF('E',event)">📄 PDF</button>
+            </div>
+          </div>
+          <div class="doc-preview" id="preview-E"></div>
         </div>
       </div>
     </div>
@@ -299,7 +331,7 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
   </div>
 </div>
 
-<!-- STEP 3 -->
+<!-- STEP 3: 郵送ガイド -->
 <div class="step-section" id="step2">
   <div class="app-content">
     <div class="card">
@@ -327,11 +359,11 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
           <div class="guide-section-title">✉️ 封筒の書き方</div>
           <div class="guide-section-body">
             <ol>
-              <li><strong>宛名（表面）：</strong>会社の正式住所と代表者名（〇〇株式会社 代表取締役社長 〇〇 〇〇 様）</li>
-              <li><strong>差出人（裏面）：</strong>ご自身の住所と氏名を手書きで記入してください</li>
+              <li><strong>宛名（表面）：</strong>会社の正式住所と代表者名</li>
+              <li><strong>差出人（裏面）：</strong>ご自身の住所と氏名を手書きで記入</li>
               <li><strong>封入物：</strong>退職届（必須）＋その他希望する書面</li>
             </ol>
-            <div class="guide-box">⚠️ 差出人住所は封筒に手書きで記入します。受け取れなかった郵便物の返送先となります。本サービスには代理受取住所はありません。</div>
+            <div class="guide-box">⚠️ 差出人住所は封筒裏面に手書きで記入します。受け取れなかった郵便物の返送先となります。</div>
           </div>
         </div>
         <div class="guide-section">
@@ -340,7 +372,6 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
             <ol>
               <li>封をした封筒を持って郵便窓口（ゆうゆう窓口）へ</li>
               <li>「配達証明郵便でお願いします」と伝える</li>
-              <li>内容証明の場合は「内容証明でお願いします」と伝え、3通の同一文書を持参</li>
               <li>料金を支払い、追跡番号の記載された控えを受け取る</li>
               <li>控えは大切に保管してください</li>
             </ol>
@@ -350,7 +381,7 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
           <div class="guide-section-title">📅 送付後のスケジュール目安</div>
           <div class="guide-section-body">
             <p>民法627条に基づき、無期雇用の場合は退職申し出から<strong>2週間後</strong>に退職の効力が生じます。会社の承認は不要です。</p>
-            <div class="guide-box">例：5月1日に退職届を送付した場合 → 5月15日（到達日の2週間後）に退職成立</div>
+            <div class="guide-box">例：5月1日に退職届を送付 → 5月15日（到達日の2週間後）に退職成立</div>
           </div>
         </div>
       </div>
@@ -362,41 +393,113 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
   </div>
 </div>
 
-<!-- STEP 4 -->
+<!-- STEP 4: 返答テンプレート -->
 <div class="step-section" id="step3">
   <div class="app-content">
     <div class="card">
       <div class="card-title">返答テンプレート（PDF）</div>
-      <p style="font-size:14px;color:var(--gray-600);margin-bottom:8px;line-height:1.8;">会社から連絡・書面が届いた際の返答書面です。日付欄は印刷後に手書きでご記入ください。</p>
-      <div class="alert-info" style="margin-bottom:20px;">📋 そのままPDF生成できます。送付前に内容を確認し、日付のみ手書きで記入してください。</div>
+      <p style="font-size:14px;color:var(--gray-600);margin-bottom:8px;line-height:1.8">
+        会社から連絡・書面が届いた際の返答書面です。日付欄は印刷後に手書きで記入してください。
+      </p>
+      <div class="alert-info" style="margin-bottom:20px">📋 プレビューで内容を確認してからPDFを生成できます。</div>
       <div class="tmpl-list">
+        
         <div class="tmpl-item">
-          <div><div class="tmpl-name">T1. 退職慰留への返答</div><div class="tmpl-scene">「辞めないでほしい」と連絡が来た場合</div></div>
-          <button class="tmpl-pdf-btn" onclick="genTemplate(1)">📄 PDF生成</button>
+          <div class="tmpl-item-header" onclick="togglePreview(1)">
+            <div class="tmpl-item-info">
+              <div class="tmpl-item-name">T1. 退職慰留への返答</div>
+              <div class="tmpl-item-scene">「辞めないでほしい」と連絡が来た場合</div>
+            </div>
+            <div class="doc-item-actions" onclick="event.stopPropagation()">
+              <button class="doc-toggle" id="toggle-1">プレビュー ▾</button>
+              <button class="doc-pdf-btn" id="pdfbtn-T1" onclick="genTemplate(1,event)">📄 PDF</button>
+            </div>
+          </div>
+          <div class="tmpl-preview" id="preview-1"></div>
         </div>
+        
         <div class="tmpl-item">
-          <div><div class="tmpl-name">T2. 退職日変更要求への返答</div><div class="tmpl-scene">「退職日を後ろ倒しにしてほしい」と言われた場合</div></div>
-          <button class="tmpl-pdf-btn" onclick="genTemplate(2)">📄 PDF生成</button>
+          <div class="tmpl-item-header" onclick="togglePreview(2)">
+            <div class="tmpl-item-info">
+              <div class="tmpl-item-name">T2. 退職日変更要求への返答</div>
+              <div class="tmpl-item-scene">「退職日を後ろ倒しにしてほしい」と言われた場合</div>
+            </div>
+            <div class="doc-item-actions" onclick="event.stopPropagation()">
+              <button class="doc-toggle" id="toggle-2">プレビュー ▾</button>
+              <button class="doc-pdf-btn" id="pdfbtn-T2" onclick="genTemplate(2,event)">📄 PDF</button>
+            </div>
+          </div>
+          <div class="tmpl-preview" id="preview-2"></div>
         </div>
+        
         <div class="tmpl-item">
-          <div><div class="tmpl-name">T3. 退職届受理拒否への返答</div><div class="tmpl-scene">「退職届を受け取れない」と言われた場合</div></div>
-          <button class="tmpl-pdf-btn" onclick="genTemplate(3)">📄 PDF生成</button>
+          <div class="tmpl-item-header" onclick="togglePreview(3)">
+            <div class="tmpl-item-info">
+              <div class="tmpl-item-name">T3. 退職届受理拒否への返答</div>
+              <div class="tmpl-item-scene">「退職届を受け取れない」と言われた場合</div>
+            </div>
+            <div class="doc-item-actions" onclick="event.stopPropagation()">
+              <button class="doc-toggle" id="toggle-3">プレビュー ▾</button>
+              <button class="doc-pdf-btn" id="pdfbtn-T3" onclick="genTemplate(3,event)">📄 PDF</button>
+            </div>
+          </div>
+          <div class="tmpl-preview" id="preview-3"></div>
         </div>
+        
         <div class="tmpl-item">
-          <div><div class="tmpl-name">T4. 損害賠償請求示唆への返答</div><div class="tmpl-scene">「損害賠償を請求する」と脅された場合</div></div>
-          <button class="tmpl-pdf-btn" onclick="genTemplate(4)">📄 PDF生成</button>
+          <div class="tmpl-item-header" onclick="togglePreview(4)">
+            <div class="tmpl-item-info">
+              <div class="tmpl-item-name">T4. 損害賠償請求示唆への返答</div>
+              <div class="tmpl-item-scene">「損害賠償を請求する」と脅された場合</div>
+            </div>
+            <div class="doc-item-actions" onclick="event.stopPropagation()">
+              <button class="doc-toggle" id="toggle-4">プレビュー ▾</button>
+              <button class="doc-pdf-btn" id="pdfbtn-T4" onclick="genTemplate(4,event)">📄 PDF</button>
+            </div>
+          </div>
+          <div class="tmpl-preview" id="preview-4"></div>
         </div>
+        
         <div class="tmpl-item">
-          <div><div class="tmpl-name">T5. 有給休暇取得拒否への返答</div><div class="tmpl-scene">「有給は認められない」と言われた場合</div></div>
-          <button class="tmpl-pdf-btn" onclick="genTemplate(5)">📄 PDF生成</button>
+          <div class="tmpl-item-header" onclick="togglePreview(5)">
+            <div class="tmpl-item-info">
+              <div class="tmpl-item-name">T5. 有給休暇取得拒否への返答</div>
+              <div class="tmpl-item-scene">「有給は認められない」と言われた場合</div>
+            </div>
+            <div class="doc-item-actions" onclick="event.stopPropagation()">
+              <button class="doc-toggle" id="toggle-5">プレビュー ▾</button>
+              <button class="doc-pdf-btn" id="pdfbtn-T5" onclick="genTemplate(5,event)">📄 PDF</button>
+            </div>
+          </div>
+          <div class="tmpl-preview" id="preview-5"></div>
         </div>
+        
         <div class="tmpl-item">
-          <div><div class="tmpl-name">T6. 離職票・書類交付請求</div><div class="tmpl-scene">退職後も離職票・源泉徴収票が届かない場合</div></div>
-          <button class="tmpl-pdf-btn" onclick="genTemplate(6)">📄 PDF生成</button>
+          <div class="tmpl-item-header" onclick="togglePreview(6)">
+            <div class="tmpl-item-info">
+              <div class="tmpl-item-name">T6. 離職票・書類交付請求</div>
+              <div class="tmpl-item-scene">退職後も離職票・源泉徴収票が届かない場合</div>
+            </div>
+            <div class="doc-item-actions" onclick="event.stopPropagation()">
+              <button class="doc-toggle" id="toggle-6">プレビュー ▾</button>
+              <button class="doc-pdf-btn" id="pdfbtn-T6" onclick="genTemplate(6,event)">📄 PDF</button>
+            </div>
+          </div>
+          <div class="tmpl-preview" id="preview-6"></div>
         </div>
+        
         <div class="tmpl-item">
-          <div><div class="tmpl-name">T7. 電話連絡拒否通知</div><div class="tmpl-scene">書面対応のみを求める旨を会社に通知する場合</div></div>
-          <button class="tmpl-pdf-btn" onclick="genTemplate(7)">📄 PDF生成</button>
+          <div class="tmpl-item-header" onclick="togglePreview(7)">
+            <div class="tmpl-item-info">
+              <div class="tmpl-item-name">T7. 電話連絡拒否通知</div>
+              <div class="tmpl-item-scene">書面対応のみを求める旨を会社に通知する場合</div>
+            </div>
+            <div class="doc-item-actions" onclick="event.stopPropagation()">
+              <button class="doc-toggle" id="toggle-7">プレビュー ▾</button>
+              <button class="doc-pdf-btn" id="pdfbtn-T7" onclick="genTemplate(7,event)">📄 PDF</button>
+            </div>
+          </div>
+          <div class="tmpl-preview" id="preview-7"></div>
         </div>
       </div>
     </div>
@@ -408,109 +511,206 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
 </div>
 
 </div><!-- #app -->
-
 <footer class="app-footer">
-  <p>退職手続きコンシェルジュ ｜ 本サービスは法律相談・法的代理を提供するものではありません。</p>
+  退職手続きコンシェルジュ ｜ 本サービスは法律相談・法的代理を提供するものではありません。
 </footer>
-
 <script>
 'use strict';
-const PW_HASH='4d7f222c6236fda1370a564e598fff0686d39477d7850707d80d57ab8ac33fa3';
-async function sha256(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');}
+
+// === CONSTANTS ===
+const SALT = 'TSCKeiyaku2026';
+const JP_HOLIDAYS = new Set([
+  '2025-01-01','2025-01-13','2025-02-11','2025-02-23','2025-02-24',
+  '2025-03-20','2025-04-29','2025-05-03','2025-05-04','2025-05-05','2025-05-06',
+  '2025-07-21','2025-08-11','2025-09-15','2025-09-22','2025-09-23',
+  '2025-10-13','2025-11-03','2025-11-23','2025-11-24',
+  '2026-01-01','2026-01-12','2026-02-11','2026-02-23',
+  '2026-03-20','2026-04-29','2026-05-03','2026-05-04','2026-05-05',
+  '2026-07-20','2026-08-11','2026-09-21','2026-09-22','2026-09-23',
+  '2026-10-12','2026-11-03','2026-11-23',
+  '2027-01-01','2027-01-11','2027-02-11','2027-02-23',
+  '2027-03-21','2027-04-29','2027-05-03','2027-05-04','2027-05-05',
+  '2027-07-19','2027-08-11','2027-09-20','2027-09-23',
+  '2027-10-11','2027-11-03','2027-11-23',
+]);
+
+// === PASSWORD SYSTEM ===
+async function sha256(s){
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+async function derivePassword(anchorEpochDays){
+  const d = new Date(anchorEpochDays * 86400000);
+  const ymd = d.getUTCFullYear()+''+String(d.getUTCMonth()+1).padStart(2,'0')+''+String(d.getUTCDate()).padStart(2,'0');
+  const h = await sha256(SALT + ymd);
+  const raw = h.substring(0,8).toUpperCase();
+  return raw.substring(0,4)+'-'+raw.substring(4,8);
+}
+async function getAnchorInfo(){
+  const todayDays = Math.floor(Date.now()/86400000);
+  const offset = todayDays % 14;
+  const a1 = todayDays - offset;
+  const a2 = a1 - 14;
+  const pw1 = await derivePassword(a1);
+  const pw2 = await derivePassword(a2);
+  const daysLeft2 = 14 - offset;
+  return {
+    primary:   {pw:pw1, daysLeft:28-offset, anchorDays:a1},
+    secondary: daysLeft2>0 ? {pw:pw2, daysLeft:daysLeft2, anchorDays:a2} : null,
+  };
+}
 async function checkPassword(){
-  const v=document.getElementById('pwInput').value.trim();
-  if(!v){document.getElementById('gateErr').textContent='パスワードを入力してください';return;}
-  const h=await sha256(v);
-  if(h===PW_HASH){document.getElementById('gate').classList.add('hidden');document.getElementById('app').classList.add('visible');sessionStorage.setItem('tsc_auth','1');initApp();}
-  else{document.getElementById('gateErr').textContent='パスワードが正しくありません';document.getElementById('pwInput').value='';}
+  const val = document.getElementById('pwInput').value.trim().toUpperCase().replace(/[-\s]/g,'');
+  if(!val){document.getElementById('gateErr').textContent='パスワードを入力してください';return;}
+  const info = await getAnchorInfo();
+  const norm = pw=>pw.replace(/-/g,'');
+  if(val===norm(info.primary.pw)||(info.secondary&&val===norm(info.secondary.pw))){
+    document.getElementById('gate').classList.add('hidden');
+    document.getElementById('app').classList.add('visible');
+    sessionStorage.setItem('tsc_auth','1');
+    initApp();
+  } else {
+    document.getElementById('gateErr').textContent='パスワードが正しくありません';
+    document.getElementById('pwInput').value='';
+  }
 }
 document.getElementById('pwInput').addEventListener('keydown',e=>{if(e.key==='Enter')checkPassword();});
 function logout(){sessionStorage.removeItem('tsc_auth');location.reload();}
-if(sessionStorage.getItem('tsc_auth')==='1'){document.getElementById('gate').classList.add('hidden');document.getElementById('app').classList.add('visible');}
+if(sessionStorage.getItem('tsc_auth')==='1'){
+  document.getElementById('gate').classList.add('hidden');
+  document.getElementById('app').classList.add('visible');
+}
 
+// === STATE ===
 const S={step:0,fontBase64:null,publicHolidays:new Set(),calYear:null,calMonth:null,retirementDate:''};
 
+// === DATA MANAGEMENT ===
 function saveData(){
-  const f=['companyName','companyAddr','ceoName','sendDate','noticeDate','vacDays','returnItems','handover'];
-  const o={};f.forEach(id=>{const el=document.getElementById(id);if(el)o[id]=el.value;});
+  const f=['companyName','companyAddr','ceoName','sendDate','noticeDate','vacDays','returnItems','handover','userAddr'];
+  const o={};
+  f.forEach(id=>{const el=document.getElementById(id);if(el)o[id]=el.value;});
   o.publicHolidays=[...S.publicHolidays];
   try{localStorage.setItem('tsc_data',JSON.stringify(o));}catch(e){}
 }
 function loadData(){
   try{
-    const r=localStorage.getItem('tsc_data');if(!r)return;const o=JSON.parse(r);
-    ['companyName','companyAddr','ceoName','sendDate','noticeDate','vacDays','returnItems','handover'].forEach(id=>{const el=document.getElementById(id);if(el&&o[id]!=null)el.value=o[id];});
+    const raw=localStorage.getItem('tsc_data');
+    if(!raw)return;
+    const o=JSON.parse(raw);
+    ['companyName','companyAddr','ceoName','sendDate','noticeDate','vacDays','returnItems','handover','userAddr'].forEach(id=>{
+      const el=document.getElementById(id);if(el&&o[id]!=null)el.value=o[id];
+    });
     if(o.publicHolidays)S.publicHolidays=new Set(o.publicHolidays);
   }catch(e){}
 }
 function getData(){
   return{
-    companyName:document.getElementById('companyName').value.trim()||'　　　　　　株式会社',
-    companyAddr:document.getElementById('companyAddr').value.trim()||'　　　　　　　　　　',
-    ceoName:document.getElementById('ceoName').value.trim()||'代表取締役社長　　　　',
+    companyName:document.getElementById('companyName').value.trim()||'\u3000\u3000\u3000\u3000\u682a\u5f0f\u4f1a\u793e',
+    companyAddr:document.getElementById('companyAddr').value.trim()||'\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000',
+    ceoName:document.getElementById('ceoName').value.trim()||'\u4ee3\u8868\u53d6\u7de0\u5f79\u793e\u9577\u3000\u3000\u3000\u3000',
     sendDate:document.getElementById('sendDate').value||'',
     noticeDate:document.getElementById('noticeDate').value||'',
     vacDays:parseInt(document.getElementById('vacDays').value)||0,
     returnItems:document.getElementById('returnItems').value.trim(),
     handover:document.getElementById('handover').value.trim(),
+    userAddr:document.getElementById('userAddr').value.trim(),
     retirementDate:S.retirementDate||'',
   };
 }
 
-function toDS(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
-function fmtJp(s){if(!s)return '\u3000\u3000\u3000\u3000\u5e74\u3000\u3000\u6708\u3000\u3000\u65e5';const d=new Date(s);if(isNaN(d))return '\u3000\u3000\u3000\u3000\u5e74\u3000\u3000\u6708\u3000\u3000\u65e5';return `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`;}
-
-function initCalendar(){const n=new Date();S.calYear=n.getFullYear();S.calMonth=n.getMonth();renderCalendar();}
+// === CALENDAR ===
+function toDS(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function initCalendar(){
+  const n=new Date();S.calYear=n.getFullYear();S.calMonth=n.getMonth();
+  if(S.publicHolidays.size===0){
+    // Pre-mark weekends + JP holidays for a wide range
+    const start=new Date(2025,0,1);
+    const end=new Date(2028,0,1);
+    for(let d=new Date(start);d<end;d.setDate(d.getDate()+1)){
+      const ds=toDS(d);
+      const dow=d.getDay();
+      if(dow===0||dow===6||JP_HOLIDAYS.has(ds)) S.publicHolidays.add(ds);
+    }
+  }
+  renderCalendar();
+}
 function calPrev(){S.calMonth--;if(S.calMonth<0){S.calMonth=11;S.calYear--;}renderCalendar();}
 function calNext(){S.calMonth++;if(S.calMonth>11){S.calMonth=0;S.calYear++;}renderCalendar();}
 function renderCalendar(){
   const y=S.calYear,m=S.calMonth;
   document.getElementById('calMonthLabel').textContent=`${y}年${m+1}月`;
   const grid=document.getElementById('calGrid');grid.innerHTML='';
-  ['日','月','火','水','木','金','土'].forEach(d=>{const el=document.createElement('div');el.className='cal-dow';el.textContent=d;grid.appendChild(el);});
-  const fd=new Date(y,m,1).getDay(),dim=new Date(y,m+1,0).getDate();
+  ['\u65e5','\u6708','\u706b','\u6c34','\u6728','\u91d1','\u571f'].forEach(d=>{
+    const el=document.createElement('div');el.className='cal-dow';el.textContent=d;grid.appendChild(el);
+  });
+  const fd=new Date(y,m,1).getDay();
+  const dim=new Date(y,m+1,0).getDate();
   const today=new Date();today.setHours(0,0,0,0);
   for(let i=0;i<fd;i++){const el=document.createElement('div');el.className='cal-day empty';grid.appendChild(el);}
-  for(let d=1;d<=dim;d++){
-    const date=new Date(y,m,d);const ds=toDS(date);const dow=date.getDay();
+  for(let day=1;day<=dim;day++){
+    const date=new Date(y,m,day);
+    const ds=toDS(date);
     const el=document.createElement('div');
     const cls=['cal-day'];
-    if(date<today)cls.push('past');
-    else if(date.getTime()===today.getTime())cls.push('today');
-    if(dow===0)cls.push('sun');
-    if(dow===6)cls.push('sat');
-    if(S.publicHolidays.has(ds))cls.push('public-holiday');
-    el.className=cls.join(' ');el.textContent=d;
-    if(date>=today&&dow!==0&&dow!==6){el.onclick=()=>toggleHoliday(ds,el);}
+    if(date.getTime()===today.getTime())cls.push('today');
+    if(S.publicHolidays.has(ds))cls.push('holiday');
+    el.className=cls.join(' ');
+    el.textContent=day;
+    el.onclick=()=>toggleHoliday(ds,el);
     grid.appendChild(el);
   }
 }
 function toggleHoliday(ds,el){
-  if(S.publicHolidays.has(ds)){S.publicHolidays.delete(ds);el.classList.remove('public-holiday');}
-  else{S.publicHolidays.add(ds);el.classList.add('public-holiday');}
+  if(S.publicHolidays.has(ds)){S.publicHolidays.delete(ds);el.classList.remove('holiday');}
+  else{S.publicHolidays.add(ds);el.classList.add('holiday');}
   saveData();calcRetirement();
 }
 
+// === RETIREMENT CALCULATION ===
+const BLANK_DATE='\u3000\u3000\u3000\u3000\u5e74\u3000\u3000\u6708\u3000\u3000\u65e5';
+function fmtJp(s){
+  if(!s)return BLANK_DATE;
+  const d=new Date(s);if(isNaN(d))return BLANK_DATE;
+  return `${d.getFullYear()}\u5e74${d.getMonth()+1}\u6708${d.getDate()}\u65e5`;
+}
+function countWorkingDays(startDate,days){
+  let left=days;
+  const d=new Date(startDate);
+  let safety=0;
+  while(left>0&&safety<400){
+    if(!S.publicHolidays.has(toDS(d)))left--;
+    if(left>0)d.setDate(d.getDate()+1);
+    safety++;
+  }
+  return d;
+}
 function calcRetirement(){
   saveData();
   const ns=document.getElementById('noticeDate').value;
   const vac=parseInt(document.getElementById('vacDays').value)||0;
   const box=document.getElementById('vacResult');
-  if(!ns){box.innerHTML='退職の意思表示日を入力してください。';return;}
+  if(!ns){box.innerHTML='\u9000\u8077\u306e\u610f\u601d\u8868\u793a\u65e5\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044\u3002';return;}
   const nd=new Date(ns);nd.setHours(0,0,0,0);
   const legal=new Date(nd);legal.setDate(legal.getDate()+14);
-  let ret=new Date(nd);ret.setDate(ret.getDate()+1);
+  let ret;
   if(vac>0){
-    let left=vac;const cur=new Date(ret);
-    while(left>0){const ds=toDS(cur);const dow=cur.getDay();if(dow!==0&&dow!==6&&!S.publicHolidays.has(ds))left--;if(left>0)cur.setDate(cur.getDate()+1);}
-    ret=new Date(cur);
-    if(ret<legal)ret=new Date(legal);
-  }else{ret=new Date(legal);}
+    const dayAfter=new Date(nd);dayAfter.setDate(dayAfter.getDate()+1);
+    const lastVac=countWorkingDays(dayAfter,vac);
+    ret=lastVac<legal?new Date(legal):lastVac;
+  } else {
+    ret=new Date(legal);
+  }
   S.retirementDate=toDS(ret);
-  const fmt=d=>`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`;
-  box.innerHTML=`<div>意思表示日：<strong>${fmt(nd)}</strong></div><div>残有給：<strong>${vac}日</strong></div><div>法定退職成立日（2週間後）：<strong>${fmt(legal)}</strong></div><div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--gray-200);">🎯 退職予定日：<strong style="font-size:16px;color:var(--green);">${fmt(ret)}</strong></div>`;
+  const fmt=d=>`${d.getFullYear()}\u5e74${d.getMonth()+1}\u6708${d.getDate()}\u65e5`;
+  // Count public holidays in first 14 days
+  let phCount=0;
+  const check=new Date(nd);check.setDate(check.getDate()+1);
+  for(let i=0;i<14;i++){if(S.publicHolidays.has(toDS(check)))phCount++;check.setDate(check.getDate()+1);}
+  box.innerHTML=`<div>\u610f\u601d\u8868\u793a\u65e5\uff1a<strong>${fmt(nd)}</strong></div><div>\u6cd5\u5b9a\u9000\u8077\u6210\u7acb\u65e5\uff1a<strong>${fmt(legal)}</strong></div><div>\u6709\u7d66\uff1a<strong>${vac}\u65e5</strong>\uff08\u516c\u4f11\u65e5\u3092\u9664\u304f\u5b9f\u5e73\u65e5\u6570\u3067\u6d88\u5316\uff09</div><div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--gray-200)">\ud83c\udfaf \u9000\u8077\u4e88\u5b9a\u65e5\uff1a<strong style="font-size:15px;color:var(--green)">${fmt(ret)}</strong></div>`;
+  updateOpenPreviews();
 }
 
+// === NAVIGATION ===
 function goStep(n){
   S.step=n;
   document.querySelectorAll('.step-section').forEach((el,i)=>el.classList.toggle('active',i===n));
@@ -522,22 +722,28 @@ function goStep(n){
   window.scrollTo(0,0);
 }
 function step0Next(){
-  const cn=document.getElementById('companyName').value.trim();
-  if(!cn){alert('会社名を入力してください。');document.getElementById('companyName').focus();return;}
+  if(!document.getElementById('companyName').value.trim()){
+    alert('\u4f1a\u793e\u540d\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044\u3002');
+    document.getElementById('companyName').focus();return;
+  }
   goStep(1);
 }
 
+// === FONT & PDF ===
 async function loadFont(){
   if(S.fontBase64)return S.fontBase64;
   try{
-    const r=await fetch('./NotoSansJP-Regular.ttf');if(!r.ok)throw new Error('font 404');
+    const r=await fetch('./NotoSansJP-Regular.ttf');
+    if(!r.ok)throw new Error('font 404');
     const buf=await r.arrayBuffer();const bytes=new Uint8Array(buf);
     let b64='';const chunk=8192;
     for(let i=0;i<bytes.length;i+=chunk)b64+=String.fromCharCode(...bytes.subarray(i,i+chunk));
     S.fontBase64=btoa(b64);return S.fontBase64;
-  }catch(e){alert('フォントファイル（NotoSansJP-Regular.ttf）が読み込めませんでした。\nGitHub Pages等のサーバー環境で実行してください。');return null;}
+  }catch(e){
+    alert('\u30d5\u30a9\u30f3\u30c8\u30d5\u30a1\u30a4\u30eb\uff08NotoSansJP-Regular.ttf\uff09\u304c\u8aad\u307f\u8fbc\u3081\u307e\u305b\u3093\u3067\u3057\u305f\u3002\nGitHub Pages\u7b49\u306e\u30b5\u30fc\u30d0\u30fc\u74b0\u5883\u3067\u5b9f\u884c\u3057\u3066\u304f\u3060\u3055\u3044\u3002');
+    return null;
+  }
 }
-
 async function makePDF(lines,filename){
   const fb=await loadFont();if(!fb)return;
   const{jsPDF}=window.jspdf;
@@ -548,11 +754,13 @@ async function makePDF(lines,filename){
   const mL=25,mR=25,mT=30,mB=25,pH=297,pW=210;
   let y=mT;
   function ln(text,opts={}){
-    const sz=opts.size||11,al=opts.align||'left',sp=opts.spacing||3;
-    doc.setFontSize(sz);doc.setTextColor(...(opts.color||[0,0,0]));
+    const sz=opts.size||11,al=opts.align||'left',sp=opts.spacing!=null?opts.spacing:3;
+    const col=opts.color||[0,0,0];
+    doc.setFontSize(sz);doc.setTextColor(...col);
     if(y+sz*0.4>pH-mB){doc.addPage();y=mT;}
     let x=mL;if(al==='center')x=pW/2;if(al==='right')x=pW-mR;
-    doc.text(text,x,y,{align:al});y+=sz*0.6+sp;
+    doc.text(text,x,y,{align:al});
+    y+=sz*0.6+sp;
   }
   function rule(){doc.setDrawColor(180,180,180);doc.line(mL,y,pW-mR,y);y+=4;}
   lines.forEach(l=>{
@@ -563,211 +771,213 @@ async function makePDF(lines,filename){
   doc.save(filename);
 }
 
-const BLANK_DATE='\u3000\u3000\u3000\u3000\u5e74\u3000\u3000\u6708\u3000\u3000\u65e5';
-const SIG_LINE=[
-  null,
-  '---',
-  null,
-  {text:`書面作成日：${BLANK_DATE}`,size:11},
-  null,
-  {text:'氏　名：',size:11},
-  {text:'\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000（自署）',size:11},
-  null,
-  {text:'住　所：',size:11},
-  {text:'\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000',size:11},
-];
-
+// === DOCUMENT BUILDERS ===
+function sigBlock(d){
+  const addr=d.userAddr?'\u3000'+d.userAddr:'\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000';
+  return[
+    null,'---',null,
+    {text:'\u66f8\u9762\u4f5c\u6210\u65e5\uff1a'+BLANK_DATE,size:11},null,
+    {text:'\u6c0f\u3000\u540d\uff1a',size:11},
+    {text:'\u3000\uff08\u81ea\u7f72\uff09',size:10,color:[120,120,120]},
+    {text:'\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000',size:9,color:[180,180,180]},
+    null,
+    {text:'\u4f4f\u3000\u6240\uff08\u4efb\u610f\uff09\uff1a',size:11},
+    {text:addr,size:10,color:d.userAddr?[0,0,0]:[160,160,160]},
+  ];
+}
 function docHeader(d){
   return[
-    {text:`${d.companyAddr}`,size:10},
-    {text:`${d.companyName}`,size:11},
-    {text:`${d.ceoName}\u3000殿`,size:11},
+    {text:d.companyAddr,size:10},
+    {text:d.companyName,size:11},
+    {text:d.ceoName+'\u3000\u6bbf',size:11},
     null,
   ];
 }
 
-async function genDoc(type){
-  const btn=document.getElementById('btn-'+type);
-  const orig=btn.innerHTML;btn.innerHTML='⏳ 生成中...';
-  const d=getData();
+function buildDocLines(type,d){
   const rd=d.retirementDate?fmtJp(d.retirementDate):BLANK_DATE;
-  let lines=[],fn='';
+  const sig=sigBlock(d);
+  const hd=docHeader(d);
+  let lines=[],filename='';
 
   if(type==='A'){
-    fn='退職届.pdf';
+    filename='\u9000\u8077\u5c4a.pdf';
     lines=[
-      {text:'退　職　届',size:20,align:'center',spacing:8},
-      null,
-      ...docHeader(d),
-      {text:'私は、下記のとおり退職いたしたく、ここに届け出ます。',size:11},
-      null,'---',{text:'記',size:11,align:'center'},null,
-      {text:`退職希望日：${rd}`,size:11},null,
-      {text:'退職理由：一身上の都合',size:11},null,
-      {text:'民法第627条第1項に基づき、本書面をもって退職の意思表示といたします。',size:10},
-      {text:'会社の承認を待たず、上記退職日をもって労働契約を終了いたします。',size:10},
-      ...SIG_LINE,
+      {text:'\u9000\u3000\u8077\u3000\u5c4a',size:20,align:'center',spacing:8},null,
+      ...hd,
+      {text:'\u79c1\u306f\u3001\u4e0b\u8a18\u306e\u3068\u304a\u308a\u9000\u8077\u3044\u305f\u3057\u305f\u304f\u3001\u3053\u3053\u306b\u5c4a\u3051\u51fa\u307e\u3059\u3002',size:11},
+      null,'---',{text:'\u8a18',size:11,align:'center'},null,
+      {text:'\u9000\u8077\u5e0c\u671b\u65e5\uff1a'+rd,size:11},null,
+      {text:'\u9000\u8077\u7406\u7531\uff1a\u4e00\u8eab\u4e0a\u306e\u90fd\u5408',size:11},null,
+      {text:'\u6c11\u6cd5\u7b2c627\u6761\u7b2c1\u9805\u306b\u57fa\u3065\u304d\u3001\u672c\u66f8\u9762\u3092\u3082\u3063\u3066\u9000\u8077\u306e\u610f\u601d\u8868\u793a\u3068\u3044\u305f\u3057\u307e\u3059\u3002',size:10},
+      {text:'\u4f1a\u793e\u306e\u627f\u8a8d\u3092\u5f85\u305f\u305a\u3001\u4e0a\u8a18\u9000\u8077\u65e5\u3092\u3082\u3063\u3066\u52b4\u50cd\u5951\u7d04\u3092\u7d42\u4e86\u3044\u305f\u3057\u307e\u3059\u3002',size:10},
+      ...sig,
     ];
-  }else if(type==='B'){
-    fn='有給休暇消化申請書.pdf';
+  } else if(type==='B'){
+    filename='\u6709\u7d66\u4f11\u6687\u6d88\u5316\u7533\u8acb\u66f8.pdf';
     lines=[
-      {text:'有給休暇消化申請書',size:20,align:'center',spacing:8},null,
-      ...docHeader(d),
-      {text:'私は、下記のとおり有給休暇の消化を申請いたします。',size:11},
-      {text:'労働基準法第39条に基づき、有給休暇の取得は労働者の権利であり、',size:10},
-      {text:'会社の承認は不要です。',size:10},null,'---',{text:'記',size:11,align:'center'},null,
-      {text:`申請日数：残有給休暇日数の全日（${d.vacDays}日間）`,size:11},
-      {text:`申請期間：退職予定日（${rd}）までの全期間`,size:11},null,
-      {text:'上記の有給休暇を取得しますので、ご承知おきください。',size:11},
-      {text:'なお、退職が確定している場合、使用者は時季変更権を行使できません（判例）。',size:10},
-      ...SIG_LINE,
+      {text:'\u6709\u7d66\u4f11\u6687\u6d88\u5316\u7533\u8acb\u66f8',size:18,align:'center',spacing:8},null,
+      ...hd,
+      {text:'\u79c1\u306f\u3001\u4e0b\u8a18\u306e\u3068\u304a\u308a\u6709\u7d66\u4f11\u6687\u306e\u6d88\u5316\u3092\u7533\u8acb\u3044\u305f\u3057\u307e\u3059\u3002',size:11},
+      {text:'\u52b4\u50cd\u57fa\u6e96\u6cd5\u7b2c39\u6761\u306b\u57fa\u3065\u304d\u3001\u6709\u7d66\u4f11\u6687\u306e\u53d6\u5f97\u306f\u52b4\u50cd\u8005\u306e\u6a29\u5229\u3067\u3042\u308a\u3001\u4f1a\u793e\u306e\u627f\u8a8d\u306f\u4e0d\u8981\u3067\u3059\u3002',size:10},
+      null,'---',{text:'\u8a18',size:11,align:'center'},null,
+      {text:'\u7533\u8acb\u65e5\u6570\uff1a\u6b8b\u6709\u7d66\u4f11\u6687\u65e5\u6570\u306e\u5168\u65e5\uff08'+d.vacDays+'\u65e5\u9593\uff09',size:11},
+      {text:'\u7533\u8acb\u671f\u9593\uff1a\u9000\u8077\u4e88\u5b9a\u65e5\uff08'+rd+'\uff09\u307e\u3067\u306e\u5168\u671f\u9593',size:11},null,
+      {text:'\u306a\u304a\u3001\u9000\u8077\u304c\u78ba\u5b9a\u3057\u3066\u3044\u308b\u5834\u5408\u3001\u4f7f\u7528\u8005\u306f\u6642\u5b63\u5909\u66f4\u6a29\u3092\u884c\u4f7f\u3067\u304d\u307e\u305b\u3093\uff08\u5224\u4f8b\uff09\u3002',size:10},
+      ...sig,
     ];
-  }else if(type==='C'){
-    fn='私物返却・物品貸与確認書.pdf';
-    const items=d.returnItems?d.returnItems.split('\n').filter(l=>l.trim()).map(l=>({text:`　・${l.trim()}`,size:11})):[{text:'　・（なし）',size:11}];
+  } else if(type==='C'){
+    filename='\u79c1\u7269\u8fd4\u5374\u30fb\u7269\u54c1\u8cb8\u4e0e\u78ba\u8a8d\u66f8.pdf';
+    const items=d.returnItems?d.returnItems.split('\n').filter(l=>l.trim()).map(l=>({text:'\u3000\u30fb'+l.trim(),size:11})):[{text:'\u3000\u30fb\uff08\u306a\u3057\uff09',size:11}];
     lines=[
-      {text:'私物返却・物品貸与確認書',size:18,align:'center',spacing:8},null,
-      ...docHeader(d),
-      {text:'退職に際し、下記のとおり物品の返却内容を確認いたします。',size:11},
-      null,'---',{text:'記',size:11,align:'center'},null,
-      {text:'【会社へ返却するもの】',size:11},...items,null,
-      {text:'【会社から返却を受けるもの】',size:11},
-      {text:'　・離職票（退職後速やかに交付を求めます）',size:11},
-      {text:'　・雇用保険被保険者証',size:11},
-      {text:'　・年金手帳（会社保管の場合）',size:11},
-      {text:'　・源泉徴収票（退職後1ヶ月以内）',size:11},
-      {text:'　・給与明細（未受取分がある場合）',size:11},null,
-      {text:'返却物は退職日までに郵送または持参にて対応いたします。',size:10},
-      {text:'返却確認のご連絡は書面にてお願いいたします。',size:10},
-      ...SIG_LINE,
+      {text:'\u79c1\u7269\u8fd4\u5却\u30fb\u7269\u54c1\u8cb8\u4e0e\u78ba\u8a8d\u66f8',size:16,align:'center',spacing:8},null,
+      ...hd,
+      {text:'\u9000\u8077\u306b\u969b\u3057\u3001\u4e0b\u8a18\u306e\u3068\u304a\u308a\u7269\u54c1\u306e\u8fd4\u5却\u5185\u5bb9\u3092\u78ba\u8a8d\u3044\u305f\u3057\u307e\u3059\u3002',size:11},
+      null,'---',{text:'\u8a18',size:11,align:'center'},null,
+      {text:'\u3010\u4f1a\u793e\u3078\u8fd4\u5却\u3059\u308b\u3082\u306e\u3011',size:11},...items,null,
+      {text:'\u3010\u4f1a\u793e\u304b\u3089\u8fd4\u5374\u3092\u53d7\u3051\u308b\u3082\u306e\u3011',size:11},
+      {text:'\u3000\u30fb\u96e2\u8077\u7968\uff08\u9000\u8077\u5f8c\u901f\u3084\u304b\u306b\u4ea4\u4ed8\u3092\u6c42\u3081\u307e\u3059\uff09',size:11},
+      {text:'\u3000\u30fb\u96c7\u7528\u4fdd\u967a\u88ab\u4fdd\u967a\u8005\u8a3c',size:11},
+      {text:'\u3000\u30fb\u5e74\u91d1\u624b\u5e33\uff08\u4f1a\u793e\u4fdd\u7ba1\u306e\u5834\u5408\uff09',size:11},
+      {text:'\u3000\u30fb\u6e90\u6cc9\u5f74\u53ce\u7968\uff08\u9000\u8077\u5f8c1\u30f6\u6708\u4ee5\u5185\uff09',size:11},null,
+      {text:'\u8fd4\u5374\u7269\u306f\u9000\u8077\u65e5\u307e\u3067\u306b\u90f5\u9001\u307e\u305f\u306f\u6301\u53c2\u306b\u3066\u5bfe\u5fdc\u3044\u305f\u3057\u307e\u3059\u3002',size:10},
+      ...sig,
     ];
-  }else if(type==='D'){
-    fn='業務引き継ぎ記録書.pdf';
-    const hoLines=d.handover?d.handover.split('\n').filter(l=>l.trim()).map(l=>({text:`　${l.trim()}`,size:11})):[{text:'　退職日までに担当業務の引き継ぎを誠実に実施いたします。',size:11}];
+  } else if(type==='D'){
+    filename='\u696d\u52d9\u5f15\u304d\u7d99\u304e\u8a18\u9332\u66f8.pdf';
+    const hoLines=d.handover?d.handover.split('\n').filter(l=>l.trim()).map(l=>({text:'\u3000'+l.trim(),size:11})):[{text:'\u3000\u9000\u8077\u65e5\u307e\u3067\u306b\u62c5\u5f53\u696d\u52d9\u306e\u5f15\u304d\u7d99\u304e\u3092\u8aa0\u5b9f\u306b\u5b9f\u65bd\u3044\u305f\u3057\u307e\u3059\u3002',size:11}];
     lines=[
-      {text:'業務引き継ぎ記録書',size:20,align:'center',spacing:8},null,
-      ...docHeader(d),
-      {text:'退職に際し、担当業務の引き継ぎについて下記のとおり記録いたします。',size:11},
-      null,'---',{text:'記',size:11,align:'center'},null,
-      {text:`退職予定日：${rd}`,size:11},null,
-      {text:'【引き継ぎ内容】',size:11},...hoLines,null,
-      {text:'引き継ぎ先のご指名がない場合は、書面にてご連絡ください。',size:10},
-      {text:'引き継ぎが適切に行われるよう、会社側のご協力もお願いいたします。',size:10},
-      ...SIG_LINE,
+      {text:'\u696d\u52d9\u5f15\u304d\u7d99\u304e\u8a18\u9332\u66f8',size:18,align:'center',spacing:8},null,
+      ...hd,
+      {text:'\u9000\u8077\u306b\u969b\u3057\u3001\u62c5\u5f53\u696d\u52d9\u306e\u5f15\u304d\u7d99\u304e\u306b\u3064\u3044\u3066\u4e0b\u8a18\u306e\u3068\u304a\u308a\u8a18\u9332\u3044\u305f\u3057\u307e\u3059\u3002',size:11},
+      null,'---',{text:'\u8a18',size:11,align:'center'},null,
+      {text:'\u9000\u8077\u4e88\u5b9a\u65e5\uff1a'+rd,size:11},null,
+      {text:'\u3010\u5f15\u304d\u7d99\u304e\u5185\u5bb9\u3011',size:11},...hoLines,null,
+      {text:'\u5f15\u304d\u7d99\u304e\u5148\u306e\u3054\u6307\u540d\u304c\u306a\u3044\u5834\u5408\u306f\u3001\u66f8\u9762\u306b\u3066\u3054\u9023\u7d61\u304f\u3060\u3055\u3044\u3002',size:10},
+      ...sig,
     ];
-  }else if(type==='E'){
-    fn='退職確認依頼書.pdf';
+  } else if(type==='E'){
+    filename='\u9000\u8077\u78ba\u8a8d\u4f9d\u983c\u66f8.pdf';
     lines=[
-      {text:'退職確認依頼書',size:20,align:'center',spacing:8},null,
-      ...docHeader(d),
-      {text:'私は、別途提出の退職届のとおり退職手続きを進めております。',size:11},
-      {text:'つきましては、下記のご対応をお願いいたします。',size:11},
-      null,'---',{text:'記',size:11,align:'center'},null,
-      {text:`退職予定日：${rd}`,size:11},null,
-      {text:'【ご対応依頼事項】',size:11},
-      {text:'１．退職日の書面による確認通知',size:11},
-      {text:'２．社会保険・雇用保険の資格喪失手続き',size:11},
-      {text:'３．離職票（雇用保険被保険者離職票）の速やかな交付',size:11},
-      {text:'４．源泉徴収票の退職後1ヶ月以内の交付',size:11},
-      {text:'５．その他退職に伴う必要書類の交付',size:11},null,
-      {text:'本書面は配達証明郵便により送付しており、到達の事実が記録されます。',size:10},
-      {text:'ご対応は書面にてお願いいたします。',size:10},
-      ...SIG_LINE,
+      {text:'\u9000\u8077\u78ba\u8a8d\u4f9d\u983c\u66f8',size:18,align:'center',spacing:8},null,
+      ...hd,
+      {text:'\u79c1\u306f\u3001\u5225\u9014\u63d0\u51fa\u306e\u9000\u8077\u5c4a\u306e\u3068\u304a\u308a\u9000\u8077\u624b\u7d9a\u304d\u3092\u9032\u3081\u3066\u304a\u308a\u307e\u3059\u3002\u4e0b\u8a18\u306e\u3054\u5bfe\u5fdc\u3092\u304a\u9858\u3044\u3044\u305f\u3057\u307e\u3059\u3002',size:11},
+      null,'---',{text:'\u8a18',size:11,align:'center'},null,
+      {text:'\u9000\u8077\u4e88\u5b9a\u65e5\uff1a'+rd,size:11},null,
+      {text:'\u3010\u3054\u5bfe\u5fdc\u4f9d\u983c\u4e8b\u9805\u3011',size:11},
+      {text:'\uff11\uff0e\u9000\u8077\u65e5\u306e\u66f8\u9762\u306b\u3088\u308b\u78ba\u8a8d\u901a\u77e5',size:11},
+      {text:'\uff12\uff0e\u793e\u4f1a\u4fdd\u967a\u30fb\u96c7\u7528\u4fdd\u967a\u306e\u8cc7\u683c\u55aa\u5931\u624b\u7d9a\u304d',size:11},
+      {text:'\uff13\uff0e\u96e2\u8077\u7968\u306e\u901f\u3084\u304b\u306a\u4ea4\u4ed8',size:11},
+      {text:'\uff14\uff0e\u6e90\u6cc9\u5f74\u53ce\u7968\u306e\u9000\u8077\u5f8c1\u30f6\u6708\u4ee5\u5185\u306e\u4ea4\u4ed8',size:11},
+      {text:'\uff15\uff0e\u305d\u306e\u4ed6\u9000\u8077\u306b\u4f34\u3046\u5fc5\u8981\u66f8\u985e\u306e\u4ea4\u4ed8',size:11},null,
+      {text:'\u672c\u66f8\u9762\u306f\u914d\u9054\u8a3c\u660e\u90f5\u4fbf\u306b\u3088\u308a\u9001\u4ed8\u3057\u3066\u304a\u308a\u3001\u5230\u9054\u306e\u4e8b\u5b9f\u304c\u8a18\u9332\u3055\u308c\u307e\u3059\u3002',size:10},
+      ...sig,
     ];
   }
-  await makePDF(lines,fn);
-  btn.innerHTML='✅ 生成完了';
-  setTimeout(()=>{btn.innerHTML=orig;},3000);
+  return{lines,filename};
 }
 
-async function genTemplate(n){
-  const d=getData();
-  const hd=[
-    {text:`${d.companyAddr}`,size:10},
-    {text:`${d.companyName}`,size:11},
-    {text:`${d.ceoName}\u3000殿`,size:11},null,
-  ];
-  let lines=[],fn='';
-  const titles=['','退職意思の最終確認通知','退職日変更要求に対する回答書','退職届送付済みの確認通知','損害賠償請求示唆に対する回答書','有給休暇取得申請の権利確認通知','離職票等書類交付請求書','連絡方法に関する通知'];
-  const fns=['','返答T1_退職慰留への返答.pdf','返答T2_退職日変更要求への返答.pdf','返答T3_退職届受理拒否への返答.pdf','返答T4_損害賠償請求示唆への返答.pdf','返答T5_有給休暇取得拒否への返答.pdf','返答T6_離職票等書類交付請求.pdf','返答T7_電話連絡拒否通知.pdf'];
-  fn=fns[n];
+function buildTemplateLines(n,d){
+  const sig=sigBlock(d);
+  const hd=docHeader(d);
+  const fns=['','\u8fd4\u7b54T1_\u9000\u8077\u6f38\u7559\u3078\u306e\u8fd4\u7b54.pdf','\u8fd4\u7b54T2_\u9000\u8077\u65e5\u5909\u66f4\u8981\u6c42\u3078\u306e\u8fd4\u7b54.pdf','\u8fd4\u7b54T3_\u9000\u8077\u5c4a\u53d7\u7406\u62d2\u5426\u3078\u306e\u8fd4\u7b54.pdf','\u8fd4\u7b54T4_\u640d\u5bb3\u8ce0\u511f\u8acb\u6c42\u793a\u5520\u3078\u306e\u8fd4\u7b54.pdf','\u8fd4\u7b54T5_\u6709\u7d66\u4f11\u6687\u53d6\u5f97\u62d2\u5426\u3078\u306e\u8fd4\u7b54.pdf','\u8fd4\u7b54T6_\u96e2\u8077\u7968\u7b49\u66f8\u985e\u4ea4\u4ed8\u8acb\u6c42.pdf','\u8fd4\u7b54T7_\u96fb\u8a71\u9023\u7d61\u62d2\u5426\u901a\u77e5.pdf'];
+  const titles=['','\u9000\u8077\u610f\u601d\u306e\u6700\u7d42\u78ba\u8a8d\u901a\u77e5','\u9000\u8077\u65e5\u5909\u66f4\u8981\u6c42\u306b\u5bfe\u3059\u308b\u56de\u7b54\u66f8','\u9000\u8077\u5c4a\u9001\u4ed8\u6e08\u307f\u306e\u78ba\u8a8d\u901a\u77e5','\u640d\u5bb3\u8ce0\u511f\u8acb\u6c42\u793a\u5520\u306b\u5bfe\u3059\u308b\u56de\u7b54\u66f8','\u6709\u7d66\u4f11\u6687\u53d6\u5f97\u7533\u8acb\u306e\u6a29\u5229\u78ba\u8a8d\u901a\u77e5','\u96e2\u8077\u7968\u7b49\u66f8\u985e\u4ea4\u4ed8\u8acb\u6c42\u66f8','\u9023\u7d61\u65b9\u6cd5\u306b\u95a2\u3059\u308b\u901a\u77e5'];
   const body={
-    1:[
-      {text:'先般、退職届を送付したところ、慰留のご連絡をいただきました。',size:11},
-      {text:'しかしながら、私の退職の意思は固く、変わるものではありません。',size:11},null,
-      {text:'民法第627条第1項に基づき、退職の意思表示から2週間の経過をもって',size:11},
-      {text:'労働契約は終了いたします。会社のご承認は法律上不要です。',size:11},null,
-      {text:'退職届に記載の退職日に退職手続きを進めていただきますよう、',size:11},
-      {text:'あらためてお願い申し上げます。ご連絡は書面にてお願いいたします。',size:11},
-    ],
-    2:[
-      {text:'退職日の変更を求めるご連絡をいただきました。',size:11},
-      {text:'しかしながら、民法第627条第1項に基づき、退職の意思表示から',size:11},
-      {text:'2週間の経過をもって労働契約は終了いたします。',size:11},null,
-      {text:'退職日の変更には私の同意が必要です。私は同意いたしません。',size:11},
-      {text:'退職届に記載の退職日のとおり、手続きをお進めいただくよう',size:11},
-      {text:'お願い申し上げます。退職日を超えて就労を強制することは違法です。',size:10},
-      {text:'ご連絡はすべて書面にてお願いいたします。',size:10},
-    ],
-    3:[
-      {text:'退職届の受け取りを拒否する旨のご連絡をいただきました。',size:11},
-      {text:'しかしながら、退職届は配達証明郵便により貴社へ送付済みであり、',size:11},
-      {text:'到達の事実は郵便記録により証明されております。',size:11},null,
-      {text:'民法第97条により、意思表示は相手方に到達した時点で効力を生じます。',size:11},
-      {text:'受け取り拒否は退職の意思表示の効力に影響しません。',size:11},null,
-      {text:'民法第627条第1項に基づき、到達日から2週間の経過をもって',size:11},
-      {text:'労働契約は終了いたします。',size:11},null,
-      {text:'退職日までに、離職票・健康保険資格喪失証明書・源泉徴収票の',size:11},
-      {text:'交付手続きをお願いいたします。ご連絡は書面にてお願いいたします。',size:11},
-    ],
-    4:[
-      {text:'損害賠償を請求するとのご連絡をいただきました。',size:11},null,
-      {text:'退職は民法第627条第1項に基づく適法な権利行使であり、',size:11},
-      {text:'適法な権利行使に対して損害賠償義務は生じません。',size:11},null,
-      {text:'仮に損害が発生したとしても、使用者側の人員配置・業務管理上の',size:11},
-      {text:'問題によるものであり、退職者個人が賠償責任を負うものではありません。',size:11},null,
-      {text:'損害賠償を請求される場合は、法的手続きによってください。',size:11},
-      {text:'なお、不当な脅迫行為は恐喝罪等に該当する可能性がある旨申し添えます。',size:10},
-      {text:'ご連絡はすべて書面にてお願いいたします。',size:10},
-    ],
-    5:[
-      {text:'有給休暇の取得を認められない旨のご連絡をいただきました。',size:11},null,
-      {text:'有給休暇の取得は労働基準法第39条に基づく労働者の権利であり、',size:11},
-      {text:'会社の承認は不要です。',size:11},null,
-      {text:'また、退職が確定している場合、使用者は時季変更権を行使できません',size:11},
-      {text:'（最高裁判所判例）。退職日までの有給休暇消化申請は有効です。',size:11},null,
-      {text:'有給休暇取得拒否は労働基準法違反となります。',size:11},
-      {text:'取得拒否が続く場合は、労働基準監督署への申告を検討いたします。',size:11},
-      {text:'申請どおり有給休暇を消化させていただきます。ご連絡は書面にてお願いいたします。',size:10},
-    ],
+    1:[{text:'\u5148\u822c\u3001\u9000\u8077\u5c4a\u3092\u9001\u4ed8\u3057\u305f\u3068\u3053\u308d\u3001\u6f38\u7559\u306e\u3054\u9023\u7d61\u3092\u3044\u305f\u3060\u304d\u307e\u3057\u305f\u3002\u3057\u304b\u3057\u306a\u304c\u3089\u3001\u79c1\u306e\u9000\u8077\u306e\u610f\u601d\u306f\u56fa\u304f\u3001\u5909\u308f\u308b\u3082\u306e\u3067\u306f\u3042\u308a\u307e\u305b\u3093\u3002\u6c11\u6cd5\u7b2c627\u6761\u7b2c1\u9805\u306b\u57fa\u3065\u304d\u3001\u9000\u8077\u5c4a\u306b\u8a18\u8f09\u306e\u9000\u8077\u65e5\u306b\u9000\u8077\u624b\u7d9a\u304d\u3092\u9032\u3081\u3066\u3044\u305f\u3060\u304d\u307e\u3059\u3088\u3046\u3001\u3042\u3089\u305f\u3081\u3066\u304a\u9858\u3044\u7533\u3057\u4e0a\u3052\u307e\u3059\u3002\u3054\u9023\u7d61\u306f\u66f8\u9762\u306b\u3066\u304a\u9858\u3044\u3044\u305f\u3057\u307e\u3059\u3002',size:11}],
+    2:[{text:'\u9000\u8077\u65e5\u306e\u5909\u66f4\u3092\u6c42\u3081\u308b\u3054\u9023\u7d61\u3092\u3044\u305f\u3060\u304d\u307e\u3057\u305f\u3002\u3057\u304b\u3057\u306a\u304c\u3089\u3001\u6c11\u6cd5\u7b2c627\u6761\u7b2c1\u9805\u306b\u57fa\u3065\u304d\u3001\u9000\u8077\u306e\u610f\u601d\u8868\u793a\u304b\u30892\u9031\u9593\u306e\u7d4c\u904e\u3092\u3082\u3063\u3066\u52b4\u50cd\u5951\u7d04\u306f\u7d42\u4e86\u3044\u305f\u3057\u307e\u3059\u3002\u9000\u8077\u65e5\u306e\u5909\u66f4\u306b\u306f\u79c1\u306e\u540c\u610f\u304c\u5fc5\u8981\u3067\u3059\u3002\u79c1\u306f\u540c\u610f\u3044\u305f\u3057\u307e\u305b\u3093\u3002\u9000\u8077\u5c4a\u8a18\u8f09\u306e\u9000\u8077\u65e5\u306e\u3068\u304a\u308a\u3001\u624b\u7d9a\u304d\u3092\u304a\u9032\u3081\u3044\u305f\u3060\u304f\u3088\u3046\u304a\u9858\u3044\u7533\u3057\u4e0a\u3052\u307e\u3059\u3002\u3054\u9023\u7d61\u306f\u66f8\u9762\u306b\u3066\u304a\u9858\u3044\u3044\u305f\u3057\u307e\u3059\u3002',size:11}],
+    3:[{text:'\u9000\u8077\u5c4a\u306e\u53d7\u3051\u53d6\u308a\u3092\u62d2\u5426\u3059\u308b\u65e8\u306e\u3054\u9023\u7d61\u3092\u3044\u305f\u3060\u304d\u307e\u3057\u305f\u3002\u3057\u304b\u3057\u306a\u304c\u3089\u3001\u9000\u8077\u5c4a\u306f\u914d\u9054\u8a3c\u660e\u90f5\u4fbf\u306b\u3088\u308a\u8cb4\u793e\u3078\u9001\u4ed8\u6e08\u307f\u3067\u3042\u308a\u3001\u5230\u9054\u306e\u4e8b\u5b9f\u306f\u90f5\u4fbf\u8a18\u9332\u306b\u3088\u308a\u8a3c\u660e\u3055\u308c\u3066\u304a\u308a\u307e\u3059\u3002\u6c11\u6cd5\u7b2c97\u6761\u306b\u3088\u308a\u3001\u610f\u601d\u8868\u793a\u306f\u76f8\u624b\u65b9\u306b\u5230\u9054\u3057\u305f\u6642\u70b9\u3067\u52b9\u529b\u3092\u751f\u3058\u307e\u3059\u3002\u53d7\u3051\u53d6\u308a\u62d2\u5426\u306f\u9000\u8077\u306e\u610f\u601d\u8868\u793a\u306e\u52b9\u529b\u306b\u5f71\u97ff\u3057\u307e\u305b\u3093\u3002\u6c11\u6cd5\u7b2c627\u6761\u7b2c1\u9805\u306b\u57fa\u3065\u304d\u3001\u5230\u9054\u65e5\u304b\u30892\u9031\u9593\u306e\u7d4c\u904e\u3092\u3082\u3063\u3066\u52b4\u50cd\u5951\u7d04\u306f\u7d42\u4e86\u3044\u305f\u3057\u307e\u3059\u3002\u3054\u9023\u7d61\u306f\u66f8\u9762\u306b\u3066\u304a\u9858\u3044\u3044\u305f\u3057\u307e\u3059\u3002',size:11}],
+    4:[{text:'\u640d\u5bb3\u8ce0\u511f\u3092\u8acb\u6c42\u3059\u308b\u3068\u306e\u3054\u9023\u7d61\u3092\u3044\u305f\u3060\u304d\u307e\u3057\u305f\u3002\u9000\u8077\u306f\u6c11\u6cd5\u7b2c627\u6761\u7b2c1\u9805\u306b\u57fa\u3065\u304f\u9069\u6cd5\u306a\u6a29\u5229\u884c\u4f7f\u3067\u3042\u308a\u3001\u9069\u6cd5\u306a\u6a29\u5229\u884c\u4f7f\u306b\u5bfe\u3057\u3066\u640d\u5bb3\u8ce0\u511f\u7fa9\u52d9\u306f\u751f\u3058\u307e\u305b\u3093\u3002\u4ef3\u308a\u306b\u640d\u5bb3\u304c\u767a\u751f\u3057\u305f\u3068\u3057\u3066\u3082\u3001\u4f7f\u7528\u8005\u5074\u306e\u4eba\u54e1\u914d\u7f6e\u30fb\u696d\u52d9\u7ba1\u7406\u4e0a\u306e\u554f\u984c\u306b\u3088\u308b\u3082\u306e\u3067\u3042\u308a\u3001\u9000\u8077\u8005\u500b\u4eba\u304c\u8ce0\u511f\u8cac\u4efb\u3092\u8ca0\u3046\u3082\u306e\u3067\u306f\u3042\u308a\u307e\u305b\u3093\u3002\u640d\u5bb3\u8ce0\u511f\u3092\u8acb\u6c42\u3055\u308c\u308b\u5834\u5408\u306f\u3001\u6cd5\u7684\u624b\u7d9a\u304d\u306b\u3088\u3063\u3066\u304f\u3060\u3055\u3044\u3002\u3054\u9023\u7d61\u306f\u66f8\u9762\u306b\u3066\u304a\u9858\u3044\u3044\u305f\u3057\u307e\u3059\u3002',size:11}],
+    5:[{text:'\u6709\u7d66\u4f11\u6687\u306e\u53d6\u5f97\u3092\u8a8d\u3081\u3089\u308c\u306a\u3044\u65e8\u306e\u3054\u9023\u7d61\u3092\u3044\u305f\u3060\u304d\u307e\u3057\u305f\u3002\u6709\u7d66\u4f11\u6687\u306e\u53d6\u5f97\u306f\u52b4\u50cd\u57fa\u6e96\u6cd5\u7b2c39\u6761\u306b\u57fa\u3065\u304f\u52b4\u50cd\u8005\u306e\u6a29\u5229\u3067\u3042\u308a\u3001\u4f1a\u793e\u306e\u627f\u8a8d\u306f\u4e0d\u8981\u3067\u3059\u3002\u307e\u305f\u3001\u9000\u8077\u304c\u78ba\u5b9a\u3057\u3066\u3044\u308b\u5834\u5408\u3001\u4f7f\u7528\u8005\u306f\u6642\u5b63\u5909\u66f4\u6a29\u3092\u884c\u4f7f\u3067\u304d\u307e\u305b\u3093\uff08\u6700\u9ad8\u88c1\u5224\u6240\u5224\u4f8b\uff09\u3002\u6709\u7d66\u4f11\u6687\u53d6\u5f97\u62d2\u5426\u306f\u52b4\u50cd\u57fa\u6e96\u6cd5\u9055\u53cd\u3068\u306a\u308a\u307e\u3059\u3002\u7533\u8acb\u3069\u304a\u308a\u6709\u7d66\u4f11\u6687\u3092\u6d88\u5316\u3055\u305b\u3066\u3044\u305f\u3060\u304d\u307e\u3059\u3002\u3054\u9023\u7d61\u306f\u66f8\u9762\u306b\u3066\u304a\u9858\u3044\u3044\u305f\u3057\u307e\u3059\u3002',size:11}],
     6:[
-      {text:'退職に伴い、下記書類の速やかなご交付をお願いいたします。',size:11},
-      null,'---',{text:'記',size:11,align:'center'},null,
-      {text:'【交付を求める書類】',size:11},
-      {text:'１．雇用保険被保険者離職票（１・２）',size:11},
-      {text:'２．健康保険・厚生年金保険資格喪失証明書',size:11},
-      {text:'３．源泉徴収票',size:11},
-      {text:'４．雇用保険被保険者証',size:11},
-      {text:'５．年金手帳（会社保管の場合）',size:11},null,
-      {text:'離職票は退職日から10日以内に交付することが事業主の義務です',size:10},
-      {text:'（雇用保険法第76条）。期日を過ぎた場合は、ハローワークへ申告いたします。',size:10},null,
-      {text:'書類は下記住所へ郵送にてお送りください。',size:11},null,
-      {text:'送付先住所：',size:11},
-      {text:'\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000（手書きでご記入ください）',size:10},
+      {text:'\u9000\u8077\u306b\u4f34\u3044\u3001\u4e0b\u8a18\u66f8\u985e\u306e\u901f\u3084\u304b\u306a\u3054\u4ea4\u4ed8\u3092\u304a\u9858\u3044\u3044\u305f\u3057\u307e\u3059\u3002',size:11},
+      null,'---',{text:'\u8a18',size:11,align:'center'},null,
+      {text:'\u3010\u4ea4\u4ed8\u3092\u6c42\u3081\u308b\u66f8\u985e\u3011',size:11},
+      {text:'\uff11\uff0e\u96c7\u7528\u4fdd\u967a\u88ab\u4fdd\u967a\u8005\u96e2\u8077\u7968\uff081\u30fb2\uff09',size:11},
+      {text:'\uff12\uff0e\u5065\u5eb7\u4fdd\u967a\u30fb\u539a\u751f\u5e74\u91d1\u4fdd\u967a\u8cc7\u683c\u55aa\u5931\u8a3c\u660e\u66f8',size:11},
+      {text:'\uff13\uff0e\u6e90\u6cc9\u5f74\u53ce\u7968',size:11},
+      {text:'\uff14\uff0e\u96c7\u7528\u4fdd\u967a\u88ab\u4fdd\u967a\u8005\u8a3c',size:11},
+      {text:'\uff15\uff0e\u5e74\u91d1\u624b\u5e33\uff08\u4f1a\u793e\u4fdd\u7ba1\u306e\u5834\u5408\uff09',size:11},null,
+      {text:'\u96e2\u8077\u7968\u306f\u9000\u8077\u65e5\u304b\u308910\u65e5\u4ee5\u5185\u306e\u4ea4\u4ed8\u304c\u4e8b\u696d\u4e3b\u306e\u7fa9\u52d9\u3067\u3059\uff08\u96c7\u7528\u4fdd\u967a\u6cd5\u7b2c76\u6761\uff09\u3002',size:10},
+      {text:'\u66f8\u985e\u306f\u4e0b\u8a18\u4f4f\u6240\u3078\u90f5\u9001\u306b\u3066\u304a\u9001\u308a\u304f\u3060\u3055\u3044\u3002',size:10},null,
+      {text:'\u9001\u4ed8\u5148\u4f4f\u6240\uff1a',size:11},
+      {text:d.userAddr?'\u3000'+d.userAddr:'\u3000\uff08\u304a\u624b\u6301\u3061\u306e\u4f4f\u6240\u3092\u304a\u66f8\u304d\u304f\u3060\u3055\u3044\uff09',size:10,color:d.userAddr?[0,0,0]:[150,150,150]},
     ],
-    7:[
-      {text:'この度の退職手続きに関して、今後の連絡はすべて書面（郵便）のみで',size:11},
-      {text:'お願いいたします。電話での連絡には応じられません。',size:11},null,
-      {text:'書面による連絡を希望する理由は以下のとおりです。',size:11},
-      {text:'・連絡内容を正確に記録・保存するため',size:11},
-      {text:'・感情的なやり取りを避け、冷静に対応するため',size:11},
-      {text:'・双方にとって公正な記録を残すため',size:11},null,
-      {text:'電話がかかってきた場合は対応できません。書面でのご連絡をお願いいたします。',size:10},
-    ],
+    7:[{text:'\u3053\u306e\u5ea6\u306e\u9000\u8077\u624b\u7d9a\u304d\u306b\u95a2\u3057\u3066\u3001\u4eca\u5f8c\u306e\u9023\u7d61\u306f\u3059\u3079\u3066\u66f8\u9762\uff08\u90f5\u4fbf\uff09\u306e\u307f\u3067\u304a\u9858\u3044\u3044\u305f\u3057\u307e\u3059\u3002\u96fb\u8a71\u3067\u306e\u3054\u9023\u7d61\u306b\u306f\u5fdc\u3058\u3089\u308c\u307e\u305b\u3093\u3002\u66f8\u9762\u306b\u3088\u308b\u9023\u7d61\u3092\u5e0c\u671b\u3059\u308b\u7406\u7531\u306f\u6b21\u306e\u3068\u304a\u308a\u3067\u3059\u3002\u30fb\u9023\u7d61\u5185\u5bb9\u3092\u6b63\u78ba\u306b\u8a18\u9332\u30fb\u4fdd\u5b58\u3059\u308b\u305f\u3081\u3002\u30fb\u611f\u60c5\u7684\u306a\u3084\u308a\u53d6\u308a\u3092\u907f\u3051\u3001\u51b7\u9759\u306b\u5bfe\u5fdc\u3059\u308b\u305f\u3081\u3002\u30fb\u53cc\u65b9\u306b\u3068\u3063\u3066\u516c\u6b63\u306a\u8a18\u9332\u3092\u6b8b\u3059\u305f\u3081\u3002\u96fb\u8a71\u304c\u304b\u304b\u3063\u3066\u304d\u305f\u5834\u5408\u306f\u5bfe\u5fdc\u3067\u304d\u307e\u305b\u3093\u3002\u66f8\u9762\u3067\u306e\u3054\u9023\u7d61\u3092\u304a\u9858\u3044\u3044\u305f\u3057\u307e\u3059\u3002',size:11}],
   };
-  lines=[{text:titles[n],size:18,align:'center',spacing:8},null,...hd,...body[n],...SIG_LINE];
-  await makePDF(lines,fn);
+  return{
+    lines:[{text:titles[n],size:18,align:'center',spacing:8},null,...hd,...body[n],...sig],
+    filename:fns[n],
+  };
 }
 
+// === PREVIEW RENDERING ===
+function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function renderPreview(areaEl,lines){
+  areaEl.innerHTML=lines.map(l=>{
+    if(l===null)return '<div class="pv-blank"></div>';
+    if(l==='---')return '<hr class="pv-rule">';
+    const text=typeof l==='string'?l:l.text;
+    const align=typeof l==='object'?(l.align||'left'):'left';
+    const size=typeof l==='object'?(l.size||11):11;
+    const cls=['pv-line'];
+    if(align==='center')cls.push('pv-center');
+    if(size>=18)cls.push('pv-big');
+    if(typeof l==='object'&&l.color&&l.color[0]>100)cls.push('pv-sig');
+    return `<div class="${cls.join(' ')}">${escHtml(text)}</div>`;
+  }).join('');
+}
+function togglePreview(id){
+  const area=document.getElementById('preview-'+id);
+  const btn=document.getElementById('toggle-'+id);
+  const isOpen=area.style.display!=='none';
+  if(isOpen){area.style.display='none';btn.textContent='プレビュー ▾';}
+  else{
+    area.style.display='block';btn.textContent='閉じる ▴';
+    const d=getData();
+    const isNum=typeof id==='number';
+    const{lines}=isNum?buildTemplateLines(id,d):buildDocLines(id,d);
+    renderPreview(area,lines);
+  }
+}
+function updateOpenPreviews(){
+  const d=getData();
+  ['A','B','C','D','E'].forEach(t=>{
+    const a=document.getElementById('preview-'+t);
+    if(a&&a.style.display!=='none'){const{lines}=buildDocLines(t,d);renderPreview(a,lines);}
+  });
+  for(let i=1;i<=7;i++){
+    const a=document.getElementById('preview-'+i);
+    if(a&&a.style.display!=='none'){const{lines}=buildTemplateLines(i,d);renderPreview(a,lines);}
+  }
+}
+
+// === PDF ACTIONS ===
+async function genPDF(type,e){
+  if(e)e.stopPropagation();
+  const btn=document.getElementById('pdfbtn-'+type);
+  if(btn){const orig=btn.innerHTML;btn.innerHTML='\u231b \u751f\u6210\u4e2d\u2026';
+    const d=getData();const{lines,filename}=buildDocLines(type,d);
+    await makePDF(lines,filename);
+    btn.innerHTML='\u2705 \u5b8c\u4e86';setTimeout(()=>{btn.innerHTML=orig;},3000);
+  } else {
+    const d=getData();const{lines,filename}=buildDocLines(type,d);
+    await makePDF(lines,filename);
+  }
+}
+async function genTemplate(n,e){
+  if(e)e.stopPropagation();
+  const btn=document.getElementById('pdfbtn-T'+n);
+  if(btn){const orig=btn.innerHTML;btn.innerHTML='\u231b \u751f\u6210\u4e2d\u2026';
+    const d=getData();const{lines,filename}=buildTemplateLines(n,d);
+    await makePDF(lines,filename);
+    btn.innerHTML='\u2705 \u5b8c\u4e86';setTimeout(()=>{btn.innerHTML=orig;},3000);
+  } else {
+    const d=getData();const{lines,filename}=buildTemplateLines(n,d);
+    await makePDF(lines,filename);
+  }
+}
+
+// === INIT ===
 function initApp(){
   loadData();initCalendar();
   const today=new Date().toISOString().split('T')[0];
