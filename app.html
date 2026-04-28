@@ -84,18 +84,18 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
 .doc-list{display:flex;flex-direction:column;gap:12px;}
 .doc-item{border:1.5px solid var(--gray-200);border-radius:10px;overflow:hidden;transition:border-color .2s;}
 .doc-item:hover{border-color:#94A3B8;}
-.doc-item-header{display:flex;align-items:center;gap:12px;padding:16px 20px;cursor:pointer;background:var(--gray-50);}
-.doc-item-header:hover{background:var(--gray-100);}
+.doc-item-header{display:flex;align-items:center;gap:12px;padding:16px 20px;background:var(--gray-50);}
+
 .doc-item-info{flex:1;}
 .doc-item-title{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:2px;}
 .doc-item-desc{font-size:12px;color:var(--gray-400);}
 .doc-item-actions{display:flex;align-items:center;gap:8px;flex-shrink:0;}
 .doc-pdf-btn{display:inline-flex;align-items:center;gap:5px;background:var(--green);color:var(--white);font-size:12px;font-weight:700;padding:7px 14px;border-radius:100px;border:none;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .2s;}
 .doc-pdf-btn:hover{background:#047857;}
-.doc-toggle{font-size:12px;color:var(--gray-500);background:var(--white);border:1px solid var(--gray-200);border-radius:100px;padding:5px 12px;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .2s;}
-.doc-toggle:hover{border-color:var(--navy);color:var(--navy);}
-.doc-preview{display:none;padding:20px 24px;background:var(--white);border-top:1px solid var(--gray-200);font-family:'Noto Sans JP',sans-serif;}
-.pv-line{font-size:11.5px;color:var(--gray-800);line-height:1.9;}
+
+
+.doc-preview{display:block;padding:16px 20px;background:#f8fffe;border-top:2px solid #D1FAE5;font-family:'Noto Sans JP',sans-serif;}
+.pv-line{font-size:11.5px;color:var(--gray-800);line-height:1.9;overflow-wrap:break-word;word-break:break-all;}
 .pv-line.pv-center{text-align:center;}
 .pv-line.pv-big{font-size:16px;font-weight:900;text-align:center;margin:4px 0;}
 .pv-blank{height:6px;}
@@ -108,7 +108,7 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
 .tmpl-item-info{flex:1;}
 .tmpl-item-name{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:2px;}
 .tmpl-item-scene{font-size:12px;color:var(--gray-400);}
-.tmpl-preview{display:none;padding:20px 24px;background:var(--white);border-top:1px solid var(--gray-200);}
+.tmpl-preview{display:block;padding:16px 20px;background:#f8fffe;border-top:2px solid #D1FAE5;}
 .guide-sections{display:flex;flex-direction:column;gap:20px;}
 .guide-section{background:var(--gray-50);border-radius:10px;padding:24px;}
 .guide-section-title{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:12px;}
@@ -254,13 +254,12 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
       <div class="doc-list">
         
         <div class="doc-item">
-          <div class="doc-item-header" onclick="togglePreview('A')">
+          <div class="doc-item-header">
             <div class="doc-item-info">
               <div class="doc-item-title">A. 退職届（退職通知書）</div>
               <div class="doc-item-desc">民法627条に基づく退職の意思表示。配達証明郵便で送付する正式書面。</div>
             </div>
-            <div class="doc-item-actions" onclick="event.stopPropagation()">
-              <button class="doc-toggle" id="toggle-A">プレビュー ▾</button>
+            <div class="doc-item-actions">
               <button class="doc-pdf-btn" id="pdfbtn-A" onclick="genPDF('A',event)">📄 PDF</button>
             </div>
           </div>
@@ -268,13 +267,12 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
         </div>
         
         <div class="doc-item">
-          <div class="doc-item-header" onclick="togglePreview('B')">
+          <div class="doc-item-header">
             <div class="doc-item-info">
               <div class="doc-item-title">B. 有給休暇消化申請書</div>
               <div class="doc-item-desc">退職日までの有給休暇全消化を申請する書面。</div>
             </div>
-            <div class="doc-item-actions" onclick="event.stopPropagation()">
-              <button class="doc-toggle" id="toggle-B">プレビュー ▾</button>
+            <div class="doc-item-actions">
               <button class="doc-pdf-btn" id="pdfbtn-B" onclick="genPDF('B',event)">📄 PDF</button>
             </div>
           </div>
@@ -282,13 +280,12 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
         </div>
         
         <div class="doc-item">
-          <div class="doc-item-header" onclick="togglePreview('C')">
+          <div class="doc-item-header">
             <div class="doc-item-info">
               <div class="doc-item-title">C. 私物返却・物品貸与確認書</div>
               <div class="doc-item-desc">会社への返却物と受け取るべき貸与物の一覧書面。</div>
             </div>
-            <div class="doc-item-actions" onclick="event.stopPropagation()">
-              <button class="doc-toggle" id="toggle-C">プレビュー ▾</button>
+            <div class="doc-item-actions">
               <button class="doc-pdf-btn" id="pdfbtn-C" onclick="genPDF('C',event)">📄 PDF</button>
             </div>
           </div>
@@ -296,13 +293,12 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
         </div>
         
         <div class="doc-item">
-          <div class="doc-item-header" onclick="togglePreview('D')">
+          <div class="doc-item-header">
             <div class="doc-item-info">
               <div class="doc-item-title">D. 業務引き継ぎ記録書</div>
               <div class="doc-item-desc">退職日までの引き継ぎ完了予定を記録する書面。</div>
             </div>
-            <div class="doc-item-actions" onclick="event.stopPropagation()">
-              <button class="doc-toggle" id="toggle-D">プレビュー ▾</button>
+            <div class="doc-item-actions">
               <button class="doc-pdf-btn" id="pdfbtn-D" onclick="genPDF('D',event)">📄 PDF</button>
             </div>
           </div>
@@ -310,13 +306,12 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
         </div>
         
         <div class="doc-item">
-          <div class="doc-item-header" onclick="togglePreview('E')">
+          <div class="doc-item-header">
             <div class="doc-item-info">
               <div class="doc-item-title">E. 退職確認依頼書</div>
               <div class="doc-item-desc">退職日の確認と離職票等の書類交付を依頼する書面。</div>
             </div>
-            <div class="doc-item-actions" onclick="event.stopPropagation()">
-              <button class="doc-toggle" id="toggle-E">プレビュー ▾</button>
+            <div class="doc-item-actions">
               <button class="doc-pdf-btn" id="pdfbtn-E" onclick="genPDF('E',event)">📄 PDF</button>
             </div>
           </div>
@@ -405,13 +400,12 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
       <div class="tmpl-list">
         
         <div class="tmpl-item">
-          <div class="tmpl-item-header" onclick="togglePreview(1)">
+          <div class="tmpl-item-header" style="cursor:default">
             <div class="tmpl-item-info">
               <div class="tmpl-item-name">T1. 退職慰留への返答</div>
               <div class="tmpl-item-scene">「辞めないでほしい」と連絡が来た場合</div>
             </div>
-            <div class="doc-item-actions" onclick="event.stopPropagation()">
-              <button class="doc-toggle" id="toggle-1">プレビュー ▾</button>
+            <div class="doc-item-actions">
               <button class="doc-pdf-btn" id="pdfbtn-T1" onclick="genTemplate(1,event)">📄 PDF</button>
             </div>
           </div>
@@ -419,13 +413,12 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
         </div>
         
         <div class="tmpl-item">
-          <div class="tmpl-item-header" onclick="togglePreview(2)">
+          <div class="tmpl-item-header" style="cursor:default">
             <div class="tmpl-item-info">
               <div class="tmpl-item-name">T2. 退職日変更要求への返答</div>
               <div class="tmpl-item-scene">「退職日を後ろ倒しにしてほしい」と言われた場合</div>
             </div>
-            <div class="doc-item-actions" onclick="event.stopPropagation()">
-              <button class="doc-toggle" id="toggle-2">プレビュー ▾</button>
+            <div class="doc-item-actions">
               <button class="doc-pdf-btn" id="pdfbtn-T2" onclick="genTemplate(2,event)">📄 PDF</button>
             </div>
           </div>
@@ -433,13 +426,12 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
         </div>
         
         <div class="tmpl-item">
-          <div class="tmpl-item-header" onclick="togglePreview(3)">
+          <div class="tmpl-item-header" style="cursor:default">
             <div class="tmpl-item-info">
               <div class="tmpl-item-name">T3. 退職届受理拒否への返答</div>
               <div class="tmpl-item-scene">「退職届を受け取れない」と言われた場合</div>
             </div>
-            <div class="doc-item-actions" onclick="event.stopPropagation()">
-              <button class="doc-toggle" id="toggle-3">プレビュー ▾</button>
+            <div class="doc-item-actions">
               <button class="doc-pdf-btn" id="pdfbtn-T3" onclick="genTemplate(3,event)">📄 PDF</button>
             </div>
           </div>
@@ -447,13 +439,12 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
         </div>
         
         <div class="tmpl-item">
-          <div class="tmpl-item-header" onclick="togglePreview(4)">
+          <div class="tmpl-item-header" style="cursor:default">
             <div class="tmpl-item-info">
               <div class="tmpl-item-name">T4. 損害賠償請求示唆への返答</div>
               <div class="tmpl-item-scene">「損害賠償を請求する」と脅された場合</div>
             </div>
-            <div class="doc-item-actions" onclick="event.stopPropagation()">
-              <button class="doc-toggle" id="toggle-4">プレビュー ▾</button>
+            <div class="doc-item-actions">
               <button class="doc-pdf-btn" id="pdfbtn-T4" onclick="genTemplate(4,event)">📄 PDF</button>
             </div>
           </div>
@@ -461,13 +452,12 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
         </div>
         
         <div class="tmpl-item">
-          <div class="tmpl-item-header" onclick="togglePreview(5)">
+          <div class="tmpl-item-header" style="cursor:default">
             <div class="tmpl-item-info">
               <div class="tmpl-item-name">T5. 有給休暇取得拒否への返答</div>
               <div class="tmpl-item-scene">「有給は認められない」と言われた場合</div>
             </div>
-            <div class="doc-item-actions" onclick="event.stopPropagation()">
-              <button class="doc-toggle" id="toggle-5">プレビュー ▾</button>
+            <div class="doc-item-actions">
               <button class="doc-pdf-btn" id="pdfbtn-T5" onclick="genTemplate(5,event)">📄 PDF</button>
             </div>
           </div>
@@ -475,13 +465,12 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
         </div>
         
         <div class="tmpl-item">
-          <div class="tmpl-item-header" onclick="togglePreview(6)">
+          <div class="tmpl-item-header" style="cursor:default">
             <div class="tmpl-item-info">
               <div class="tmpl-item-name">T6. 離職票・書類交付請求</div>
               <div class="tmpl-item-scene">退職後も離職票・源泉徴収票が届かない場合</div>
             </div>
-            <div class="doc-item-actions" onclick="event.stopPropagation()">
-              <button class="doc-toggle" id="toggle-6">プレビュー ▾</button>
+            <div class="doc-item-actions">
               <button class="doc-pdf-btn" id="pdfbtn-T6" onclick="genTemplate(6,event)">📄 PDF</button>
             </div>
           </div>
@@ -489,13 +478,12 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
         </div>
         
         <div class="tmpl-item">
-          <div class="tmpl-item-header" onclick="togglePreview(7)">
+          <div class="tmpl-item-header" style="cursor:default">
             <div class="tmpl-item-info">
               <div class="tmpl-item-name">T7. 電話連絡拒否通知</div>
               <div class="tmpl-item-scene">書面対応のみを求める旨を会社に通知する場合</div>
             </div>
-            <div class="doc-item-actions" onclick="event.stopPropagation()">
-              <button class="doc-toggle" id="toggle-7">プレビュー ▾</button>
+            <div class="doc-item-actions">
               <button class="doc-pdf-btn" id="pdfbtn-T7" onclick="genTemplate(7,event)">📄 PDF</button>
             </div>
           </div>
@@ -905,6 +893,7 @@ function goStep(n){
     if(i===n)el.classList.add('active');
     else if(i<n)el.classList.add('done');
   });
+  if(n===1||n===3)setTimeout(renderAllPreviews,80);
   window.scrollTo(0,0);
 }
 function step0Next(){
@@ -943,10 +932,14 @@ async function makePDF(lines,filename){
     const sz=opts.size||11,al=opts.align||'left',sp=opts.spacing!=null?opts.spacing:3;
     const col=opts.color||[0,0,0];
     doc.setFontSize(sz);doc.setTextColor(...col);
-    if(y+sz*0.4>pH-mB){doc.addPage();y=mT;}
-    let x=mL;if(al==='center')x=pW/2;if(al==='right')x=pW-mR;
-    doc.text(text,x,y,{align:al});
-    y+=sz*0.6+sp;
+    const usableW=pW-mL-mR;
+    const wrapped=doc.splitTextToSize(text,usableW);
+    wrapped.forEach(function(wline,wi){
+      if(y+sz*0.4>pH-mB){doc.addPage();y=mT;}
+      let x=mL;if(al==='center')x=pW/2;if(al==='right')x=pW-mR;
+      doc.text(wline,x,y,{align:al});
+      y+=sz*0.4+(wi<wrapped.length-1?1.8:sp+sz*0.2);
+    });
   }
   function rule(){doc.setDrawColor(180,180,180);doc.line(mL,y,pW-mR,y);y+=4;}
   lines.forEach(l=>{
@@ -1112,30 +1105,13 @@ function renderPreview(areaEl,lines){
     return `<div class="${cls.join(' ')}">${escHtml(text)}</div>`;
   }).join('');
 }
-function togglePreview(id){
-  const area=document.getElementById('preview-'+id);
-  const btn=document.getElementById('toggle-'+id);
-  const isOpen=area.style.display!=='none';
-  if(isOpen){area.style.display='none';btn.textContent='プレビュー ▾';}
-  else{
-    area.style.display='block';btn.textContent='閉じる ▴';
-    const d=getData();
-    const isNum=typeof id==='number';
-    const{lines}=isNum?buildTemplateLines(id,d):buildDocLines(id,d);
-    renderPreview(area,lines);
-  }
-}
-function updateOpenPreviews(){
+function togglePreview(id){renderAllPreviews();}
+function renderAllPreviews(){
   const d=getData();
-  ['A','B','C','D','E'].forEach(t=>{
-    const a=document.getElementById('preview-'+t);
-    if(a&&a.style.display!=='none'){const{lines}=buildDocLines(t,d);renderPreview(a,lines);}
-  });
-  for(let i=1;i<=7;i++){
-    const a=document.getElementById('preview-'+i);
-    if(a&&a.style.display!=='none'){const{lines}=buildTemplateLines(i,d);renderPreview(a,lines);}
-  }
+  if(S.step===1){['A','B','C','D','E'].forEach(t=>{const a=document.getElementById('preview-'+t);if(a){const{lines}=buildDocLines(t,d);renderPreview(a,lines);}});}
+  if(S.step===3){for(let i=1;i<=7;i++){const a=document.getElementById('preview-'+i);if(a){const{lines}=buildTemplateLines(i,d);renderPreview(a,lines);}}}
 }
+function updateOpenPreviews(){renderAllPreviews();}
 
 // === PDF ACTIONS ===
 async function genPDF(type,e){
