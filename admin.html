@@ -112,6 +112,10 @@ td{padding:10px 12px;border-bottom:1px solid var(--gray-200);}
 
   <div class="card">
     <div class="card-title">パスワード通知メール</div>
+    <div class="info-box" id="emailjsSetupNote" style="display:none;background:#EFF6FF;border-color:#BFDBFE;color:#1E40AF">
+      ℹ️ 初回のみ：EmailJS の設定が必要です。<a href="https://www.emailjs.com/" target="_blank" rel="noopener" style="color:#1D4ED8">emailjs.com</a> でアカウントを作成し、Gmailサービスを連携した後、下記の3つのIDを <code style="background:#DBEAFE;padding:1px 6px;border-radius:4px">admin.html</code> の <code style="background:#DBEAFE;padding:1px 6px;border-radius:4px">EMAILJS_*</code> 定数に記入してください。
+    </div>
+    <div id="emailSendStatus" style="display:none;border-radius:8px;padding:12px 16px;font-size:13px;margin-bottom:16px;font-weight:700;"></div>
     <div class="fg">
       <label>送信先メールアドレス</label>
       <input type="email" id="toEmail" placeholder="user@example.com">
@@ -124,8 +128,11 @@ td{padding:10px 12px;border-bottom:1px solid var(--gray-200);}
       <label>メール本文（編集可能）</label>
       <textarea id="mailBody" rows="14"></textarea>
     </div>
-    <button class="send-btn" onclick="openMailClient()">📧 メールクライアントを開く</button>
-    <p style="font-size:12px;color:var(--gray-400);margin-top:10px;">※ お使いのメールアプリが開きます。送信前に内容をご確認ください。</p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+      <button class="send-btn" id="sendEmailBtn" onclick="sendEmailDirect()">📧 メールを送信する</button>
+      <button class="send-btn" onclick="openMailClient()" style="background:var(--gray-400);font-size:13px;padding:10px 20px">📨 メールアプリで開く</button>
+    </div>
+    <p style="font-size:12px;color:var(--gray-600);margin-top:10px;">送信元：退職手続きコンシェルジュ &lt;12312171016226a@gmail.com&gt;</p>
   </div>
 
   <div class="card">
@@ -146,11 +153,22 @@ td{padding:10px 12px;border-bottom:1px solid var(--gray-200);}
 </main>
 </div><!-- #adminApp -->
 
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
 'use strict';
 const ADMIN_HASH = 'd7d2fe5536b8c6962c7e447b30c0025f6b7805f3d5b49d3709bf6808fe97e3ce';
 const SALT = 'TSCKeiyaku2026';
 const SITE_URL = 'https://351justy.github.io/taisyoku/';
+
+// ── EmailJS 設定 ──────────────────────────────────────────────
+// EmailJS（https://www.emailjs.com/）でアカウントを作り、
+// Gmailサービス（12312171016226a@gmail.com）を接続後、
+// 下記3つのIDを設定してください。
+const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';   // Account > API Keys
+const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';   // Email Services タブ
+const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';  // Email Templates タブ
+// テンプレートには以下の変数を使用: {{to_email}} {{subject}} {{message}}
+// ─────────────────────────────────────────────────────────────
 
 async function sha256(s){
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
@@ -287,6 +305,53 @@ function copyText(text,btn){
     setTimeout(()=>{ btn.innerHTML=orig; },2000);
   }).catch(()=>{ alert('コピーできません。手動でコピーしてください:\n'+text); });
 }
+
+function showEmailStatus(msg, type){
+  const el = document.getElementById('emailSendStatus');
+  el.style.display = 'block';
+  el.textContent = msg;
+  if(type === 'ok')  { el.style.background='#D1FAE5'; el.style.color='#065F46'; }
+  if(type === 'err') { el.style.background='#FEE2E2'; el.style.color='#991B1B'; }
+  if(type === 'ing') { el.style.background='#EFF6FF'; el.style.color='#1E40AF'; }
+}
+
+async function sendEmailDirect(){
+  const to   = document.getElementById('toEmail').value.trim();
+  const subj = document.getElementById('mailSubject').value.trim();
+  const body = document.getElementById('mailBody').value.trim();
+  if(!to)  { alert('送信先メールアドレスを入力してください。'); return; }
+  if(!body){ alert('メール本文が空です。'); return; }
+
+  if(EMAILJS_PUBLIC_KEY === 'YOUR_PUBLIC_KEY'){
+    document.getElementById('emailjsSetupNote').style.display = 'block';
+    showEmailStatus('⚠️ EmailJS が未設定です。まず設定を完了してください。', 'err');
+    return;
+  }
+
+  const btn = document.getElementById('sendEmailBtn');
+  btn.disabled = true;
+  btn.textContent = '⌛ 送信中...';
+  showEmailStatus('⌛ 送信中...', 'ing');
+
+  try {
+    emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+      to_email: to,
+      subject:  subj,
+      message:  body,
+      from_name: '退職手続きコンシェルジュ',
+    });
+    showEmailStatus('✅ 送信しました！ 宛先：' + to, 'ok');
+    btn.textContent = '✅ 送信完了';
+    setTimeout(()=>{ btn.disabled=false; btn.textContent='📧 メールを送信する'; }, 4000);
+  } catch(e) {
+    console.error('EmailJS error:', e);
+    showEmailStatus('❌ 送信失敗：' + (e.text || e.message || JSON.stringify(e)), 'err');
+    btn.disabled = false;
+    btn.textContent = '📧 メールを送信する';
+  }
+}
+
 function openMailClient(){
   const to = document.getElementById('toEmail').value.trim();
   if(!to){ alert('送信先メールアドレスを入力してください。'); return; }
