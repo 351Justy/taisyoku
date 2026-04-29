@@ -125,6 +125,9 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
 .step-section{display:none;}
 .step-section.active{display:block;}
 .alert-info{background:var(--green-light);border:1px solid #6EE7B7;border-radius:8px;padding:14px 18px;font-size:13px;color:#065F46;margin-bottom:20px;line-height:1.7;}
+.send-warn{margin-top:6px;padding:8px 12px;border-radius:6px;font-size:12px;line-height:1.65;}
+.send-warn.warn-error{background:#FEE2E2;color:#991B1B;border:1px solid #FCA5A5;}
+.send-warn.warn-caution{background:#FEF3C7;color:#78350F;border:1px solid #FDE68A;}
 .app-footer{background:var(--navy);color:rgba(255,255,255,.4);text-align:center;padding:24px;font-size:12px;}
 </style>
 </head>
@@ -178,9 +181,10 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
           <input type="text" id="ceoName" placeholder="例：代表取締役社長 山田太郎" oninput="saveData()">
         </div>
         <div class="fg">
-          <label>書面送付予定日</label>
-          <input type="date" id="sendDate" oninput="saveData()">
-          <small>郵送投函日</small>
+          <label>書面送付予定日（投函日）</label>
+          <input type="date" id="sendDate" oninput="onSendDateChange()">
+          <small>郵便局の窓口に差し出す日。書留は日曜・祝日が不配達のため、投函日により到達日が変わります。</small>
+          <div id="sendDateWarn" class="send-warn" style="display:none"></div>
         </div>
       </div>
     </div>
@@ -199,9 +203,9 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
       <div class="vac-layout">
         <div>
           <div class="fg" style="margin-bottom:16px">
-            <label>退職の意思表示日</label>
+            <label>退職届の会社到達予定日（意思表示日）</label>
             <input type="date" id="noticeDate" oninput="calcRetirement()">
-            <small>通常は書面送付日と同日</small>
+            <small>配達証明書に記載される配達日。民法97条により、この日が意思表示の効力発生日となります。投函翌日〜翌々日が目安。投函後に実際の配達日で必ず確認してください。</small>
           </div>
           <div class="fg" style="margin-bottom:8px">
             <label>残有給休暇日数</label>
@@ -210,7 +214,7 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
               <span style="font-size:14px;color:var(--gray-600)">日間</span>
             </div>
           </div>
-          <div class="vac-result-box" id="vacResult">退職の意思表示日を入力してください。</div>
+          <div class="vac-result-box" id="vacResult">会社到達予定日を入力してください。</div>
         </div>
         <div>
           <div class="cal-header">
@@ -248,9 +252,16 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
   <div class="app-content">
     <div class="card">
       <div class="card-title">書面生成（PDF）</div>
-      <p style="font-size:14px;color:var(--gray-600);margin-bottom:20px;line-height:1.8">
+      <p style="font-size:14px;color:var(--gray-600);margin-bottom:16px;line-height:1.8">
         各書面のプレビューを確認してからPDFを生成できます。印刷後、自署欄に署名・日付を手書きで記入してください。
       </p>
+      <div style="margin-bottom:20px;padding:14px 18px;background:#EFF6FF;border:1.5px solid #BFDBFE;border-radius:10px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:200px">
+          <div style="font-size:13px;font-weight:700;color:#1E40AF;margin-bottom:2px">📄 5書類まとめて印刷する場合</div>
+          <div style="font-size:12px;color:#3B82F6">スキームA（一般書留）で全書類を1封筒に入れて送付する場合は、まとめてPDFが便利です。</div>
+        </div>
+        <button class="doc-pdf-btn" id="pdfbtn-all" onclick="genAllPDF()" style="background:#1D4ED8;white-space:nowrap;font-size:13px;padding:10px 20px">📎 5書類まとめてPDF</button>
+      </div>
       <div class="doc-list">
         
         <div class="doc-item">
@@ -331,54 +342,125 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
   <div class="app-content">
     <div class="card">
       <div class="card-title">郵送ガイド</div>
+      <div style="background:#FEF9C3;border:1.5px solid #FDE047;border-radius:10px;padding:14px 18px;margin-bottom:20px;font-size:12px;color:#713F12;line-height:1.75">
+        <strong>⚠️ 免責事項：</strong>本ガイドは一般的な情報提供を目的としており、法的アドバイスではありません。郵便料金・サービス内容は変更される場合があります。差し出し前に郵便局窓口で必ずご確認ください。本ガイドの記載内容に従った行動の結果については、利用者ご自身の責任となります。手続きに不安がある場合は弁護士等の専門家にご相談ください。
+      </div>
+
       <div class="guide-sections">
-        <div class="guide-section">
-          <div class="guide-section-title">📬 配達証明郵便について</div>
+
+        <!-- ▼ スキーム選択 -->
+        <div class="guide-section" style="border:2px solid #1D4ED8">
+          <div class="guide-section-title" style="color:#1D4ED8">📋 STEP 0：送付スキームを選ぶ（最初に決めること）</div>
           <div class="guide-section-body">
-            <p>退職届は<strong>「配達証明郵便」</strong>で送付することを強く推奨します。配達証明郵便とは、郵便局が配達した事実を証明するサービスで、会社が「受け取っていない」と主張することを防げます。</p>
-            <div class="guide-box">💡 <strong>配達証明＋簡易書留</strong>の組み合わせが一般的です。料金は書留料金＋配達証明料（320円）が加算されます。</div>
+            <p>退職届の送付には「<strong>到達の事実と日付</strong>」の法的証明が必須です（民法97条）。以下の2スキームのいずれかを選んでください。</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px">
+              <div style="border:2px solid #3B82F6;border-radius:8px;padding:12px;background:#EFF6FF">
+                <div style="font-weight:700;color:#1D4ED8;margin-bottom:6px">🔵 スキームA（標準・推奨）</div>
+                <div style="font-size:12px;color:#1E3A5F;line-height:1.7"><strong>一般書留＋配達証明</strong><br>5書類を1封筒に同封<br>目安：約834円〜<br>木〜金・祝前日は速達追加</div>
+              </div>
+              <div style="border:2px solid #7C3AED;border-radius:8px;padding:12px;background:#F5F3FF">
+                <div style="font-weight:700;color:#5B21B6;margin-bottom:6px">🟣 スキームB（証拠力最強）</div>
+                <div style="font-size:12px;color:#3B1F6A;line-height:1.7"><strong>速達＋内容証明＋配達証明</strong><br>退職届（A）のみこの方法<br>B〜E書面は別便・速達必須<br>目安：約2,000円〜（計2便）</div>
+              </div>
+            </div>
+            <p style="margin-top:10px;font-size:12px;color:#6B7280">迷う場合はスキームAを選んでください。内容証明は証拠力は高いですが手続きが複雑で費用も増えます。</p>
           </div>
         </div>
-        <div class="guide-section">
-          <div class="guide-section-title">📝 内容証明郵便について</div>
+
+        <!-- ▼ スキームA詳細 -->
+        <div class="guide-section" style="border-left:4px solid #3B82F6">
+          <div class="guide-section-title">🔵 スキームA詳細：一般書留＋配達証明</div>
           <div class="guide-section-body">
-            <p>より強い証明力が必要な場合は<strong>「内容証明郵便」</strong>も選択できます。郵便局が文書の内容・差出・配達を証明します。</p>
+            <ol>
+              <li><strong>印刷：</strong>「5書類まとめてPDF」または各書類PDFを印刷する。自署欄（氏名・日付）に<strong>手書きで自署・日付</strong>を記入する。</li>
+              <li><strong>封入：</strong>5書類をすべて<strong>1通の封筒</strong>に同封する。表面に会社の正式住所と代表者名、裏面に自分の住所氏名を手書きで記入する。</li>
+              <li><strong>差し出し：</strong>郵便局の窓口（ゆうゆう窓口）で「<strong>一般書留と配達証明でお願いします</strong>」と伝える。<strong>コンビニ・ポスト投函は不可</strong>（書留は窓口のみ）。</li>
+              <li><strong>速達追加の判断：</strong>木曜・金曜・祝日前日に差し出す場合は「<strong>速達も付けてください</strong>」と追加する（日曜・祝日も配達・翌日到達）。</li>
+              <li><strong>控えの保管：</strong>追跡番号が記載されたレシートと控えを受け取り、<strong>配達証明書（葉書）が届くまで必ず保管する</strong>。</li>
+            </ol>
+            <div class="guide-box">
+              料金目安：封書84円＋一般書留430円＋配達証明320円＝<strong>約834円〜</strong><br>
+              速達追加：＋260円（250g以内）＝<strong>約1,094円〜</strong><br>
+              ※実際の料金は重量・郵便局でご確認ください
+            </div>
+          </div>
+        </div>
+
+        <!-- ▼ スキームB詳細 -->
+        <div class="guide-section" style="border-left:4px solid #7C3AED">
+          <div class="guide-section-title">🟣 スキームB詳細：内容証明郵便（2便に分けて同日投函）</div>
+          <div class="guide-section-body">
+            <p>内容証明郵便は<strong>退職届（書面A）のみ</strong>対応しています。残り4書面（B〜E）は別便で送る必要があります。<strong>両便とも速達を付けて同日に投函し、同日到達させることが重要です。</strong></p>
+            <div style="margin:12px 0;padding:12px;background:#F5F3FF;border-radius:8px">
+              <div style="font-weight:700;color:#5B21B6;margin-bottom:8px">📮 第1便：退職届（書面A）</div>
+              <p style="font-size:12px;margin-bottom:6px"><strong>速達＋内容証明＋配達証明</strong>で差し出す。</p>
+              <ul style="font-size:12px">
+                <li>同一文書を3通作成（自分用・会社用・郵便局保管用）</li>
+                <li>横書き：1行26字以内・1枚26行以内の指定フォーマットに書き直す</li>
+                <li>使用可能文字：日本語・数字・一般的な記号のみ（ローマ字混在は要確認）</li>
+                <li>窓口で「<strong>速達・内容証明・配達証明でお願いします</strong>」と伝える</li>
+              </ul>
+            </div>
+            <div style="margin:12px 0;padding:12px;background:#EFF6FF;border-radius:8px">
+              <div style="font-weight:700;color:#1D4ED8;margin-bottom:8px">📮 第2便：B〜E書面（同日投函）</div>
+              <p style="font-size:12px;margin-bottom:6px"><strong>速達＋一般書留＋配達証明</strong>で差し出す。第1便と<strong>同じ日・同じ窓口</strong>で続けて差し出すとスムーズです。</p>
+              <ul style="font-size:12px">
+                <li>B〜E書面を1通の封筒にまとめて封入</li>
+                <li>「<strong>速達・一般書留・配達証明でお願いします</strong>」と伝える</li>
+              </ul>
+            </div>
+            <div class="guide-box" style="background:#FEF3C7;border-color:#FDE68A;color:#78350F">
+              ⚠️ <strong>速達なし（内容証明のみ）では到達日がずれる場合があります。</strong>両便に速達を付けることで翌日同時到達が可能です。速達をつけない場合、書面Aと書面B〜Eの到達日が異なり、有給申請等の効力発生日がずれる可能性があります。
+            </div>
+          </div>
+        </div>
+
+        <!-- ▼ 貸与品返却 -->
+        <div class="guide-section">
+          <div class="guide-section-title">📦 会社貸与品の返却（別便）</div>
+          <div class="guide-section-body">
+            <p>社員証・制服・備品などの<strong>会社貸与品は書類とは別便</strong>で返却します。ゆうパック等の宅配便（追跡番号あり）を利用してください。</p>
+            <ol>
+              <li><strong>タイミング：</strong>書類の投函日と同日かそれ以降に発送する。退職届到達前に貸与品が届いても問題ありません。</li>
+              <li><strong>方法：</strong>ゆうパック（追跡あり）を推奨。着払い・元払いどちらも可。<strong>速達オプションはゆうパックには存在しません</strong>（通常配送のみ）。</li>
+              <li><strong>記録：</strong>送り状の控え（追跡番号が分かるもの）を必ず保管する。</li>
+              <li><strong>送付先：</strong>会社の所在地宛（書面と同じ住所）を原則とします。</li>
+            </ol>
+            <div class="guide-box">
+              ゆうパックは追跡番号で配達状況を確認できますが、書類送付とは別の記録となります。書面C（私物返却・物品貸与確認書）に記載の返却物と照合してください。
+            </div>
+          </div>
+        </div>
+
+        <!-- ▼ 到達確認と退職日 -->
+        <div class="guide-section">
+          <div class="guide-section-title">📅 到達後の確認と法定退職日</div>
+          <div class="guide-section-body">
+            <p>民法第97条（到達主義）・第627条第1項に基づき、<strong>書面の会社への到達日から14日後</strong>に退職の効力が生じます。会社の承認は不要です。</p>
+            <ol>
+              <li><strong>配達証明書の受取：</strong>投函から約1週間後に「配達証明書（葉書）」が郵便局から届きます。葉書に記載の<strong>配達日＝民法97条の到達日</strong>です。</li>
+              <li><strong>退職日の再確認：</strong>届いた葉書の日付を「基本情報」ページの「会社到達予定日」欄に入力し直して、法定退職成立日を再確認してください。</li>
+              <li><strong>有給消化の確認：</strong>入力した有給日数分が到達日翌日から起算され、有給消化後の日付が退職予定日として表示されます。</li>
+            </ol>
+            <div class="guide-box">例：5月1日（火）投函 → 5月2日（水）到達（意思表示効力発生）→ 5月16日（水）に退職成立（到達日から14日後）</div>
+          </div>
+        </div>
+
+        <!-- ▼ 使ってはいけない方法 -->
+        <div class="guide-section" style="border-left:4px solid #DC2626">
+          <div class="guide-section-title" style="color:#DC2626">⛔ 使用してはいけない送付方法</div>
+          <div class="guide-section-body">
+            <p>以下の方法では「到達日の証明」が得られず、退職の法的有効性が不安定になるため使用しないでください。</p>
             <ul>
-              <li>同一文書を3通作成（自分用・会社用・郵便局保管用）</li>
-              <li>横書き：1行26字以内、1枚26行以内</li>
-              <li>使用できる文字：日本語・数字・一般的な記号のみ</li>
+              <li><strong>普通郵便・レターパック：</strong>到達証明なし。会社が「受け取っていない」と主張した場合に反証できません。</li>
+              <li><strong>速達のみ：</strong>日祝配達は可能ですが到達証明がありません。</li>
+              <li><strong>特定記録郵便：</strong>差し出しの記録のみ。到達（配達）の証明はありません。</li>
+              <li><strong>簡易書留：</strong>書留の一種ですが、配達証明オプションを追加できません。</li>
+              <li><strong>コンビニ・ポスト投函：</strong>書留（一般書留・簡易書留とも）は郵便局窓口での差し出しが必須です。</li>
             </ul>
           </div>
         </div>
-        <div class="guide-section">
-          <div class="guide-section-title">✉️ 封筒の書き方</div>
-          <div class="guide-section-body">
-            <ol>
-              <li><strong>宛名（表面）：</strong>会社の正式住所と代表者名</li>
-              <li><strong>差出人（裏面）：</strong>ご自身の住所と氏名を手書きで記入</li>
-              <li><strong>封入物：</strong>退職届（必須）＋その他希望する書面</li>
-            </ol>
-            <div class="guide-box">⚠️ 差出人住所は封筒裏面に手書きで記入します。受け取れなかった郵便物の返送先となります。</div>
-          </div>
-        </div>
-        <div class="guide-section">
-          <div class="guide-section-title">🏤 郵便局での手続き</div>
-          <div class="guide-section-body">
-            <ol>
-              <li>封をした封筒を持って郵便窓口（ゆうゆう窓口）へ</li>
-              <li>「配達証明郵便でお願いします」と伝える</li>
-              <li>料金を支払い、追跡番号の記載された控えを受け取る</li>
-              <li>控えは大切に保管してください</li>
-            </ol>
-          </div>
-        </div>
-        <div class="guide-section">
-          <div class="guide-section-title">📅 送付後のスケジュール目安</div>
-          <div class="guide-section-body">
-            <p>民法627条に基づき、無期雇用の場合は退職申し出から<strong>2週間後</strong>に退職の効力が生じます。会社の承認は不要です。</p>
-            <div class="guide-box">例：5月1日に退職届を送付 → 5月15日（到達日の2週間後）に退職成立</div>
-          </div>
-        </div>
+
       </div>
     </div>
     <div class="nav-btns">
@@ -759,6 +841,53 @@ if(sessionStorage.getItem('tsc_auth')==='1'){
 const S={step:0,fontBase64:null,publicHolidays:new Set(),calYear:null,calMonth:null,retirementDate:''};
 
 // === DATA MANAGEMENT ===
+function addMailDays(date,n){
+  // 書留は日曜・祝日不配達（月〜土）
+  const d=new Date(date);let added=0;
+  while(added<n){
+    d.setDate(d.getDate()+1);
+    const dow=d.getDay();
+    if(dow!==0&&!JP_HOLIDAYS.has(toDS(d)))added++;
+  }
+  return d;
+}
+function checkSendDateWarning(){
+  const sd=document.getElementById('sendDate').value;
+  const wEl=document.getElementById('sendDateWarn');
+  if(!wEl||!sd)return;
+  const d=new Date(sd);const dow=d.getDay();const ds=toDS(d);
+  if(dow===0||JP_HOLIDAYS.has(ds)){
+    wEl.className='send-warn warn-error';
+    wEl.innerHTML='⛔ 日曜日・祝日は郵便局の書留窓口が閉まっています。翌営業日（平日）の窓口で差し出してください。';
+    wEl.style.display='block';
+  } else if(dow===6){
+    wEl.className='send-warn warn-caution';
+    wEl.innerHTML='⚠️ 土曜日は「ゆうゆう窓口」のある主要郵便局のみ書留を受け付けています。到達日は翌営業日（月曜日以降）になります。';
+    wEl.style.display='block';
+  } else {
+    const tom=new Date(d);tom.setDate(tom.getDate()+1);
+    const tdow=tom.getDay();
+    if(tdow===0||tdow===6||JP_HOLIDAYS.has(toDS(tom))){
+      wEl.className='send-warn warn-caution';
+      wEl.innerHTML='📦 投函翌日が休日のため書留（日祝不配達）では到達が遅れます。<strong>速達＋一般書留＋配達証明</strong>（追加約260円）にすると日祝も配達・到達証明あり・翌日到達が可能です。';
+      wEl.style.display='block';
+    } else {
+      wEl.style.display='none';
+    }
+  }
+}
+function onSendDateChange(){
+  saveData();
+  const sd=document.getElementById('sendDate').value;
+  const nd=document.getElementById('noticeDate');
+  if(sd&&!nd.value){
+    // 書留の到達目安: +2営業日（日曜・祝日スキップ）
+    const arr=addMailDays(new Date(sd),2);
+    nd.value=arr.toISOString().split('T')[0];
+    calcRetirement();
+  }
+  checkSendDateWarning();
+}
 function saveData(){
   const f=['companyName','companyAddr','ceoName','sendDate','noticeDate','vacDays','returnItems','handover','userAddr'];
   const o={};
@@ -880,7 +1009,7 @@ function calcRetirement(){
   let phCount=0;
   const check=new Date(nd);check.setDate(check.getDate()+1);
   for(let i=0;i<14;i++){if(S.publicHolidays.has(toDS(check)))phCount++;check.setDate(check.getDate()+1);}
-  box.innerHTML=`<div>\u610f\u601d\u8868\u793a\u65e5\uff1a<strong>${fmt(nd)}</strong></div><div>\u6cd5\u5b9a\u9000\u8077\u6210\u7acb\u65e5\uff1a<strong>${fmt(legal)}</strong></div><div>\u6709\u7d66\uff1a<strong>${vac}\u65e5</strong>\uff08\u516c\u4f11\u65e5\u3092\u9664\u304f\u5b9f\u5e73\u65e5\u6570\u3067\u6d88\u5316\uff09</div><div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--gray-200)">\ud83c\udfaf \u9000\u8077\u4e88\u5b9a\u65e5\uff1a<strong style="font-size:15px;color:var(--green)">${fmt(ret)}</strong></div>`;
+  box.innerHTML=`<div>\u4f1a\u793e\u5230\u9054\u65e5\uff08\u610f\u601d\u8868\u793a\u65e5\uff09\uff1a<strong>${fmt(nd)}</strong></div><div>\u6cd5\u5b9a\u9000\u8077\u6210\u7acb\u65e5\uff08\u5230\u9054\u65e5+14\u65e5\uff09\uff1a<strong>${fmt(legal)}</strong></div><div>\u6709\u7d66\uff1a<strong>${vac}\u65e5</strong>\uff08\u516c\u4f11\u65e5\u3092\u9664\u304f\u5b9f\u5e73\u65e5\u6570\u3067\u6d88\u5316\uff09</div><div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--gray-200)">\ud83c\udfaf \u9000\u8077\u4e88\u5b9a\u65e5\uff1a<strong style="font-size:15px;color:var(--green)">${fmt(ret)}</strong></div>`;
   updateOpenPreviews();
 }
 
@@ -919,13 +1048,7 @@ async function loadFont(){
     return null;
   }
 }
-async function makePDF(lines,filename){
-  const fb=await loadFont();if(!fb)return;
-  const{jsPDF}=window.jspdf;
-  const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
-  doc.addFileToVFS('NotoSansJP-Regular.ttf',fb);
-  doc.addFont('NotoSansJP-Regular.ttf','NotoSansJP','normal');
-  doc.setFont('NotoSansJP','normal');
+function makePDFRenderer(doc){
   const mL=25,mR=25,mT=30,mB=25,pH=297,pW=210;
   let y=mT;
   function ln(text,opts={}){
@@ -942,12 +1065,46 @@ async function makePDF(lines,filename){
     });
   }
   function rule(){doc.setDrawColor(180,180,180);doc.line(mL,y,pW-mR,y);y+=4;}
-  lines.forEach(l=>{
-    if(l===null){y+=5;return;}
-    if(l==='---'){rule();return;}
-    if(typeof l==='object')ln(l.text,l);else ln(l);
-  });
+  function renderLines(lines){
+    lines.forEach(function(l){
+      if(l===null){y+=5;return;}
+      if(l==='---'){rule();return;}
+      if(typeof l==='object')ln(l.text,l);else ln(l);
+    });
+  }
+  function newPage(){doc.addPage();y=mT;}
+  return{renderLines,newPage};
+}
+function initDoc(fb){
+  const{jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  doc.addFileToVFS('NotoSansJP-Regular.ttf',fb);
+  doc.addFont('NotoSansJP-Regular.ttf','NotoSansJP','normal');
+  doc.setFont('NotoSansJP','normal');
+  return doc;
+}
+async function makePDF(lines,filename){
+  const fb=await loadFont();if(!fb)return;
+  const doc=initDoc(fb);
+  const r=makePDFRenderer(doc);
+  r.renderLines(lines);
   doc.save(filename);
+}
+async function genAllPDF(){
+  const btn=document.getElementById('pdfbtn-all');
+  const orig=btn?btn.innerHTML:'';
+  if(btn)btn.innerHTML='⌛ 全書類生成中…';
+  const fb=await loadFont();if(!fb){if(btn)btn.innerHTML=orig;return;}
+  const doc=initDoc(fb);
+  const r=makePDFRenderer(doc);
+  const d=getData();
+  ['A','B','C','D','E'].forEach(function(t,i){
+    if(i>0)r.newPage();
+    const{lines}=buildDocLines(t,d);
+    r.renderLines(lines);
+  });
+  doc.save('退職書類一式.pdf');
+  if(btn){btn.innerHTML='✅ 完了';setTimeout(function(){btn.innerHTML=orig;},3000);}
 }
 
 // === DOCUMENT BUILDERS ===
@@ -1144,8 +1301,11 @@ function initApp(){
   loadData();initCalendar();
   const today=new Date().toISOString().split('T')[0];
   if(!document.getElementById('sendDate').value)document.getElementById('sendDate').value=today;
-  if(!document.getElementById('noticeDate').value)document.getElementById('noticeDate').value=today;
-  calcRetirement();goStep(0);
+  if(!document.getElementById('noticeDate').value){
+    const arr=new Date(today);arr.setDate(arr.getDate()+2);
+    document.getElementById('noticeDate').value=arr.toISOString().split('T')[0];
+  }
+  calcRetirement();checkSendDateWarning();goStep(0);
 }
 if(sessionStorage.getItem('tsc_auth')==='1'){
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initApp);
