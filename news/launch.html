@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>退職代行への不安が高まる中、交渉・代理を行わない"本人書面型"退職手続き支援サービスを開始｜退職手続きコンシェルジュ</title>
+<meta name="description" content="合同会社ジャスティが「退職手続きコンシェルジュ」を公開。退職代行ではなく、本人名義の書面（退職届・有給消化申請等）をブラウザで作成し一般書留で郵送する新しい退職手続き支援サービス。税込4,980円の買い切り型。">
+<meta property="og:title" content='退職代行への不安が高まる中、交渉・代理を行わない"本人書面型"退職手続き支援サービスを開始'>
+<meta property="og:description" content="合同会社ジャスティが「退職手続きコンシェルジュ」を公開。退職代行ではなく、本人名義の書面をブラウザで作成・郵送する新しい退職手続き支援サービス。">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ja_JP">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0F2F5C;--navy-light:#1E4D8C;--green:#059669;--green-light:#D1FAE5;
+  --amber:#D97706;--amber-light:#FEF3C7;--red:#DC2626;--red-light:#FEE2E2;
+  --gray-50:#F8FAFC;--gray-100:#F1F5F9;--gray-200:#E2E8F0;
+  --gray-400:#94A3B8;--gray-600:#475569;--gray-800:#1E293B;--white:#fff;
+  --radius:12px;--shadow:0 4px 24px rgba(15,47,92,.10);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(--gray-50);line-height:1.75;font-size:16px;}
+
+/* Nav */
+.nav{background:rgba(255,255,255,.97);border-bottom:1px solid var(--gray-200);padding:0 24px;position:sticky;top:0;z-index:100;}
+.nav-inner{display:flex;align-items:center;height:60px;max-width:960px;margin:0 auto;gap:16px;}
+.nav-logo{font-size:16px;font-weight:900;color:var(--navy);text-decoration:none;display:flex;align-items:center;gap:8px;}
+.nav-logo span{color:var(--green);}
+.nav-pr{font-size:11px;font-weight:700;background:var(--navy);color:var(--white);padding:3px 10px;border-radius:4px;margin-left:auto;letter-spacing:.06em;}
+
+/* Breadcrumb */
+.breadcrumb{max-width:960px;margin:0 auto;padding:14px 24px 0;font-size:12px;color:var(--gray-400);}
+.breadcrumb a{color:var(--gray-400);text-decoration:none;}
+.breadcrumb a:hover{color:var(--navy);}
+.breadcrumb span{margin:0 6px;}
+
+/* Layout */
+.page-wrap{max-width:960px;margin:0 auto;padding:36px 24px 80px;display:grid;grid-template-columns:1fr 268px;gap:36px;align-items:start;}
+@media(max-width:780px){.page-wrap{grid-template-columns:1fr;padding:24px 16px 60px;gap:24px;}}
+
+/* Article */
+.article{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:48px 52px;min-width:0;}
+@media(max-width:780px){.article{padding:28px 20px;}}
+
+.article-eyebrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:22px;}
+.pr-badge{background:var(--navy);color:var(--white);font-size:11px;font-weight:700;padding:4px 12px;border-radius:4px;letter-spacing:.08em;}
+.date-tag{font-size:12px;color:var(--gray-600);}
+.company-tag{font-size:12px;color:var(--gray-600);}
+
+.article-title{font-size:clamp(19px,3vw,26px);font-weight:900;color:var(--navy);line-height:1.45;margin-bottom:28px;padding-bottom:24px;border-bottom:2px solid var(--gray-100);}
+
+.lead{font-size:15px;line-height:1.95;color:var(--gray-800);background:var(--gray-50);border-left:4px solid var(--green);padding:20px 24px;border-radius:0 8px 8px 0;margin-bottom:36px;}
+
+.article-body{font-size:15px;line-height:1.9;color:var(--gray-800);}
+.article-body p{margin-bottom:20px;}
+
+.article-body h2{font-size:17px;font-weight:900;color:var(--navy);margin:40px 0 16px;padding-left:14px;border-left:4px solid var(--green);line-height:1.4;}
+
+.highlight{background:var(--amber-light);border:1px solid #FDE68A;border-radius:8px;padding:18px 22px;margin-bottom:24px;font-size:14px;color:var(--gray-800);line-height:1.85;}
+.highlight strong{color:var(--amber);font-weight:900;}
+
+.green-box{background:var(--green-light);border-radius:8px;padding:18px 22px;margin-bottom:24px;}
+.green-box-title{font-size:12px;font-weight:700;color:var(--green);margin-bottom:12px;letter-spacing:.06em;}
+.green-box ul{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.green-box ul li{display:flex;gap:10px;font-size:14px;color:var(--gray-800);}
+.green-box ul li::before{content:'✓';color:var(--green);font-weight:900;flex-shrink:0;margin-top:2px;}
+
+.red-box{background:var(--red-light);border-radius:8px;padding:18px 22px;margin-bottom:24px;}
+.red-box-title{font-size:12px;font-weight:700;color:var(--red);margin-bottom:12px;letter-spacing:.06em;}
+.red-box ul{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.red-box ul li{display:flex;gap:10px;font-size:14px;color:var(--gray-800);}
+.red-box ul li::before{content:'✕';color:var(--red);font-weight:900;flex-shrink:0;margin-top:2px;}
+
+.info-note{font-size:13px;color:var(--gray-600);background:var(--gray-50);border:1px solid var(--gray-200);border-radius:8px;padding:16px 20px;margin-bottom:24px;line-height:1.85;}
+.info-note strong{color:var(--gray-800);}
+
+.company-box{border:1px solid var(--gray-200);border-radius:10px;padding:28px 32px;margin-top:36px;}
+.company-box-title{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--gray-200);}
+.company-table{width:100%;border-collapse:collapse;}
+.company-table td{padding:7px 0;vertical-align:top;font-size:14px;color:var(--gray-600);border-bottom:1px solid var(--gray-100);}
+.company-table td:first-child{width:110px;font-weight:700;color:var(--gray-800);white-space:nowrap;}
+.company-table tr:last-child td{border-bottom:none;}
+.contact-box{background:var(--gray-50);border-radius:8px;padding:18px 20px;margin-top:18px;font-size:13px;color:var(--gray-600);line-height:1.85;}
+.contact-box strong{color:var(--gray-800);}
+
+/* Sidebar */
+.sidebar{display:flex;flex-direction:column;gap:20px;}
+.sidebar-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px 22px;}
+.sidebar-card-title{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:14px;display:flex;align-items:center;gap:6px;}
+.cta-btn{display:block;width:100%;padding:14px;border-radius:100px;background:var(--green);color:var(--white);font-size:14px;font-weight:900;text-align:center;text-decoration:none;transition:all .2s;letter-spacing:.02em;}
+.cta-btn:hover{background:#047857;transform:translateY(-2px);box-shadow:0 6px 20px rgba(5,150,105,.3);}
+.cta-sub{font-size:11px;color:var(--gray-400);text-align:center;margin-top:8px;}
+.sidebar-list{list-style:none;display:flex;flex-direction:column;gap:7px;}
+.sidebar-list li{font-size:13px;color:var(--gray-600);display:flex;gap:8px;line-height:1.6;}
+.sidebar-list li::before{content:'✓';color:var(--green);font-weight:900;flex-shrink:0;margin-top:2px;}
+.law-box{font-size:12px;color:var(--gray-600);line-height:1.85;background:var(--gray-50);border-radius:6px;padding:14px 16px;}
+.law-box strong{color:var(--navy);}
+
+/* Footer */
+.footer{background:var(--navy);color:rgba(255,255,255,.5);text-align:center;padding:32px 24px;font-size:13px;}
+.footer a{color:rgba(255,255,255,.5);text-decoration:none;}
+.footer a:hover{color:rgba(255,255,255,.8);}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-logo">🏛️ 退職手続き<span>コンシェルジュ</span></a>
+    <span class="nav-pr">プレスリリース</span>
+  </div>
+</nav>
+
+<div class="breadcrumb">
+  <a href="../index.html">トップ</a><span>›</span><span>プレスリリース</span>
+</div>
+
+<div class="page-wrap">
+
+  <article class="article">
+
+    <div class="article-eyebrow">
+      <span class="pr-badge">PRESS RELEASE</span>
+      <span class="date-tag">2026年4月29日</span>
+      <span class="company-tag">合同会社ジャスティ</span>
+    </div>
+
+    <h1 class="article-title">退職代行への不安が高まる中、交渉・代理を行わない"本人書面型"退職手続き支援サービスを開始</h1>
+
+    <p class="lead">合同会社ジャスティ（所在地：<strong>[所在地]</strong>、代表：<strong>[代表者名]</strong>）は、退職代行サービスとは一線を画す「退職手続きコンシェルジュ」を公開しました。会社への電話・交渉・代理を一切行わず、退職者本人が書面を印刷・自署・郵送することで、面談や電話なしに退職手続きを完結できる"本人書面型"の支援ツールです。料金は買い切り4,980円（税込）。</p>
+
+    <div class="article-body">
+
+      <h2>背景①　退職代行を取り巻く環境の急変</h2>
+
+      <p>退職代行サービスの利用は近年急増し、2024年以降に退職代行業者を利用した退職者がいた企業は8.7%にのぼると東京商工リサーチが2026年4月に報告しています。一方で、2026年2月には退職代行サービス「モームリ」の運営会社代表らが弁護士法違反の疑いで逮捕されたと同社が報じました。退職代行業者が会社に代わって交渉・折衝を行う行為が非弁行為として弁護士法に抵触する可能性は以前から指摘されてきましたが、刑事事件として顕在化したのは今回が初めてのケースです。</p>
+
+      <p>また、企業側の対応にも変化が現れています。同調査では「退職代行からの連絡に取り合わない」とする企業の姿勢が報告されており、退職代行経由での退職が必ずしも円滑に進まないケースも増えています。利用者・企業双方から、「代行会社が会社に電話する」方式への警戒・不安が高まっています。</p>
+
+      <div class="highlight">
+        <strong>こうした状況の中で浮かび上がるニーズ：</strong><br>
+        退職代行を使いたい。でも、代行会社が会社に連絡する方式は不安だ。会社とは電話もしたくない。だったら——本人名義の書面で、証拠を残しながら退職できないか。
+      </div>
+
+      <h2>背景②　民法が認める「書面到達」という確実な退職手段</h2>
+
+      <p>民法第97条（到達主義）により、退職の意思表示は書面が会社に「到達した時点」で法的効力が生じます。また、民法第627条第1項は、無期雇用の労働者は退職の意思表示から2週間の経過をもって退職できると定めており、これは就業規則や会社の方針によって排除できない強行規定です。配達証明付き一般書留を使えば、到達の事実と日時を郵便記録として証明できます。「受理しない」「認めない」という会社の主張に法的効力はなく、書面の到達をもって手続きは法的に完了します。</p>
+
+      <p>書面による自己手続きは、退職代行が担ってきた「会社との接点を断つ」という機能を、交渉・代理・非弁リスクなしに実現できる手段です。</p>
+
+      <h2>サービス概要</h2>
+
+      <p>「退職手続きコンシェルジュ」は、退職に必要な書面一式をブラウザ上で作成し、PDFとして出力できる買い切り型Webサービスです。スクリーニング通過後、パスワード認証ページで書面を生成します。</p>
+
+      <div class="green-box">
+        <div class="green-box-title">生成できる書面・資料（全8種）</div>
+        <ul>
+          <li>退職届（一般書留＋配達証明対応フォーマット／退職日・到達日の自動計算付き）</li>
+          <li>有給休暇消化申請書（残日数・消化期間のカレンダー計算付き）</li>
+          <li>私物返却・物品貸与確認書</li>
+          <li>業務引き継ぎ記録書</li>
+          <li>退職確認依頼書</li>
+          <li>会社向けQ&amp;A（民法・労基法根拠の法的回答書）</li>
+          <li>返答テンプレート一式（7種）</li>
+          <li>郵送ガイド（一般書留＋配達証明の具体的手順）</li>
+        </ul>
+      </div>
+
+      <p>氏名・住所などの個人情報はブラウザ内のみで処理され、外部サーバーへの送信は行いません。利用者は書面を印刷・自署・捺印のうえ配達証明付き一般書留で会社に郵送します。郵便局の窓口に行くだけで、会社との交渉・電話・面談は一切不要です。</p>
+
+      <h2>本サービスが行わないこと</h2>
+
+      <div class="red-box">
+        <div class="red-box-title">対象外の行為（非弁・代理行為は一切行いません）</div>
+        <ul>
+          <li>会社への電話・連絡</li>
+          <li>会社との交渉・折衝</li>
+          <li>法律相談・弁護士紹介</li>
+          <li>退職代行（第三者による退職意思の代理伝達）</li>
+        </ul>
+      </div>
+
+      <h2>対象外案件の事前スクリーニング</h2>
+
+      <p>有期雇用・試用期間中・未払い賃金請求・損害賠償係争・懲戒解雇示唆・社宅居住中など、書面作成のみでは対応が困難なケースは、申し込み前のスクリーニング診断で案内し、当サービスの対象外として専門家相談への接続を促す設計としています。不適切なケースへの販売を防ぐことで、利用者・サービス双方のリスクを低減します。</p>
+
+      <div class="info-note">
+        <strong>サービス名：</strong>退職手続きコンシェルジュ　／
+        <strong>URL：</strong><a href="../index.html" style="color:var(--navy);">https://[ドメイン]/taisyoku/</a>　／
+        <strong>料金：</strong>4,980円（税込・買い切り）　／
+        <strong>決済：</strong>クレジットカード（会費PAY）
+      </div>
+
+      <div class="company-box">
+        <div class="company-box-title">会社概要</div>
+        <table class="company-table">
+          <tr><td>会社名</td><td>合同会社ジャスティ</td></tr>
+          <tr><td>代表者</td><td>[代表者名]</td></tr>
+          <tr><td>所在地</td><td>[所在地]</td></tr>
+          <tr><td>設立</td><td>[設立年月]</td></tr>
+          <tr><td>事業内容</td><td>Webサービスの企画・開発・運営</td></tr>
+          <tr><td>URL</td><td><a href="https://justy.co.jp" style="color:var(--navy);">https://justy.co.jp</a></td></tr>
+        </table>
+        <div class="contact-box">
+          <strong>本件に関するお問い合わせ先</strong><br>
+          合同会社ジャスティ　担当：[担当者名]<br>
+          E-mail：[メールアドレス]
+        </div>
+      </div>
+
+    </div>
+  </article>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-card">
+      <div class="sidebar-card-title">📄 サービスを見る</div>
+      <a href="../index.html" class="cta-btn">退職手続きコンシェルジュ</a>
+      <p class="cta-sub">¥4,980（税込）・買い切り</p>
+    </div>
+
+    <div class="sidebar-card">
+      <div class="sidebar-card-title">✅ このサービスの特徴</div>
+      <ul class="sidebar-list">
+        <li>交渉・代理・代行は一切行わない</li>
+        <li>本人名義の書面をPDFで作成</li>
+        <li>配達証明で到達の事実を証明</li>
+        <li>氏名・住所の入力不要（ブラウザ内処理）</li>
+        <li>対象外案件は事前スクリーニングで除外</li>
+        <li>買い切り4,980円（税込）</li>
+      </ul>
+    </div>
+
+    <div class="sidebar-card">
+      <div class="sidebar-card-title">⚖️ 関連する法的根拠</div>
+      <div class="law-box">
+        <strong>民法第627条第1項</strong><br>
+        無期雇用は2週間前の申し出で退職可能（強行規定・会社の同意不要）<br><br>
+        <strong>民法第97条</strong><br>
+        書面の到達をもって意思表示が成立（到達主義）<br><br>
+        <strong>労働基準法第39条</strong><br>
+        退職確定後の有給消化申請に時季変更権は行使不可
+      </div>
+    </div>
+
+  </aside>
+
+</div>
+
+<footer class="footer">
+  <p style="margin-bottom:8px;">退職手続きコンシェルジュ｜合同会社ジャスティ</p>
+  <p>本サービスは法律相談・法的代理を提供するものではありません。</p>
+  <p style="margin-top:8px;"><a href="../index.html">トップへ戻る</a></p>
+</footer>
+
+</body>
+</html>
