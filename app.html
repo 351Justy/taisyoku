@@ -255,12 +255,15 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
       <p style="font-size:14px;color:var(--gray-600);margin-bottom:16px;line-height:1.8">
         各書面のプレビューを確認してからPDFを生成できます。印刷後、自署欄に署名・日付を手書きで記入してください。
       </p>
+      <div style="margin-bottom:16px;padding:12px 16px;background:#FFF7ED;border:1.5px solid #FED7AA;border-radius:10px;font-size:13px;color:#92400E;line-height:1.75">
+        📎 <strong>ホッチキス綴じのお願い：</strong>各書面が複数ページになる場合は、書類ごとに<strong>左上をホッチキスで綴じて</strong>まとめてください。6書類すべてを一括送付する場合は、全体を左上で綴じてひとまとめにしても構いません。
+      </div>
       <div style="margin-bottom:20px;padding:14px 18px;background:#EFF6FF;border:1.5px solid #BFDBFE;border-radius:10px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
         <div style="flex:1;min-width:200px">
-          <div style="font-size:13px;font-weight:700;color:#1E40AF;margin-bottom:2px">📄 5書類まとめて印刷する場合</div>
-          <div style="font-size:12px;color:#3B82F6">スキームA（一般書留）で全書類を1封筒に入れて送付する場合は、まとめてPDFが便利です。</div>
+          <div style="font-size:13px;font-weight:700;color:#1E40AF;margin-bottom:2px">📄 6書類まとめて印刷する場合</div>
+          <div style="font-size:12px;color:#3B82F6">全6書類を1封筒に入れて送付する場合は、まとめてPDFが便利です。</div>
         </div>
-        <button class="doc-pdf-btn" id="pdfbtn-all" onclick="genAllPDF()" style="background:#1D4ED8;white-space:nowrap;font-size:13px;padding:10px 20px">📎 5書類まとめてPDF</button>
+        <button class="doc-pdf-btn" id="pdfbtn-all" onclick="genAllPDF()" style="background:#1D4ED8;white-space:nowrap;font-size:13px;padding:10px 20px">📎 6書類まとめてPDF</button>
       </div>
       <div class="doc-list">
         
@@ -328,6 +331,19 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
           </div>
           <div class="doc-preview" id="preview-E"></div>
         </div>
+        
+        <div class="doc-item">
+          <div class="doc-item-header">
+            <div class="doc-item-info">
+              <div class="doc-item-title">F. 会社向けQ&amp;A</div>
+              <div class="doc-item-desc">退職に際して会社からよく寄せられる質問・主張への法的根拠に基づく回答書面。</div>
+            </div>
+            <div class="doc-item-actions">
+              <button class="doc-pdf-btn" id="pdfbtn-F" onclick="genPDF('F',event)">📄 PDF</button>
+            </div>
+          </div>
+          <div class="doc-preview" id="preview-F"></div>
+        </div>
       </div>
     </div>
     <div class="nav-btns">
@@ -348,32 +364,25 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
 
       <div class="guide-sections">
 
-        <!-- ▼ スキーム選択 -->
+        <!-- ▼ 送付方法 -->
         <div class="guide-section" style="border:2px solid #1D4ED8">
-          <div class="guide-section-title" style="color:#1D4ED8">📋 STEP 0：送付スキームを選ぶ（最初に決めること）</div>
+          <div class="guide-section-title" style="color:#1D4ED8">📋 送付方法について</div>
           <div class="guide-section-body">
-            <p>退職届の送付には「<strong>到達の事実と日付</strong>」の法的証明が必須です（民法97条）。以下の2スキームのいずれかを選んでください。</p>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px">
-              <div style="border:2px solid #3B82F6;border-radius:8px;padding:12px;background:#EFF6FF">
-                <div style="font-weight:700;color:#1D4ED8;margin-bottom:6px">🔵 スキームA（標準・推奨）</div>
-                <div style="font-size:12px;color:#1E3A5F;line-height:1.7"><strong>一般書留＋配達証明</strong><br>5書類を1封筒に同封<br>目安：約834円〜<br>木〜金・祝前日は速達追加</div>
-              </div>
-              <div style="border:2px solid #7C3AED;border-radius:8px;padding:12px;background:#F5F3FF">
-                <div style="font-weight:700;color:#5B21B6;margin-bottom:6px">🟣 スキームB（証拠力最強）</div>
-                <div style="font-size:12px;color:#3B1F6A;line-height:1.7"><strong>速達＋内容証明＋配達証明</strong><br>退職届（A）のみこの方法<br>B〜E書面は別便・速達必須<br>目安：約2,000円〜（計2便）</div>
-              </div>
+            <p>退職届の送付には「<strong>到達の事実と日付</strong>」の法的証明が必須です（民法97条）。本サービスでは<strong>一般書留＋配達証明</strong>による送付を推奨しています。</p>
+            <div style="border:2px solid #3B82F6;border-radius:8px;padding:12px;background:#EFF6FF;margin-top:12px">
+              <div style="font-weight:700;color:#1D4ED8;margin-bottom:6px">📮 推奨送付方法：一般書留＋配達証明</div>
+              <div style="font-size:12px;color:#1E3A5F;line-height:1.7">6書類すべてを1封筒に同封して送付できます。木〜金曜日・祝日前日に差し出す場合は速達を追加してください。目安：約834円〜（速達追加時：約1,094円〜）</div>
             </div>
-            <p style="margin-top:10px;font-size:12px;color:#6B7280">迷う場合はスキームAを選んでください。内容証明は証拠力は高いですが手続きが複雑で費用も増えます。</p>
           </div>
         </div>
 
         <!-- ▼ スキームA詳細 -->
         <div class="guide-section" style="border-left:4px solid #3B82F6">
-          <div class="guide-section-title">🔵 スキームA詳細：一般書留＋配達証明</div>
+          <div class="guide-section-title">🔵 送付手順：一般書留＋配達証明</div>
           <div class="guide-section-body">
             <ol>
-              <li><strong>印刷：</strong>「5書類まとめてPDF」または各書類PDFを印刷する。自署欄（氏名・日付）に<strong>手書きで自署・日付</strong>を記入する。</li>
-              <li><strong>封入：</strong>5書類をすべて<strong>1通の封筒</strong>に同封する。表面に会社の正式住所と代表者名、裏面に自分の住所氏名を手書きで記入する。</li>
+              <li><strong>印刷：</strong>「6書類まとめてPDF」または各書類PDFを印刷する。自署欄（氏名・日付）に<strong>手書きで自署・日付</strong>を記入する。</li>
+              <li><strong>封入：</strong>6書類をすべて<strong>1通の封筒</strong>に同封する。表面に会社の正式住所と代表者名、裏面に自分の住所氏名を手書きで記入する。</li>
               <li><strong>差し出し：</strong>郵便局の窓口（ゆうゆう窓口）で「<strong>一般書留と配達証明でお願いします</strong>」と伝える。<strong>コンビニ・ポスト投函は不可</strong>（書留は窓口のみ）。</li>
               <li><strong>速達追加の判断：</strong>木曜・金曜・祝日前日に差し出す場合は「<strong>速達も付けてください</strong>」と追加する（日曜・祝日も配達・翌日到達）。</li>
               <li><strong>控えの保管：</strong>追跡番号が記載されたレシートと控えを受け取り、<strong>配達証明書（葉書）が届くまで必ず保管する</strong>。</li>
@@ -386,34 +395,6 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--gray-800);background:var(
           </div>
         </div>
 
-        <!-- ▼ スキームB詳細 -->
-        <div class="guide-section" style="border-left:4px solid #7C3AED">
-          <div class="guide-section-title">🟣 スキームB詳細：内容証明郵便（2便に分けて同日投函）</div>
-          <div class="guide-section-body">
-            <p>内容証明郵便は<strong>退職届（書面A）のみ</strong>対応しています。残り4書面（B〜E）は別便で送る必要があります。<strong>両便とも速達を付けて同日に投函し、同日到達させることが重要です。</strong></p>
-            <div style="margin:12px 0;padding:12px;background:#F5F3FF;border-radius:8px">
-              <div style="font-weight:700;color:#5B21B6;margin-bottom:8px">📮 第1便：退職届（書面A）</div>
-              <p style="font-size:12px;margin-bottom:6px"><strong>速達＋内容証明＋配達証明</strong>で差し出す。</p>
-              <ul style="font-size:12px">
-                <li>同一文書を3通作成（自分用・会社用・郵便局保管用）</li>
-                <li>横書き：1行26字以内・1枚26行以内の指定フォーマットに書き直す</li>
-                <li>使用可能文字：日本語・数字・一般的な記号のみ（ローマ字混在は要確認）</li>
-                <li>窓口で「<strong>速達・内容証明・配達証明でお願いします</strong>」と伝える</li>
-              </ul>
-            </div>
-            <div style="margin:12px 0;padding:12px;background:#EFF6FF;border-radius:8px">
-              <div style="font-weight:700;color:#1D4ED8;margin-bottom:8px">📮 第2便：B〜E書面（同日投函）</div>
-              <p style="font-size:12px;margin-bottom:6px"><strong>速達＋一般書留＋配達証明</strong>で差し出す。第1便と<strong>同じ日・同じ窓口</strong>で続けて差し出すとスムーズです。</p>
-              <ul style="font-size:12px">
-                <li>B〜E書面を1通の封筒にまとめて封入</li>
-                <li>「<strong>速達・一般書留・配達証明でお願いします</strong>」と伝える</li>
-              </ul>
-            </div>
-            <div class="guide-box" style="background:#FEF3C7;border-color:#FDE68A;color:#78350F">
-              ⚠️ <strong>速達なし（内容証明のみ）では到達日がずれる場合があります。</strong>両便に速達を付けることで翌日同時到達が可能です。速達をつけない場合、書面Aと書面B〜Eの到達日が異なり、有給申請等の効力発生日がずれる可能性があります。
-            </div>
-          </div>
-        </div>
 
         <!-- ▼ 貸与品返却 -->
         <div class="guide-section">
@@ -1098,12 +1079,12 @@ async function genAllPDF(){
   const doc=initDoc(fb);
   const r=makePDFRenderer(doc);
   const d=getData();
-  ['A','B','C','D','E'].forEach(function(t,i){
+  ['A','B','C','D','E','F'].forEach(function(t,i){
     if(i>0)r.newPage();
     const{lines}=buildDocLines(t,d);
     r.renderLines(lines);
   });
-  doc.save('退職書類一式.pdf');
+  doc.save('退職書類一式（全6書面）.pdf');
   if(btn){btn.innerHTML='✅ 完了';setTimeout(function(){btn.innerHTML=orig;},3000);}
 }
 
@@ -1147,6 +1128,7 @@ function buildDocLines(type,d){
       {text:'\u9000\u8077\u7406\u7531\uff1a\u4e00\u8eab\u4e0a\u306e\u90fd\u5408',size:11},null,
       {text:'\u6c11\u6cd5\u7b2c627\u6761\u7b2c1\u9805\u306b\u57fa\u3065\u304d\u3001\u672c\u66f8\u9762\u3092\u3082\u3063\u3066\u9000\u8077\u306e\u610f\u601d\u8868\u793a\u3068\u3044\u305f\u3057\u307e\u3059\u3002',size:10},
       {text:'\u4f1a\u793e\u306e\u627f\u8a8d\u3092\u5f85\u305f\u305a\u3001\u4e0a\u8a18\u9000\u8077\u65e5\u3092\u3082\u3063\u3066\u52b4\u50cd\u5951\u7d04\u3092\u7d42\u4e86\u3044\u305f\u3057\u307e\u3059\u3002',size:10},
+      {text:'\u672c\u66f8\u9762\u306f\u914d\u9054\u8a3c\u660e\u90f5\u4fbf\u306b\u3088\u308a\u9001\u4ed8\u3057\u3066\u304a\u308a\u3001\u5230\u9054\u306e\u4e8b\u5b9f\u304c\u90f5\u4fbf\u8a18\u9332\u306b\u3088\u308a\u8a3c\u660e\u3055\u308c\u307e\u3059\u3002',size:10},
       ...sig,
     ];
   } else if(type==='B'){
@@ -1175,7 +1157,7 @@ function buildDocLines(type,d){
       {text:'\u3000\u30fb\u96e2\u8077\u7968\uff08\u9000\u8077\u5f8c\u901f\u3084\u304b\u306b\u4ea4\u4ed8\u3092\u6c42\u3081\u307e\u3059\uff09',size:11},
       {text:'\u3000\u30fb\u96c7\u7528\u4fdd\u967a\u88ab\u4fdd\u967a\u8005\u8a3c',size:11},
       {text:'\u3000\u30fb\u5e74\u91d1\u624b\u5e33\uff08\u4f1a\u793e\u4fdd\u7ba1\u306e\u5834\u5408\uff09',size:11},
-      {text:'\u3000\u30fb\u6e90\u6cc9\u5f74\u53ce\u7968\uff08\u9000\u8077\u5f8c1\u30f6\u6708\u4ee5\u5185\uff09',size:11},null,
+      {text:'\u3000\u30fb\u6e90\u6cc9\u5fb4\u53ce\u7968\uff08\u9000\u8077\u5f8c1\u30f6\u6708\u4ee5\u5185\uff09',size:11},null,
       {text:'\u8fd4\u5374\u7269\u306f\u9000\u8077\u65e5\u307e\u3067\u306b\u90f5\u9001\u307e\u305f\u306f\u6301\u53c2\u306b\u3066\u5bfe\u5fdc\u3044\u305f\u3057\u307e\u3059\u3002',size:10},
       ...sig,
     ];
@@ -1204,10 +1186,24 @@ function buildDocLines(type,d){
       {text:'\uff11\uff0e\u9000\u8077\u65e5\u306e\u66f8\u9762\u306b\u3088\u308b\u78ba\u8a8d\u901a\u77e5',size:11},
       {text:'\uff12\uff0e\u793e\u4f1a\u4fdd\u967a\u30fb\u96c7\u7528\u4fdd\u967a\u306e\u8cc7\u683c\u55aa\u5931\u624b\u7d9a\u304d',size:11},
       {text:'\uff13\uff0e\u96e2\u8077\u7968\u306e\u901f\u3084\u304b\u306a\u4ea4\u4ed8',size:11},
-      {text:'\uff14\uff0e\u6e90\u6cc9\u5f74\u53ce\u7968\u306e\u9000\u8077\u5f8c1\u30f6\u6708\u4ee5\u5185\u306e\u4ea4\u4ed8',size:11},
+      {text:'\uff14\uff0e\u6e90\u6cc9\u5fb4\u53ce\u7968\u306e\u9000\u8077\u5f8c1\u30f6\u6708\u4ee5\u5185\u306e\u4ea4\u4ed8',size:11},
       {text:'\uff15\uff0e\u305d\u306e\u4ed6\u9000\u8077\u306b\u4f34\u3046\u5fc5\u8981\u66f8\u985e\u306e\u4ea4\u4ed8',size:11},null,
-      {text:'\u672c\u66f8\u9762\u306f\u914d\u9054\u8a3c\u660e\u90f5\u4fbf\u306b\u3088\u308a\u9001\u4ed8\u3057\u3066\u304a\u308a\u3001\u5230\u9054\u306e\u4e8b\u5b9f\u304c\u8a18\u9332\u3055\u308c\u307e\u3059\u3002',size:10},
       ...sig,
+    ];
+  }
+  if(type==='F'){
+    filename='会社向けQA.pdf';
+    lines=[
+      {text:'会社向けQ＆A（よくある質問と回答）',size:16,align:'center',spacing:8},null,
+      ...hd,
+      {text:'本書面は退職手続きに関して会社からよく寄せられる主張・質問に対する回答を記載したものです。',size:10},null,
+      {text:'Q1．退職を承認しないと言われた場合',size:12},{text:'A．会社の承認は法的に不要です。民法第627条第1項により、退職の意思表示が会社に到達した日から2週間の経過をもって、労働契約は終了します。これは強行規定であり、就業規則や会社の方針によって排除することはできません。',size:10},null,
+      {text:'Q2．退職届を受け取れない・受理しないと言われた場合',size:12},{text:'A．退職届は配達証明郵便で送付済みであり、郵便記録により到達の事実が証明されています。民法第97条（到達主義）により、意思表示は相手方に到達した時点で効力を生じます。会社が受け取りを拒否しても退職の効力には影響しません。',size:10},null,
+      {text:'Q3．退職日を変更してほしいと要求された場合',size:12},{text:'A．退職日の変更には労働者本人の同意が必要です。同意しない場合は、退職届に記載の退職希望日から民法627条に基づき退職が成立します。一方的な退職日の変更は認められません。',size:10},null,
+      {text:'Q4．損害賠償を請求すると言われた場合',size:12},{text:'A．民法第627条に基づく適法な退職権の行使に対して、損害賠償義務は原則として生じません（最高裁・下級審の確立した判例）。通常の引き継ぎを誠実に行っている限り、個人が損害賠償責任を負うことはありません。万一、訴訟等の法的手続きが開始された場合は弁護士にご相談ください。',size:10},null,
+      {text:'Q5．有給休暇の消化を拒否された場合',size:12},{text:'A．有給休暇の取得は労働基準法第39条に基づく労働者の権利であり、会社の承認は不要です。退職が確定している場合、使用者は時季変更権を行使できません（最高裁判所判例）。申請した有給休暇はすべて消化できます。有給取得妨害は労働基準法違反となります。',size:10},null,
+      {text:'Q6．引き継ぎを終わらせるまで退職を認めないと言われた場合',size:12},{text:'A．引き継ぎは信義則上の義務として誠実に行う必要がありますが、引き継ぎの未完了を理由に退職を引き止めることはできません。退職日までに可能な限りの引き継ぎを書面（業務引き継ぎ記録書）で実施することで義務を果たしたことになります。',size:10},null,
+      {text:'Q7．離職票・源泉徴収票が送られてこない場合',size:12},{text:'A．離職票の交付は退職日から10日以内の事業主の義務です（雇用保険法第76条）。源泉徴収票は退職後1ヶ月以内の交付義務があります（所得税法第226条）。交付がない場合は書面にて催促し、それでも応じない場合はハローワーク・税務署にご相談ください。',size:10},
     ];
   }
   return{lines,filename};
@@ -1230,7 +1226,7 @@ function buildTemplateLines(n,d){
       {text:'\u3010\u4ea4\u4ed8\u3092\u6c42\u3081\u308b\u66f8\u985e\u3011',size:11},
       {text:'\uff11\uff0e\u96c7\u7528\u4fdd\u967a\u88ab\u4fdd\u967a\u8005\u96e2\u8077\u7968\uff081\u30fb2\uff09',size:11},
       {text:'\uff12\uff0e\u5065\u5eb7\u4fdd\u967a\u30fb\u539a\u751f\u5e74\u91d1\u4fdd\u967a\u8cc7\u683c\u55aa\u5931\u8a3c\u660e\u66f8',size:11},
-      {text:'\uff13\uff0e\u6e90\u6cc9\u5f74\u53ce\u7968',size:11},
+      {text:'\uff13\uff0e\u6e90\u6cc9\u5fb4\u53ce\u7968',size:11},
       {text:'\uff14\uff0e\u96c7\u7528\u4fdd\u967a\u88ab\u4fdd\u967a\u8005\u8a3c',size:11},
       {text:'\uff15\uff0e\u5e74\u91d1\u624b\u5e33\uff08\u4f1a\u793e\u4fdd\u7ba1\u306e\u5834\u5408\uff09',size:11},null,
       {text:'\u96e2\u8077\u7968\u306f\u9000\u8077\u65e5\u304b\u308910\u65e5\u4ee5\u5185\u306e\u4ea4\u4ed8\u304c\u4e8b\u696d\u4e3b\u306e\u7fa9\u52d9\u3067\u3059\uff08\u96c7\u7528\u4fdd\u967a\u6cd5\u7b2c76\u6761\uff09\u3002',size:10},
@@ -1265,7 +1261,7 @@ function renderPreview(areaEl,lines){
 function togglePreview(id){renderAllPreviews();}
 function renderAllPreviews(){
   const d=getData();
-  if(S.step===1){['A','B','C','D','E'].forEach(t=>{const a=document.getElementById('preview-'+t);if(a){const{lines}=buildDocLines(t,d);renderPreview(a,lines);}});}
+  if(S.step===1){['A','B','C','D','E','F'].forEach(t=>{const a=document.getElementById('preview-'+t);if(a){const{lines}=buildDocLines(t,d);renderPreview(a,lines);}});}
   if(S.step===3){for(let i=1;i<=7;i++){const a=document.getElementById('preview-'+i);if(a){const{lines}=buildTemplateLines(i,d);renderPreview(a,lines);}}}
 }
 function updateOpenPreviews(){renderAllPreviews();}
